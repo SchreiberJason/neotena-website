@@ -1223,6 +1223,17 @@
     render(routeFromHash(), true);
   });
 
+  // Auf den Rechtsseiten ist das Kontaktformular ausgeblendet — "Anfrage senden"
+  // muss von dort erst zurueck auf die Startseite routen, sonst passiert nichts.
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a[href="#kontakt"]');
+    if (!link || !kontakt.hidden) return;
+    e.preventDefault();
+    render('start', false);
+    history.replaceState(null, '', '#/start');
+    document.getElementById('kontakt').scrollIntoView({ behavior: 'smooth' });
+  });
+
   // ---- Ueberschlagsrechner
   var state = { mitarbeiter: 8, stunden: 6, satz: 30 };
   var fmt = function (n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); };

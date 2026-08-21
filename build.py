@@ -289,6 +289,17 @@ RUNTIME_JS = """
     render(routeFromHash(), true);
   });
 
+  // Auf den Rechtsseiten ist das Kontaktformular ausgeblendet — "Anfrage senden"
+  // muss von dort erst zurueck auf die Startseite routen, sonst passiert nichts.
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a[href="#kontakt"]');
+    if (!link || !kontakt.hidden) return;
+    e.preventDefault();
+    render('start', false);
+    history.replaceState(null, '', '#/start');
+    document.getElementById('kontakt').scrollIntoView({ behavior: 'smooth' });
+  });
+
   // ---- Ueberschlagsrechner
   var state = { mitarbeiter: 8, stunden: 6, satz: 30 };
   var fmt = function (n) { return String(n).replace(/\\B(?=(\\d{3})+(?!\\d))/g, '.'); };
@@ -412,5 +423,34 @@ out = """<!DOCTYPE html>
 )
 
 OUT.write_text(out, encoding="utf-8")
+
+# Zusaetzlich eine Variante fuer die Claude-Artifact-Vorschau: dort liefert der
+# Host das <html>/<head>/<body>-Geruest, es darf also nur Seiteninhalt drin sein.
+# Canonical/robots/og faellt weg (zeigt auf die echte Domain, nicht auf die Vorschau).
+preview_head = helmet.strip().replace(
+    "</style>", "\n" + "\n".join("  " + r for r in extra_css) + "\n</style>"
+)
+preview_head = re.sub(r"<title>.*?</title>", "", preview_head, flags=re.S)
+preview_head = re.sub(
+    r'<(?:link rel="canonical"|meta name="robots"|meta property="og:[^"]*"'
+    r'|meta name="twitter:[^"]*")[^>]*/?>\s*',
+    "",
+    preview_head,
+)
+preview = (
+    "<title>Axion Prozessautomatisierung</title>\n"
+    + preview_head
+    + "\n<style>"
+    + RUNTIME_CSS
+    + "</style>\n"
+    + body.strip()
+    + "\n<script>"
+    + RUNTIME_JS
+    + "</script>\n"
+)
+prev_path = ROOT / ".preview" / "artifact.html"
+prev_path.parent.mkdir(exist_ok=True)
+prev_path.write_text(preview, encoding="utf-8")
+
 print("index.html geschrieben — %d Zeilen, %d Hover/Focus-Regeln, %d Seiten"
       % (out.count("\n") + 1, len(extra_css), len(PAGES)))
