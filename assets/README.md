@@ -1,4 +1,8 @@
-# Screenshots
+# Assets
+
+`axion-logo.png` ist das Logo im Seitenkopf (freigestellt, transparent).
+
+## Screenshots
 
 Die Referenz-Sektion auf der Startseite hat drei Bildflächen. Sie zeigen einen
 Platzhalter, solange hier keine Datei liegt. Sobald eine PNG-Datei mit dem

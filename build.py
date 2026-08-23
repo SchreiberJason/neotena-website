@@ -250,6 +250,12 @@ RUNTIME_CSS = """
   .ax-note { margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px;
     line-height: 1.6; color: #135A3F; }
   .ax-note[hidden] { display: none; }
+  /* Schmaler Viewport: Logo und Anfrage-Button in die erste Zeile, Navigation darunter. */
+  @media (max-width: 860px) {
+    header > button[aria-label="Zur Startseite"] { order: 0 !important; }
+    header > a[href="#kontakt"] { order: 0 !important; margin-left: auto; }
+    header > nav { order: 1 !important; flex-basis: 100%; }
+  }
 """
 
 RUNTIME_JS = """
