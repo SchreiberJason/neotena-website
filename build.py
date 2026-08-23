@@ -252,9 +252,8 @@ RUNTIME_CSS = """
   .ax-note[hidden] { display: none; }
   /* Schmaler Viewport: Logo und Anfrage-Button in die erste Zeile, Navigation darunter. */
   @media (max-width: 860px) {
-    header > button[aria-label="Zur Startseite"] { order: 0 !important; }
-    header > a[href="#kontakt"] { order: 0 !important; margin-left: auto; }
-    header > nav { order: 1 !important; flex-basis: 100%; }
+    header > a[href="#kontakt"] { margin-left: auto; }
+    header > nav { order: 1; flex-basis: 100%; justify-content: flex-start !important; }
   }
 """
 
