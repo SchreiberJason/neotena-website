@@ -162,10 +162,24 @@
     '.aw-fuss b{color:#18181b}',
     // Aufnahme-Portal — Werte aus portal/public/stil.css (Schrift 18 px, Karten 12 px, Kopf mit 5 px Linie)
     '.pt-buehne{display:grid;grid-template-columns:auto minmax(60px,.6fr) minmax(0,1fr);align-items:center;gap:0 8px;max-width:980px;margin:0 auto}',
-    '.pt-handy{width:300px;padding:10px;border-radius:44px;background:#1a202c;box-shadow:0 30px 60px -20px rgba(12,46,34,.35)}',
-    '.pt-schirm{height:560px;overflow-y:auto;overflow-x:hidden;border-radius:31px;background:rgb(247,248,250);scrollbar-width:none}',
-    '.pt-schirm::-webkit-scrollbar{display:none}',
-    '.pt-seite{width:390px;zoom:.72;padding:0 16px 40px;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:18px;line-height:1.5;color:rgb(26,32,44)}',
+    '.pt-handy{position:relative;width:300px;padding:11px;border-radius:52px;background:linear-gradient(145deg,#3a3d42,#1c1d20 40%,#2b2d31);' +
+      'box-shadow:inset 0 0 0 1.5px #55585e,inset 0 0 0 4px #121316,0 40px 80px -30px rgba(12,46,34,.45),0 18px 30px -18px rgba(0,0,0,.35)}',
+    '.ip-taste{position:absolute;width:4px;border-radius:2px;background:linear-gradient(90deg,#2a2c30,#4a4d52)}',
+    '.ip-l1{left:-3px;top:110px;height:26px}.ip-l2{left:-3px;top:156px;height:48px}.ip-l3{left:-3px;top:214px;height:48px}.ip-r{right:-3px;top:170px;height:76px}',
+    '.pt-schirm{position:relative;display:flex;flex-direction:column;height:600px;overflow:hidden;border-radius:42px;background:#fff}',
+    '.ip-status{position:relative;flex:none;display:flex;align-items:center;justify-content:space-between;height:44px;padding:0 26px 0 30px;background:rgb(247,248,250);font:600 14px -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;color:#000}',
+    '.ip-insel{position:absolute;left:50%;top:10px;width:92px;height:27px;margin-left:-46px;border-radius:20px;background:#000}',
+    '.ip-symbole{display:flex;align-items:center;gap:5px}.ip-symbole svg{fill:#000}',
+    '.ip-akku{position:relative;width:24px;height:12px;border:1.2px solid rgba(0,0,0,.4);border-radius:4px;padding:1.5px}',
+    '.ip-akku span{display:block;width:78%;height:100%;border-radius:2px;background:#000}',
+    '.ip-akku::after{content:"";position:absolute;right:-4px;top:3.5px;width:2px;height:4px;border-radius:0 1px 1px 0;background:rgba(0,0,0,.4)}',
+    '.ip-inhalt{flex:1;overflow-y:auto;overflow-x:hidden;background:rgb(247,248,250);scrollbar-width:none}',
+    '.ip-inhalt::-webkit-scrollbar{display:none}',
+    '.ip-safari{flex:none;padding:8px 14px 6px;background:rgba(249,249,249,.94);border-top:1px solid rgba(0,0,0,.08);backdrop-filter:blur(12px)}',
+    '.ip-adresse{display:flex;align-items:center;justify-content:center;gap:5px;height:34px;border-radius:12px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12);font:13px -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;color:#000}',
+    '.ip-adresse span{font-size:10px;opacity:.6}',
+    '.ip-home{display:block;width:120px;height:5px;margin:9px auto 0;border-radius:3px;background:#000}',
+    '.pt-seite{width:390px;zoom:.71;padding:0 16px 24px;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:18px;line-height:1.5;color:rgb(26,32,44)}',
     '.ps-kopfzeile{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:5px solid rgb(31,90,142);border-bottom:1px solid rgb(205,213,224);margin:0 -16px;padding-left:16px;padding-right:16px}',
     '.ps-zeichen{display:grid;place-items:center;width:44px;height:44px;border-radius:8px;background:rgb(31,90,142);color:#fff;font-size:20px;font-weight:700}',
     '.ps-name{font-weight:700;font-size:18px;line-height:1.2}.ps-zusatz{font-size:14px;color:rgb(74,85,104)}',
@@ -518,7 +532,15 @@
     var st = neu();
     root.innerHTML =
       '<div class="pt-buehne">' +
-        '<div class="pt-handy"><div class="pt-schirm"><div class="pt-seite"></div></div></div>' +
+        '<div class="pt-handy"><span class="ip-taste ip-l1"></span><span class="ip-taste ip-l2"></span><span class="ip-taste ip-l3"></span><span class="ip-taste ip-r"></span>' +
+          '<div class="pt-schirm">' +
+            '<div class="ip-status"><span class="ip-zeit">9:41</span><span class="ip-insel"></span><span class="ip-symbole">' +
+              '<svg viewBox="0 0 18 12" width="17" height="11"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>' +
+              '<svg viewBox="0 0 16 12" width="15" height="11"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.3-1.3A10.5 10.5 0 0 0 8 .4 10.5 10.5 0 0 0 .5 3.4l1.3 1.3A8.7 8.7 0 0 1 8 2.2Zm0 3.5c1.4 0 2.8.6 3.8 1.5l1.3-1.3A7.2 7.2 0 0 0 8 3.9a7.2 7.2 0 0 0-5.1 2l1.3 1.3c1-.9 2.4-1.5 3.8-1.5Zm0 3.5c.5 0 1 .2 1.3.5L8 11 6.7 9.7c.3-.3.8-.5 1.3-.5Z"/></svg>' +
+              '<span class="ip-akku"><span></span></span></span></div>' +
+            '<div class="ip-inhalt"><div class="pt-seite"></div></div>' +
+            '<div class="ip-safari"><div class="ip-adresse"><span>🔒</span>aufnahme.ihr-traeger.at</div><span class="ip-home"></span></div>' +
+          '</div></div>' +
         '<div class="pt-weg" aria-hidden="true"><span class="pt-linie"></span><span class="pt-paket">🔒 nur Chiffrat</span></div>' +
         '<div class="pt-akte"><div class="pt-akte-kopf"><span class="nb-ava" style="background:#0EA5E9">AB</span><div><b>Alex Beispiel</b><small>Akte · Dokumente</small></div></div>' +
           '<div class="pt-eingang"></div></div>' +
