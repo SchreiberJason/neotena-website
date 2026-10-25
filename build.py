@@ -314,6 +314,15 @@ RUNTIME_CSS = """
     font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .04em; text-decoration: none; transition: background .3s; }
   .nb-pilot-los:hover { background: #A6E3C3; }
   @media (max-width: 860px) { .nb-pilot { grid-template-columns: 1fr; } }
+  /* Kosten: welche Stages verrechnet werden. */
+  .nb-zaehlt { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .nb-z-st { display: grid; gap: 6px; padding: 14px; border-radius: 14px; border: 1px dashed rgba(127,209,166,.3);
+    font-size: 14px; font-weight: 600; color: rgba(234,242,237,.55); }
+  .nb-z-st i { width: 10px; height: 10px; border-radius: 50%; opacity: .5; }
+  .nb-z-st span { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 400; }
+  .nb-z-ja { border: 0; background: #7FD1A6; color: #0C2E22; }
+  .nb-z-ja i { opacity: 1; } .nb-z-ja span { font-weight: 600; }
+  @media (max-width: 760px) { .nb-zaehlt { grid-template-columns: 1fr 1fr; } .nb-z-ja { grid-column: 1 / -1; } }
   /* Weg 1: das Paket als drei aufgefächerte Karten. */
   .nb-paket { position: relative; display: grid; gap: 12px; max-width: 400px; width: 100%; margin: 0 auto; }
   .nb-paket-karte { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-items: baseline; padding: 18px 20px;

@@ -155,6 +155,15 @@
     font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .04em; text-decoration: none; transition: background .3s; }
   .nb-pilot-los:hover { background: #A6E3C3; }
   @media (max-width: 860px) { .nb-pilot { grid-template-columns: 1fr; } }
+  /* Kosten: welche Stages verrechnet werden. */
+  .nb-zaehlt { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .nb-z-st { display: grid; gap: 6px; padding: 14px; border-radius: 14px; border: 1px dashed rgba(127,209,166,.3);
+    font-size: 14px; font-weight: 600; color: rgba(234,242,237,.55); }
+  .nb-z-st i { width: 10px; height: 10px; border-radius: 50%; opacity: .5; }
+  .nb-z-st span { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 400; }
+  .nb-z-ja { border: 0; background: #7FD1A6; color: #0C2E22; }
+  .nb-z-ja i { opacity: 1; } .nb-z-ja span { font-weight: 600; }
+  @media (max-width: 760px) { .nb-zaehlt { grid-template-columns: 1fr 1fr; } .nb-z-ja { grid-column: 1 / -1; } }
   /* Weg 1: das Paket als drei aufgefächerte Karten. */
   .nb-paket { position: relative; display: grid; gap: 12px; max-width: 400px; width: 100%; margin: 0 auto; }
   .nb-paket-karte { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-items: baseline; padding: 18px 20px;
@@ -286,7 +295,7 @@
             <div class="nb-tuer-weg">Weg 1</div>
             <h2 class="nb-tuer-titel">Fertige Software <span style="color: #135A3F;">für AMS‑Träger.</span></h2>
             <div class="nb-tuer-bild"><div class="nb-paket"><div class="nb-paket-karte"><span class="nb-paket-nr">01</span><b>Software</b><span>alle Module, lokal und verschlüsselt</span></div><div class="nb-paket-karte"><span class="nb-paket-nr">02</span><b>Einrichtung</b><span>Datenübernahme aus Ihren Listen, Vorlagen, Rollen, Schulung</span></div><div class="nb-paket-karte"><span class="nb-paket-nr">03</span><b>Betrieb</b><span>Updates, Anpassung an neue Richtlinien, Support</span></div></div></div>
-            <div class="nb-tuer-fuss"><span>eingerichtet in wenigen Wochen · monatliche Pauschale</span><button type="button" data-go="preise" class="nb-tuer-los">So läuft die Einführung →</button></div>
+            <div class="nb-tuer-fuss"><span>bezahlt nur für Menschen in Ausbildung</span><button type="button" data-go="preise" class="nb-tuer-los">So läuft die Einführung →</button></div>
           </div>
           <div class="nb-tuer">
             <div class="nb-tuer-weg">Weg 2</div>
@@ -814,9 +823,17 @@
         <div class="nb-pilot" style="grid-template-columns: 1fr;">
           <div>
             <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #7FD1A6; margin-bottom: 18px;">Kosten</div>
-            <h2 style="font-size: clamp(28px, 3.2vw, 40px); line-height: 1.06; letter-spacing: -.03em; font-weight: 600; margin: 0 0 18px;">Eine monatliche Pauschale. <span style="color: #7FD1A6;">Planbar über das Förderjahr.</span></h2>
-            <p style="font-size: clamp(16px, 1.6vw, 18px); line-height: 1.65; color: rgba(234,242,237,.78); margin: 0; max-width: 40em;">Die Pauschale richtet sich nach der Größe Ihres Standorts, nicht nach der Zahl der Teilnehmenden. Dazu kommt einmalig die Einrichtung. Ein genaues Angebot bekommen Sie nach der Prozessaufnahme — wenn klar ist, was Sie wirklich brauchen.</p>
+            <h2 style="font-size: clamp(28px, 3.2vw, 40px); line-height: 1.06; letter-spacing: -.03em; font-weight: 600; margin: 0 0 18px;">Sie zahlen nur für Menschen in Ausbildung. <span style="color: #7FD1A6;">Vorher kostet es nichts.</span></h2>
+            <p style="font-size: clamp(16px, 1.6vw, 18px); line-height: 1.65; color: rgba(234,242,237,.78); margin: 0 0 28px; max-width: 40em;">Solange eine Person aufgebucht ist, gesucht wird oder ein Gespräch läuft, verdienen Sie nichts — also verrechne ich auch nichts. Erst wenn sie in Ausbildung ist, zählt sie. So zahlen Sie nur für Fälle, die auch Ihnen Geld bringen.</p>
           </div>
+          <div class="nb-zaehlt" aria-label="Welche Stages verrechnet werden">
+            <div class="nb-z-st"><i style="background:#3B82F6"></i>Aufgebucht<span>kostenlos</span></div>
+            <div class="nb-z-st"><i style="background:#6366F1"></i>Erstkontakt<span>kostenlos</span></div>
+            <div class="nb-z-st"><i style="background:#8B5CF6"></i>Suche<span>kostenlos</span></div>
+            <div class="nb-z-st"><i style="background:#C026D3"></i>Vorstellung<span>kostenlos</span></div>
+            <div class="nb-z-st nb-z-ja"><i style="background:#16A34A"></i>In Ausbildung<span>wird verrechnet</span></div>
+          </div>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.7; color: rgba(234,242,237,.6); margin: 0;">Dazu einmalig die Einrichtung. Ein genaues Angebot gibt es nach der Prozessaufnahme.</p>
           <a href="#kontakt" class="nb-pilot-los">Gespräch vereinbaren →</a>
         </div>
       </div>
@@ -832,9 +849,9 @@
             <span style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58;">Datenübernahme aus Ihren Listen, Vorlagen, Rollen, Schulung Ihres Teams und Begleitung in den ersten Wochen.</span>
           </div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 16px; padding: 22px 0; border-top: 1px solid rgba(19,90,63,.2);">
-            <span style="font-size: 16px; font-weight: 500;">Monatspauschale</span>
+            <span style="font-size: 16px; font-weight: 500;">Laufend</span>
             <span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: #135A3F;">laufend</span>
-            <span style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58;">Nutzung aller freigeschalteten Module, Updates, Anpassung an geänderte Richtlinien und Fördersätze, Support.</span>
+            <span style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58;">Je Person in Ausbildung, monatlich. Darin: alle Module, Updates, Anpassung an geänderte Richtlinien und Fördersätze, Support.</span>
           </div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 16px; padding: 22px 0; border-top: 1px solid rgba(19,90,63,.2);">
             <span style="font-size: 16px; font-weight: 500;">Nicht enthalten</span>
