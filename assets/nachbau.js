@@ -52,6 +52,10 @@
     '@keyframes nb-ein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}',
     '.nb-ein{animation:nb-ein .4s ease both}',
 
+    // Was zuerst angefasst werden kann, pulsiert — bis die Kachel berührt wurde.
+    '@keyframes nb-puls{0%{box-shadow:0 0 0 0 rgba(19,90,63,.45)}70%{box-shadow:0 0 0 12px rgba(19,90,63,0)}100%{box-shadow:0 0 0 0 rgba(19,90,63,0)}}',
+    '.nb-lockt{animation:nb-puls 1.8s ease-out infinite;position:relative;z-index:1}',
+    '@media (prefers-reduced-motion:reduce){.nb-lockt{animation:none;outline:2px solid rgba(19,90,63,.5);outline-offset:2px}}',
     // Pipeline
     '.nb-pipe{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,1fr);gap:14px;overflow-x:auto;padding:6px 2px 14px;scroll-snap-type:x mandatory}',
     '.nb-spalte{display:flex;flex-direction:column;gap:10px;min-height:340px;padding:12px;border-radius:16px;background:rgba(255,255,255,.55);scroll-snap-align:start;transition:background .2s,box-shadow .2s}',
@@ -157,11 +161,11 @@
     '.aw-fuss{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin-top:16px;font-size:12px;color:#52525b}',
     '.aw-fuss b{color:#18181b}',
     // Aufnahme-Portal — Werte aus portal/public/stil.css (Schrift 18 px, Karten 12 px, Kopf mit 5 px Linie)
-    '.pt-buehne{display:grid;grid-template-columns:auto minmax(48px,.5fr) minmax(0,1.1fr);align-items:center}',
-    '.pt-handy{width:252px;padding:9px;border-radius:40px;background:#1a202c;box-shadow:0 30px 60px -20px rgba(12,46,34,.35)}',
-    '.pt-schirm{height:500px;overflow-y:auto;overflow-x:hidden;border-radius:31px;background:rgb(247,248,250);scrollbar-width:none}',
+    '.pt-buehne{display:grid;grid-template-columns:auto minmax(60px,.6fr) minmax(0,1fr);align-items:center;gap:0 8px;max-width:980px;margin:0 auto}',
+    '.pt-handy{width:300px;padding:10px;border-radius:44px;background:#1a202c;box-shadow:0 30px 60px -20px rgba(12,46,34,.35)}',
+    '.pt-schirm{height:560px;overflow-y:auto;overflow-x:hidden;border-radius:31px;background:rgb(247,248,250);scrollbar-width:none}',
     '.pt-schirm::-webkit-scrollbar{display:none}',
-    '.pt-seite{width:390px;zoom:.6;padding:0 16px 40px;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:18px;line-height:1.5;color:rgb(26,32,44)}',
+    '.pt-seite{width:390px;zoom:.72;padding:0 16px 40px;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:18px;line-height:1.5;color:rgb(26,32,44)}',
     '.ps-kopfzeile{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:5px solid rgb(31,90,142);border-bottom:1px solid rgb(205,213,224);margin:0 -16px;padding-left:16px;padding-right:16px}',
     '.ps-zeichen{display:grid;place-items:center;width:44px;height:44px;border-radius:8px;background:rgb(31,90,142);color:#fff;font-size:20px;font-weight:700}',
     '.ps-name{font-weight:700;font-size:18px;line-height:1.2}.ps-zusatz{font-size:14px;color:rgb(74,85,104)}',
@@ -198,6 +202,11 @@
     '.pt-eingang{display:grid;gap:8px;min-height:120px;align-content:start}',
     '.pt-doc{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:#fff;font-size:12px}',
     '.pt-doc .nb-pdf{width:24px;height:28px;font-size:8px}',
+    '.pt-zaehler{font-size:12px;color:#71717a;margin-bottom:2px}.pt-zaehler b{color:#18181b}',
+    '.pt-doc em{font-style:normal;color:#71717a}',
+    '.pt-erwartet{background:transparent;border:1.5px dashed #d4d4d8;color:#a1a1aa}',
+    '.pt-platz{display:grid;place-items:center;flex:none;width:24px;height:28px;border-radius:4px;border:1.5px dashed #d4d4d8;font-size:8px;font-weight:700}',
+    '.pt-fehlt{margin-left:auto;font-size:11px;color:#a1a1aa}',
     '.pt-wartet{padding:20px 0;font-size:12px;color:#a1a1aa;text-align:center}',
     '@container (max-width:500px){.pt-buehne{grid-template-columns:1fr;justify-items:center;gap:10px}.pt-weg{width:40px;height:50px}.pt-linie{left:50%;right:auto;top:0;bottom:0;border-top:0;border-left:2px dashed #c2c2bc}.pt-weg .pt-paket{display:none}.pt-akte{width:100%;max-width:340px}}',
     // Nach dem eigenen Platz, nicht nach dem Bildschirm: die halbe Spalte bei A—0x ist auch am Desktop schmal.
@@ -563,13 +572,22 @@
       h += '<p class="ps-klein">Dieser Link gilt bis ' + gueltig + '. Sie können jederzeit aufhören und später mit diesem Link weitermachen.</p>' +
         '<p class="ps-klein">Ihre Angaben und Dateien werden auf Ihrem Gerät verschlüsselt. Nur Ihr Bildungsträger kann sie öffnen.</p>';
       seite.innerHTML = h;
-      var doks = [];
-      if (s1fertig) doks.push(['PDF', 'Datenschutzvereinbarung · unterschrieben'], ['PDF', 'Aufnahmeantrag · unterschrieben']);
-      if (s2fertig) FAECHER.forEach(function (f) { st.dateien[f[0]].forEach(function (n) { doks.push(['JPG', f[1] + ' · ' + n]); }); });
-      eingang.innerHTML = doks.length
-        ? doks.map(function (d) { return '<div class="pt-doc nb-ein"><span class="nb-pdf">' + d[0] + '</span>' + d[1] + '<span class="nb-ok">✓</span></div>'; }).join('') +
-          (s2fertig ? '<button type="button" class="nb-zurueck" data-a="neu" style="justify-self:start;margin-top:6px">Noch einmal</button>' : '')
-        : '<div class="pt-wartet">Wartet auf Unterlagen …</div>';
+      // Die Akte weiß, was erwartet wird: fünf Plätze, die sich füllen.
+      var ERWARTET = [
+        ['PDF', 'Datenschutzvereinbarung', s1fertig, 'unterschrieben'],
+        ['PDF', 'Aufnahmeantrag', s1fertig, 'unterschrieben'],
+        ['JPG', 'Lebenslauf', s2fertig, st.dateien.lebenslauf[0]],
+        ['JPG', 'Bewerbungsfoto', s2fertig, st.dateien.foto[0]],
+        ['PDF', 'Zeugnisse', false, '']
+      ];
+      var da = ERWARTET.filter(function (e) { return e[2]; }).length;
+      eingang.innerHTML = '<div class="pt-zaehler"><b>' + da + ' von ' + ERWARTET.length + '</b> Unterlagen da</div>' +
+        ERWARTET.map(function (e) {
+          return e[2]
+            ? '<div class="pt-doc nb-ein"><span class="nb-pdf">' + e[0] + '</span><span>' + e[1] + ' <em>· ' + esc(e[3] || '') + '</em></span><span class="nb-ok">✓</span></div>'
+            : '<div class="pt-doc pt-erwartet"><span class="pt-platz">' + e[0] + '</span><span>' + e[1] + '</span><span class="pt-fehlt">fehlt</span></div>';
+        }).join('') +
+        (s2fertig ? '<button type="button" class="nb-zurueck" data-a="neu" style="justify-self:start;margin-top:6px">Noch einmal</button>' : '');
     }
     function fahren(dann) {
       weg.classList.remove('faehrt'); void weg.offsetWidth; weg.classList.add('faehrt');
@@ -659,7 +677,21 @@
     beimZeigen(root, function () {
       var i = 0;
       (function naechstes() {
-        if (i >= AMS.length) { root.querySelector('.nb-senden').classList.add('bereit'); return; }
+        if (i >= AMS.length) {
+          root.querySelector('.nb-senden').classList.add('bereit');
+          if (!root.querySelector('.nb-nochmal')) {
+            var nm = document.createElement('button');
+            nm.type = 'button'; nm.className = 'nb-zurueck nb-nochmal'; nm.textContent = '▶ Noch einmal abspielen';
+            nm.style.marginTop = '14px';
+            nm.addEventListener('click', function () {
+              root.querySelectorAll('.nb-mf').forEach(function (f) { f.classList.remove('voll'); f.querySelector('span').textContent = ''; });
+              root.querySelector('.nb-senden').classList.remove('bereit');
+              nm.remove(); i = 0; naechstes();
+            });
+            root.querySelector('.nb-zuord').parentNode.appendChild(nm);
+          }
+          return;
+        }
         var a = AMS[i], f = root.querySelector('[data-m="' + i + '"]');
         var text = a[2] === null ? datum(9) : a[2];
         i++;
@@ -669,8 +701,24 @@
   }
 
   var BAU = { pipeline: pipeline, vorlage: vorlage, teilnehmer: teilnehmer, amsfelder: amsfelder, portal: portal, anwesenheit: anwesenheit };
+  var LOCKT = {
+    pipeline: '.nb-karte', portal: '[data-a="sig"]', vorlage: '.nb-quelle:not(:disabled)',
+    anwesenheit: '.aw-zelle', teilnehmer: 'input', amsfelder: null
+  };
   Array.prototype.forEach.call(document.querySelectorAll('[data-nachbau]'), function (el) {
     var f = BAU[el.dataset.nachbau];
-    if (f) f(el);
+    if (!f) return;
+    f(el);
+    var sel = LOCKT[el.dataset.nachbau];
+    var ziel = sel && el.querySelector(sel);
+    if (!ziel) return;
+    ziel.classList.add('nb-lockt');
+    var aus = function () {
+      el.querySelectorAll('.nb-lockt').forEach(function (x) { x.classList.remove('nb-lockt'); });
+      el.removeEventListener('pointerdown', aus, true);
+      el.removeEventListener('focusin', aus, true);
+    };
+    el.addEventListener('pointerdown', aus, true);
+    el.addEventListener('focusin', aus, true);
   });
 })();

@@ -262,9 +262,10 @@ RUNTIME_CSS = """
   .nb-kb-bsp { justify-self: end; padding: 4px 10px; border-radius: 999px; background: rgba(19,90,63,.07); font-family: 'IBM Plex Mono', monospace;
     font-size: 12px; color: #616C79; white-space: nowrap; }
   .nb-kb-echt { background: #135A3F; color: #F4F3EE; }
-  .nb-kb-zeile::after { content: "→"; position: absolute; right: 0; top: 50%; transform: translate(8px, -50%); opacity: 0;
+  .nb-kb-zeile::after { content: "→"; position: absolute; right: 0; top: 50%; transform: translate(0, -50%); opacity: .5;
     font-family: 'IBM Plex Mono', monospace; color: #135A3F; transition: opacity .3s, transform .3s; }
   .nb-kb-zeile:hover::after { opacity: 1; transform: translate(-6px, -50%); }
+  .nb-kb-bsp { margin-right: 26px; }
   .nb-kb-zeile:hover .nb-kb-bsp { opacity: 0; }
   @media (max-width: 820px) {
     .nb-kb-kopf { display: none; }
@@ -304,7 +305,9 @@ RUNTIME_CSS = """
     border-radius: 24px; border: 1px solid rgba(19,90,63,.16); background: rgba(255,255,255,.5); }
   .nb-k4 { grid-column: span 4; } .nb-k6 { grid-column: span 6; } .nb-k8 { grid-column: span 8; } .nb-k12 { grid-column: span 12; }
   .nb-hoch { grid-row: span 2; }
-  .nb-k-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #135A3F; }
+  .nb-k-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #135A3F;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+  .nb-k-tipp { padding: 4px 10px; border-radius: 999px; background: #135A3F; color: #F4F3EE; letter-spacing: .04em; text-transform: none; font-size: 11px; white-space: nowrap; }
   .nb-k-titel { margin: 6px 0 22px; font-size: clamp(19px, 1.8vw, 22px); line-height: 1.2; letter-spacing: -.015em; font-weight: 600; }
   @media (max-width: 960px) {
     .nb-bento { grid-template-columns: 1fr; }
