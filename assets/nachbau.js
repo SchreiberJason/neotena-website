@@ -149,6 +149,27 @@
     '.nb-senden b{padding:6px 12px;border-radius:6px;background:#e4e4e7;color:#a1a1aa;font-weight:600;transition:background .3s,color .3s}',
     '.nb-senden.bereit b{background:' + GRUEN + ';color:#fff}',
 
+    // Listen zusammenführen
+    '.zf-listen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}',
+    '.zf-datei,.zf-eine{padding:10px;border-radius:10px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06),0 10px 20px -14px rgba(0,0,0,.25)}',
+    '.zf-datei{transform:rotate(var(--r))}',
+    '.zf-kopf{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:11px;font-weight:600;color:#52525b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
+    '.zf-kopf i{flex:none;width:10px;height:12px;border-radius:2px}',
+    '.zf-zeile{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:5px 0;border-top:1px solid #f0f0f0;font-size:12px}',
+    '.zf-eine{margin-bottom:14px}',
+    '.zf-eine .zf-zeile{font-size:13px;padding:8px 0}',
+    '@container (max-width:460px){.zf-listen{grid-template-columns:1fr}.zf-datei{transform:none}}',
+    // Matching
+    '.mt{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:16px}',
+    '.mt-tn,.mt-bt{display:grid;gap:6px}',
+    '.mt-p{display:grid;gap:2px;width:100%;padding:10px 12px;border:1.5px solid transparent;border-radius:12px;background:rgba(255,255,255,.75);text-align:left;font:inherit;cursor:pointer;transition:border-color .2s,background .2s}',
+    '.mt-p.an{border-color:' + GRUEN + ';background:#fff}',
+    '.mt-p b,.mt-b b{font-size:13px}.mt-p span,.mt-b span{font-size:11px;color:#71717a}',
+    '.mt-b{display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:center;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.45);opacity:.5;transition:opacity .25s,background .25s}',
+    '.mt-b b{grid-column:1;grid-row:1}.mt-b span{grid-column:1;grid-row:2}.mt-b em{grid-column:2;grid-row:1/3;align-self:center;font-style:normal}',
+    '.mt-b.gut{opacity:1;background:#fff;box-shadow:0 0 0 1.5px ' + GRUEN + ' inset}',
+    '.mt-b.halb{opacity:.85;background:#fff}',
+    '@container (max-width:460px){.mt{grid-template-columns:1fr}}',
     // Anwesenheit
     '.aw-tab{display:grid;grid-template-columns:auto repeat(5,minmax(26px,44px));gap:6px;align-items:center;justify-content:start}',
     '.aw-tag{font-size:11px;font-weight:600;color:#71717a;text-align:center}',
@@ -481,6 +502,72 @@
     malen();
   }
 
+  // ============================================================ Listen zusammenführen
+  // Drei Excel-Listen mit Überschneidungen → „Zusammenführen“ → eine Liste,
+  // Doppelte erkannt, Widersprüche markiert.
+  function zusammen(root) {
+    var LISTEN = [
+      ['TN_Liste_2026.xlsx', '#1D6F42', [['Gruber Lisa-Marie', 'K1'], ['Yılmaz Emre', 'K2'], ['Hofer Jonas', 'K1']]],
+      ['Statusliste_FINAL2.xlsx', '#1D6F42', [['Gruber L.', 'K1'], ['Kovalenko Olha', 'K3']]],
+      ['Kontakte_Betreuung.xlsx', '#1D6F42', [['Hofer Jonas', 'K2'], ['Bauer Lena', 'K2']]]
+    ];
+    var ERG = [
+      ['Gruber Lisa-Marie', 'K1', 'aus 2 Listen'],
+      ['Yılmaz Emre', 'K2', ''],
+      ['Hofer Jonas', 'K1', 'Widerspruch: K1 / K2'],
+      ['Kovalenko Olha', 'K3', ''],
+      ['Bauer Lena', 'K2', '']
+    ];
+    var offen = false;
+    function malen() {
+      if (!offen) {
+        root.innerHTML = '<div class="zf-listen">' + LISTEN.map(function (l, i) {
+          return '<div class="zf-datei" style="--r:' + (i - 1) * 2 + 'deg"><div class="zf-kopf"><i style="background:' + l[1] + '"></i>' + l[0] + '</div>' +
+            l[2].map(function (z) { return '<div class="zf-zeile"><span>' + esc(z[0]) + '</span><span>' + z[1] + '</span></div>'; }).join('') + '</div>';
+        }).join('') + '</div><button type="button" class="nb-knopf" data-a="los">Zusammenführen</button>' +
+          '<div class="nb-hinweis">7 Zeilen in 3 Dateien — wer ist wer?</div>';
+      } else {
+        root.innerHTML = '<div class="zf-eine"><div class="zf-kopf"><i style="background:' + GRUEN + '"></i>Eine Quelle · 5 Personen</div>' +
+          ERG.map(function (z, i) {
+            return '<div class="zf-zeile nb-ein" style="animation-delay:' + i * 70 + 'ms"><span>' + esc(z[0]) + '</span><span>' + z[1] + '</span>' +
+              (z[2] ? '<span class="nb-chip ' + (z[2].indexOf('Widerspruch') === 0 ? 'nb-krit' : 'nb-brand') + '">' + z[2] + '</span>' : '<span></span>') + '</div>';
+          }).join('') + '</div><button type="button" class="nb-zurueck" data-a="zurueck">Noch einmal</button>' +
+          '<div class="nb-hinweis">Doppelte erkannt, Widersprüche zur Klärung markiert — nichts geht still verloren.</div>';
+      }
+    }
+    root.addEventListener('click', function (e) {
+      var a = e.target.dataset && e.target.dataset.a;
+      if (a === 'los') { offen = true; malen(); }
+      if (a === 'zurueck') { offen = false; malen(); }
+    });
+    malen();
+  }
+
+  // ============================================================ Matching
+  // Person antippen → passende Betriebe leuchten auf, nach Beruf und Region.
+  function matching(root) {
+    var TN = [['Hofer Jonas', 'Metalltechnik', 'Deutschlandsberg'], ['Bauer Lena', 'Köchin', 'Voitsberg'], ['Gruber Lisa-Marie', 'Installationstechnik', 'Graz West']];
+    var BT = [['Stahlbau Muster', 'Metalltechnik', 'Deutschlandsberg', 2], ['Gasthaus Beispiel', 'Köchin', 'Voitsberg', 1], ['Haustechnik Probe', 'Installationstechnik', 'Graz West', 1],
+      ['Metall Weststeiermark', 'Metalltechnik', 'Voitsberg', 1], ['Hotel Muster', 'Köchin', 'Graz Ost', 3]];
+    var wahl = 0;
+    root.innerHTML = '<div class="mt"><div><div class="nb-label" style="margin-bottom:8px">Teilnehmende</div><div class="mt-tn"></div></div>' +
+      '<div><div class="nb-label" style="margin-bottom:8px">Betriebe</div><div class="mt-bt"></div></div></div>';
+    var tn = root.querySelector('.mt-tn'), bt = root.querySelector('.mt-bt');
+    function malen() {
+      var p = TN[wahl];
+      tn.innerHTML = TN.map(function (t, i) {
+        return '<button type="button" class="mt-p' + (i === wahl ? ' an' : '') + '" data-i="' + i + '"><b>' + esc(t[0]) + '</b><span>' + t[1] + ' · ' + t[2] + '</span></button>';
+      }).join('');
+      bt.innerHTML = BT.map(function (b) {
+        var beruf = b[1] === p[1], ort = b[2] === p[2], gut = beruf && ort, halb = beruf && !ort;
+        return '<div class="mt-b' + (gut ? ' gut' : halb ? ' halb' : '') + '"><b>' + esc(b[0]) + '</b><span>' + b[1] + ' · ' + b[2] + '</span>' +
+          (gut ? '<em class="nb-chip nb-brand">passt · ' + b[3] + ' Platz' + (b[3] > 1 ? 'e' : '') + '</em>' : halb ? '<em class="nb-chip nb-leise">anderer Ort</em>' : '') + '</div>';
+      }).join('');
+    }
+    tn.addEventListener('click', function (e) { var b = e.target.closest('[data-i]'); if (b) { wahl = +b.dataset.i; malen(); } });
+    malen();
+  }
+
   // ============================================================ Anwesenheit
   // Eine Woche, drei Personen. Antippen wechselt: da → krank → fehlt → da.
   // Stundenliste und Hinweis rechnen sofort mit.
@@ -723,10 +810,10 @@
     });
   }
 
-  var BAU = { pipeline: pipeline, vorlage: vorlage, teilnehmer: teilnehmer, amsfelder: amsfelder, portal: portal, anwesenheit: anwesenheit };
+  var BAU = { pipeline: pipeline, vorlage: vorlage, teilnehmer: teilnehmer, amsfelder: amsfelder, portal: portal, anwesenheit: anwesenheit, zusammen: zusammen, matching: matching };
   var LOCKT = {
     pipeline: '.nb-karte', portal: '[data-a="sig"]', vorlage: '.nb-quelle:not(:disabled)',
-    anwesenheit: '.aw-zelle', teilnehmer: 'input', amsfelder: null
+    anwesenheit: '.aw-zelle', teilnehmer: 'input', amsfelder: null, zusammen: '[data-a="los"]', matching: '.mt-p:not(.an)'
   };
   Array.prototype.forEach.call(document.querySelectorAll('[data-nachbau]'), function (el) {
     var f = BAU[el.dataset.nachbau];
