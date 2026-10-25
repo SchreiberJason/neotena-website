@@ -103,7 +103,7 @@
     '.nb-datei b{display:block;font-size:13px}.nb-datei span{font-size:11px;color:#71717a}',
     '.nb-pdf{display:grid;place-items:center;flex:none;width:30px;height:36px;border-radius:4px;background:#B30B00;color:#fff;font-size:9px;font-weight:700}',
     '.nb-ok{margin-left:auto;color:' + GRUEN + ';font-weight:700}',
-    '.nb-blatt{position:relative;aspect-ratio:1/1.16;padding:9% 10%;background:#fff;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.06),0 30px 60px -24px rgba(12,46,34,.25);font-size:11px;color:#3f3f46}',
+    '.nb-blatt{position:relative;padding:9% 10% 18%;background:#fff;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.06),0 30px 60px -24px rgba(12,46,34,.25);font-size:11px;color:#3f3f46}',
     '.nb-blatt h4{margin:0 0 4px;font-size:17px;font-weight:600;color:#18181b;letter-spacing:-.01em}',
     '.nb-blatt .nb-kl{display:block;margin-bottom:14px;font-size:10px;color:#a1a1aa}',
     '.nb-feld{display:grid;grid-template-columns:38% 1fr;gap:8px;align-items:end;margin:9px 0}',
