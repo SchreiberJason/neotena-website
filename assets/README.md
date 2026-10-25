@@ -1,6 +1,6 @@
 # Assets
 
-`axion-logo.png` ist das Logo im Seitenkopf (freigestellt, transparent).
+`neotena.svg` ist das Logo im Seitenkopf (Wortmarke, transparent).
 
 ## Screenshots
 

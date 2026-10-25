@@ -443,7 +443,7 @@ preview_head = re.sub(
     preview_head,
 )
 preview = (
-    "<title>Axion Prozessautomatisierung</title>\n"
+    "<title>Neotena Prozessautomatisierung</title>\n"
     + preview_head
     + "\n<style>"
     + RUNTIME_CSS
