@@ -232,7 +232,8 @@ RUNTIME_CSS = """
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   img { max-width: 100%; display: block; }
   /* Lange deutsche Wörter (Datenschutzbeauftragter) trennen statt aus dem Fenster zu ragen. */
-  h1, h2, h3 { overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; }
+  h1, h2, h3 { overflow-wrap: break-word; }
+  @media (max-width: 600px) { h1, h2, h3 { hyphens: auto; -webkit-hyphens: auto; } }
   :focus-visible { outline: 2px solid #135A3F; outline-offset: 3px; }
   .ax-page[hidden] { display: none; }
   .ax-nav { width: auto; background: none; border: none; font: inherit; cursor: pointer;
@@ -247,6 +248,31 @@ RUNTIME_CSS = """
   .ax-note { margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px;
     line-height: 1.6; color: #135A3F; }
   .ax-note[hidden] { display: none; }
+  /* „Was sie kann · was es bringt“: große Zeilen, jede führt zu ihrer Kachel im Bento. */
+  .nb-kb { display: grid; border-top: 1px solid rgba(19,90,63,.28); }
+  .nb-kb-kopf, .nb-kb-zeile { display: grid; grid-template-columns: 3.2em minmax(0, 1fr) minmax(0, 1.25fr) 11em; gap: 8px 28px; align-items: baseline; }
+  .nb-kb-kopf { padding: 14px 0; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #616C79;
+    border-bottom: 1px solid rgba(19,90,63,.28); }
+  .nb-kb-zeile { position: relative; padding: clamp(18px, 2.4vw, 28px) 0; border-bottom: 1px solid rgba(19,90,63,.18);
+    color: inherit; text-decoration: none; transition: background .3s, padding .3s; }
+  .nb-kb-zeile:hover, .nb-kb-zeile:focus-visible { background: rgba(255,255,255,.55); padding-left: 14px; padding-right: 14px; }
+  .nb-kb-nr { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #135A3F; }
+  .nb-kb-kann { font-size: clamp(20px, 2.3vw, 28px); line-height: 1.15; letter-spacing: -.02em; font-weight: 600; }
+  .nb-kb-bringt { font-size: clamp(16px, 1.6vw, 19px); line-height: 1.45; color: #135A3F; }
+  .nb-kb-bsp { justify-self: end; padding: 4px 10px; border-radius: 999px; background: rgba(19,90,63,.07); font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; color: #616C79; white-space: nowrap; }
+  .nb-kb-echt { background: #135A3F; color: #F4F3EE; }
+  .nb-kb-zeile::after { content: "→"; position: absolute; right: 0; top: 50%; transform: translate(8px, -50%); opacity: 0;
+    font-family: 'IBM Plex Mono', monospace; color: #135A3F; transition: opacity .3s, transform .3s; }
+  .nb-kb-zeile:hover::after { opacity: 1; transform: translate(-6px, -50%); }
+  .nb-kb-zeile:hover .nb-kb-bsp { opacity: 0; }
+  @media (max-width: 820px) {
+    .nb-kb-kopf { display: none; }
+    .nb-kb-zeile { grid-template-columns: 2.4em minmax(0, 1fr); }
+    .nb-kb-bringt, .nb-kb-bsp { grid-column: 2; }
+    .nb-kb-bsp { justify-self: start; }
+  }
+  .nb-kachel { scroll-margin-top: 96px; }
   /* Hero: zwei Türen als Kacheln. */
   .nb-tueren { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr)); gap: 20px; }
   .nb-tuer { display: flex; flex-direction: column; min-width: 0; overflow: hidden; padding: clamp(24px, 3vw, 36px);
