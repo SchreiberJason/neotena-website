@@ -605,3 +605,87 @@
     setze('cloud');
   }
 })();
+
+// -------------------------------------------- Ablauf & Kosten: Linienplan
+// Wie ein U-Bahn-Plan: Aufnahme → Bauplan → Gabelung (Software einrichten
+// oder individuell bauen) → Betrieb. Stationen anklickbar, Detail darunter.
+(function () {
+  'use strict';
+  var root = document.getElementById('nf-linie');
+  if (!root) return;
+  var G = '#135A3F', H = '#7FD1A6';
+  var ST = [
+    { id: 'aufnahme', x: 60, y: 90, name: 'Prozessaufnahme', dauer: '1–2 Tage vor Ort', text: 'Ich begleite Ihr Team im Alltag und halte fest, welche Handgriffe sich wiederholen, wie lange sie dauern und wo Daten doppelt entstehen.' },
+    { id: 'bauplan', x: 270, y: 90, name: 'Bauplan', dauer: 'schriftlich, auch ohne Folgeauftrag nutzbar', text: 'Jeder Ablauf gezeichnet, mit Zeitaufwand pro Schritt und dem Vorschlag, was die Software übernimmt — und was nicht.' },
+    { id: 'software', x: 560, y: 40, name: 'Software einrichten', dauer: 'wenige Wochen', text: 'Datenübernahme aus Ihren Listen, Vorlagen hinterlegen, Rollen einrichten, Ihr Team schulen. Danach läuft der erste Ablauf im Alltag.' },
+    { id: 'individuell', x: 560, y: 150, name: 'Individuell bauen', dauer: 'nach Aufwand', text: 'Was sich nicht einstellen lässt, wird gebaut: eigene Berichtsformate, Anbindung an ein Bestandssystem, Sonderabläufe.' },
+    { id: 'betrieb', x: 860, y: 90, name: 'Betrieb & Ausbau', dauer: 'laufend, fester Ansprechpartner', text: 'Updates, Anpassung an geänderte Richtlinien, Unterstützung im Alltag. Weitere Abläufe kommen dazu, sobald der vorige sitzt.' }
+  ];
+  var LINIEN = [['aufnahme', 'bauplan'], ['bauplan', 'software'], ['bauplan', 'individuell'], ['software', 'betrieb'], ['individuell', 'betrieb']];
+  var by = {}; ST.forEach(function (s) { by[s.id] = s; });
+  var st = document.createElement('style');
+  st.textContent = [
+    '#nf-linie{display:grid;gap:28px}',
+    '.ln-plan{width:100%;height:auto;overflow:visible}',
+    '.ln-weg{fill:none;stroke:' + G + ';stroke-width:6;stroke-linecap:round;stroke-linejoin:round;opacity:.25;transition:opacity .3s}',
+    '.ln-weg.an{opacity:1}',
+    '.ln-st{cursor:pointer;outline:none}',
+    '.ln-st circle{fill:#F4F3EE;stroke:' + G + ';stroke-width:5;transition:r .2s,fill .2s}',
+    '.ln-st:hover circle,.ln-st:focus-visible circle{r:16}',
+    '.ln-st.an circle{fill:' + G + '}',
+    '.ln-st text{font:600 15px "Space Grotesk",sans-serif;fill:#121A22;text-anchor:middle}',
+    '.ln-st .ln-d{font:400 11px "IBM Plex Mono",monospace;fill:#616C79}',
+    '.ln-detail{display:grid;grid-template-columns:auto 1fr;gap:6px 24px;align-items:baseline;padding:24px 28px;border-radius:20px;background:#0C2E22;color:#EAF2ED;animation:ln-ein .3s ease}',
+    '.ln-detail b{font-size:22px;font-weight:600}',
+    '.ln-detail span{font-family:"IBM Plex Mono",monospace;font-size:12px;color:' + H + '}',
+    '.ln-detail p{grid-column:1/-1;margin:4px 0 0;font-size:16px;line-height:1.6;color:rgba(234,242,237,.8);max-width:46em}',
+    '@keyframes ln-ein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}',
+    '.ln-tipp{font-family:"IBM Plex Mono",monospace;font-size:12px;color:#616C79}',
+    '@media (max-width:700px){.ln-plan{display:none}.ln-liste{display:grid!important}}',
+    '.ln-liste{display:none;gap:8px;list-style:none;margin:0;padding:0}',
+    '.ln-liste button{width:100%;display:flex;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid rgba(19,90,63,.25);border-radius:14px;background:rgba(255,255,255,.6);font:600 15px "Space Grotesk",sans-serif;color:#121A22;text-align:left;cursor:pointer}',
+    '.ln-liste button.an{background:' + G + ';color:#F4F3EE;border-color:' + G + '}',
+    '.ln-liste small{font:400 11px "IBM Plex Mono",monospace;opacity:.7}',
+    '@media (prefers-reduced-motion:reduce){.ln-detail{animation:none}}'
+  ].join('\n');
+  document.head.appendChild(st);
+  var NS = 'http://www.w3.org/2000/svg';
+  var weg = function (a, b) {
+    var p = by[a], q = by[b], mx = (p.x + q.x) / 2;
+    return 'M' + p.x + ',' + p.y + ' C' + mx + ',' + p.y + ' ' + mx + ',' + q.y + ' ' + q.x + ',' + q.y;
+  };
+  root.innerHTML = '<div class="ln-tipp">Stationen anklicken — die Gabelung zeigt: fertige Software einrichten oder Eigenes bauen lassen, oft beides.</div>' +
+    '<svg class="ln-plan" viewBox="0 -10 920 230" role="group" aria-label="Ablauf der Zusammenarbeit">' +
+    LINIEN.map(function (l) { return '<path class="ln-weg" data-l="' + l.join('-') + '" d="' + weg(l[0], l[1]) + '"/>'; }).join('') +
+    ST.map(function (s) {
+      return '<g class="ln-st" data-s="' + s.id + '" tabindex="0" role="button" aria-label="' + s.name + '"><circle cx="' + s.x + '" cy="' + s.y + '" r="13"/>' +
+        '<text x="' + s.x + '" y="' + (s.y - 26) + '">' + s.name + '</text><text class="ln-d" x="' + s.x + '" y="' + (s.y + 36) + '">' + s.dauer.split(',')[0] + '</text></g>';
+    }).join('') + '</svg>' +
+    '<ul class="ln-liste">' + ST.map(function (s) { return '<li><button type="button" data-s="' + s.id + '">' + s.name + '<small>' + s.dauer.split(',')[0] + '</small></button></li>'; }).join('') + '</ul>' +
+    '<div class="ln-detail" aria-live="polite"></div>';
+  var detail = root.querySelector('.ln-detail');
+  var REIHE = ['aufnahme', 'bauplan', 'software', 'individuell', 'betrieb'];
+  function waehle(id) {
+    var bis = REIHE.indexOf(id);
+    root.querySelectorAll('[data-s]').forEach(function (g) {
+      var k = g.dataset.s, n = REIHE.indexOf(k);
+      var an = n <= bis && !(id === 'software' && k === 'individuell') && !(id === 'individuell' && k === 'software');
+      g.classList.toggle('an', an);
+    });
+    root.querySelectorAll('.ln-weg').forEach(function (p) {
+      var ab = p.dataset.l.split('-');
+      var an = REIHE.indexOf(ab[1]) <= bis && !(id === 'software' && ab[1] === 'individuell') && !(id === 'individuell' && ab[1] === 'software') &&
+        !(id === 'software' && ab[0] === 'individuell') && !(id === 'individuell' && ab[0] === 'software');
+      p.classList.toggle('an', an);
+    });
+    var s = by[id];
+    detail.innerHTML = '<b>' + s.name + '</b><span>' + s.dauer + '</span><p>' + s.text + '</p>';
+    detail.style.animation = 'none'; void detail.offsetWidth; detail.style.animation = '';
+  }
+  root.addEventListener('click', function (e) { var g = e.target.closest('[data-s]'); if (g) waehle(g.dataset.s); });
+  root.addEventListener('keydown', function (e) {
+    var g = e.target.closest && e.target.closest('.ln-st');
+    if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); waehle(g.dataset.s); }
+  });
+  waehle('aufnahme');
+})();
