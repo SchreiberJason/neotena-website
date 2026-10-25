@@ -76,6 +76,8 @@
     '.nb-schritt.jetzt{color:#18181b;font-weight:600}.nb-schritt.jetzt i{border-color:#18181b}',
     '.nb-schritt-linie{width:22px;height:1px;background:#d4d4d8}',
     '.nb-vorlage{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(24px,4vw,56px);align-items:start}',
+    '.nb-vorlage > *{min-width:0}',
+    '.nb-feld > span{min-width:0;overflow-wrap:anywhere}',
     '.nb-quellen{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 12px}',
     '.nb-quelle{width:auto;padding:7px 12px;font-size:12px;font-family:inherit;cursor:grab;touch-action:none;transition:opacity .2s,transform .2s}',
     '.nb-quelle:hover:not(:disabled){transform:translateY(-1px)}',
