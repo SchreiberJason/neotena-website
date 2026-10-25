@@ -364,7 +364,18 @@
     var APP = '-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif';
     var kcss = document.createElement('style');
     kcss.textContent = [
-      '#nf-kreis{font-family:' + APP + ';color:#18181b;max-width:440px;margin:0 auto;width:100%}',
+      '#nf-kreis{font-family:' + APP + ';color:#18181b;max-width:480px;margin:0 auto;width:100%;perspective:1600px}',
+      // Schräg gestellt wie ein Produktbild; beim Zeigen richtet er sich auf.
+      '.kr-buehne{padding:28px 30px 26px;border-radius:28px;background:linear-gradient(160deg,rgba(255,255,255,.82),rgba(255,255,255,.5));' +
+        'box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 40px 80px -20px rgba(12,46,34,.22),0 18px 36px -18px rgba(12,46,34,.18);' +
+        'transform:rotateX(16deg) rotateY(-22deg) rotateZ(4deg);transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.7,.2,1),box-shadow .9s}',
+      '#nf-kreis:hover .kr-buehne{box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 24px 50px -20px rgba(12,46,34,.18)}',
+      '#nf-kreis:hover .kr-buehne,#nf-kreis:focus-within .kr-buehne{transform:rotateX(6deg) rotateY(-8deg) rotateZ(1deg)}',
+      '.kr-kopf{transform:translateZ(40px)}',
+      '.kr-naechst{transform:translateZ(56px)}',
+      '.kr-legende{transform:translateZ(20px)}',
+      '@media (max-width:760px){.kr-buehne{transform:rotateX(10deg) rotateY(-12deg) rotateZ(2deg)}}',
+      '@media (prefers-reduced-motion:reduce){.kr-buehne{transition:none}}',
       '.kr-kopf{display:flex;align-items:center;gap:12px;margin-bottom:18px}',
       '.kr-avatar{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#0EA5E9;color:#fff;font-size:14px;font-weight:600}',
       '.kr-name{font-size:16px;font-weight:600;line-height:1.2}',
@@ -430,13 +441,13 @@
     var n = STAGES.length, spanje = (BOGEN - (n - 1) * LUECKE) / n, start = -90 - BOGEN / 2;
     var winkel = STAGES.map(function (s, i) { var a = start + i * (spanje + LUECKE); return [a, a + spanje]; });
 
-    kreisRoot.innerHTML =
+    kreisRoot.innerHTML = '<div class="kr-buehne">' +
       '<div class="kr-kopf"><span class="kr-avatar">AB</span><div><div class="kr-name">Alex Beispiel</div>' +
       '<div class="kr-sub">Teilnehmer:in · Akte</div></div><span class="kr-chip"></span></div>' +
       '<div class="kr-bogen"><svg viewBox="0 0 ' + SIZE + ' ' + vbH.toFixed(1) + '" aria-hidden="true"></svg>' +
       '<div class="kr-mitte"></div></div>' +
       '<ol class="kr-legende" aria-label="Stages des Ablaufs"></ol>' +
-      '<div class="kr-naechst"><small>Als Nächstes</small><div class="kr-aufgabe"></div></div>';
+      '<div class="kr-naechst"><small>Als Nächstes</small><div class="kr-aufgabe"></div></div></div>';
     kreisRoot.setAttribute('role', 'img');
     var svgK = $('svg', kreisRoot), mitte = $('.kr-mitte', kreisRoot), legende = $('.kr-legende', kreisRoot);
     var chip = $('.kr-chip', kreisRoot), aufgabe = $('.kr-aufgabe', kreisRoot);
