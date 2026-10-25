@@ -247,6 +247,32 @@ RUNTIME_CSS = """
   .ax-note { margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px;
     line-height: 1.6; color: #135A3F; }
   .ax-note[hidden] { display: none; }
+  /* Hero: zwei Türen als Kacheln. */
+  .nb-tueren { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr)); gap: 20px; }
+  .nb-tuer { display: flex; flex-direction: column; min-width: 0; padding: clamp(24px, 3vw, 36px);
+    border-radius: 28px; border: 1px solid rgba(19,90,63,.2); background: rgba(255,255,255,.55);
+    transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s, background .4s; }
+  .nb-tuer:hover { transform: translateY(-3px); background: rgba(255,255,255,.75); box-shadow: 0 30px 60px -30px rgba(12,46,34,.25); }
+  .nb-tuer-weg { font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #135A3F; }
+  .nb-tuer-titel { margin: 10px 0 0; font-size: clamp(26px, 2.8vw, 34px); line-height: 1.08; letter-spacing: -.025em; font-weight: 600; }
+  .nb-tuer-bild { flex: 1; display: grid; align-items: center; min-height: 320px; margin: 8px 0; }
+  .nb-tuer-fuss { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px;
+    padding-top: 18px; border-top: 1px dashed rgba(19,90,63,.3); font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; }
+  .nb-tuer-los { width: auto; padding: 11px 20px; border-radius: 999px; border: 1px solid #135A3F; background: #135A3F; color: #F4F3EE;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .04em; cursor: pointer; text-decoration: none; }
+  .nb-tuer-los:hover { background: #0B3D2A; }
+  /* Bento: Kacheln in verschiedenen Größen, jede zum Anfassen. */
+  .nb-bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
+  .nb-kachel { display: flex; flex-direction: column; min-width: 0; padding: clamp(20px, 2.6vw, 32px);
+    border-radius: 24px; border: 1px solid rgba(19,90,63,.16); background: rgba(255,255,255,.5); }
+  .nb-k4 { grid-column: span 4; } .nb-k6 { grid-column: span 6; } .nb-k8 { grid-column: span 8; } .nb-k12 { grid-column: span 12; }
+  .nb-hoch { grid-row: span 2; }
+  .nb-k-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #135A3F; }
+  .nb-k-titel { margin: 6px 0 22px; font-size: clamp(19px, 1.8vw, 22px); line-height: 1.2; letter-spacing: -.015em; font-weight: 600; }
+  @media (max-width: 960px) {
+    .nb-bento { grid-template-columns: 1fr; }
+    .nb-k4, .nb-k6, .nb-k8, .nb-k12 { grid-column: auto; } .nb-hoch { grid-row: auto; }
+  }
   /* Schmaler Viewport: Logo und Anfrage-Button in die erste Zeile, Navigation darunter. */
   @media (max-width: 860px) {
     header > a[href="#kontakt"] { margin-left: auto; }

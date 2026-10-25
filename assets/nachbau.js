@@ -53,7 +53,7 @@
     '.nb-ein{animation:nb-ein .4s ease both}',
 
     // Pipeline
-    '.nb-pipe{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,1fr);gap:14px;overflow-x:auto;padding:6px 2px 14px;scroll-snap-type:x mandatory}',
+    '.nb-pipe{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,1fr);gap:14px;overflow-x:auto;padding:6px 2px 14px;scroll-snap-type:x mandatory}',
     '.nb-spalte{display:flex;flex-direction:column;gap:10px;min-height:340px;padding:12px;border-radius:16px;background:rgba(255,255,255,.55);scroll-snap-align:start;transition:background .2s,box-shadow .2s}',
     '.nb-spalte.ziel{background:rgba(255,255,255,.9);box-shadow:0 0 0 2px var(--f) inset}',
     '.nb-spalte-kopf{display:flex;align-items:center;gap:8px;padding-bottom:10px;border-bottom:3px solid var(--f);font-weight:600;font-size:14px}',
@@ -144,6 +144,18 @@
     '.nb-senden b{padding:6px 12px;border-radius:6px;background:#e4e4e7;color:#a1a1aa;font-weight:600;transition:background .3s,color .3s}',
     '.nb-senden.bereit b{background:' + GRUEN + ';color:#fff}',
 
+    // Anwesenheit
+    '.aw-tab{display:grid;grid-template-columns:auto repeat(5,minmax(30px,44px));gap:6px;align-items:center;justify-content:start}',
+    '.aw-tag{font-size:11px;font-weight:600;color:#71717a;text-align:center}',
+    '.aw-name{padding-right:10px;font-size:13px;font-weight:500;white-space:nowrap}',
+    '.aw-zelle{width:100%;aspect-ratio:1;border:0;border-radius:10px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s,transform .15s}',
+    '.aw-zelle:hover{transform:scale(1.06)}',
+    '.aw-zelle:focus-visible{outline:2px solid ' + GRUEN + ';outline-offset:2px}',
+    '.aw-da{background:rgba(19,90,63,.12);color:' + GRUEN + '}',
+    '.aw-krank{background:rgba(245,158,11,.16);color:#B45309}',
+    '.aw-fehlt{background:rgba(179,64,46,.14);color:' + ROT + '}',
+    '.aw-fuss{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin-top:16px;font-size:12px;color:#52525b}',
+    '.aw-fuss b{color:#18181b}',
     // Aufnahme-Portal (Farben aus portal/public/stil.css)
     '.pt-buehne{display:grid;grid-template-columns:auto minmax(48px,.5fr) minmax(0,1.1fr);align-items:center;gap:0}',
     '.pt-handy{width:250px;padding:10px;border-radius:38px;background:#1a202c;box-shadow:0 30px 60px -20px rgba(12,46,34,.35)}',
@@ -200,7 +212,7 @@
     ['erstkontakt', 'Kovalenko Olha', 'K3', 'Bürokauffrau', 'Graz Ost', null],
     ['suche', 'Hofer Jonas', 'K1', 'Metalltechnik', 'Deutschlandsberg', null],
     ['suche', 'Đurđević Ivana', 'K1', 'Einzelhandel', 'Graz West', null],
-    ['vorstellung', 'Bauer Lena', 'K2', 'Köchin', 'Voitsberg', null],
+    ['suche', 'Bauer Lena', 'K2', 'Köchin', 'Voitsberg', null],
     ['massnahme', 'Nikolić Marko', 'K1', 'Installationstechnik', 'Graz Ost', null]
   ];
   var VON_SELBST = {
@@ -213,7 +225,7 @@
   function pipeline(root) {
     root.innerHTML = '<div class="nb-pipe"></div><div class="nb-hinweis">Karten in eine andere Spalte ziehen — was dort von selbst passiert, steht an der Karte.</div>';
     var pipe = root.firstChild, spalten = {};
-    Object.keys(STAGE).forEach(function (k) {
+    ['aufgebucht', 'erstkontakt', 'suche', 'massnahme'].forEach(function (k) {
       var s = STAGE[k], sp = document.createElement('div');
       sp.className = 'nb-spalte';
       sp.dataset.stage = k;
@@ -440,6 +452,44 @@
     malen();
   }
 
+  // ============================================================ Anwesenheit
+  // Eine Woche, drei Personen. Antippen wechselt: da → krank → fehlt → da.
+  // Stundenliste und Hinweis rechnen sofort mit.
+  function anwesenheit(root) {
+    var TAGE = ['Mo', 'Di', 'Mi', 'Do', 'Fr'], STUNDEN = 7.5;
+    var leute = [['Gruber L.', ['da', 'da', 'da', 'da', 'da']], ['Yılmaz E.', ['da', 'da', 'krank', 'da', 'da']], ['Hofer J.', ['da', 'da', 'da', 'fehlt', 'da']]];
+    var ZEICHEN = { da: '✓', krank: 'K', fehlt: '!' }, NAME = { da: 'anwesend', krank: 'Krankenstand', fehlt: 'fehlt ohne Grund' };
+    var kw = (function () {
+      var d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+      var w1 = new Date(d.getFullYear(), 0, 4);
+      return 1 + Math.round(((d - w1) / 864e5 - 3 + (w1.getDay() + 6) % 7) / 7);
+    })();
+    root.innerHTML = '<div class="aw-tab" role="grid" aria-label="Anwesenheit KW ' + kw + '"></div><div class="aw-fuss"></div>';
+    var tab = root.querySelector('.aw-tab'), fuss = root.querySelector('.aw-fuss');
+    function malen() {
+      tab.innerHTML = '<span></span>' + TAGE.map(function (t) { return '<span class="aw-tag">' + t + '</span>'; }).join('') +
+        leute.map(function (l, i) {
+          return '<span class="aw-name">' + esc(l[0]) + '</span>' + l[1].map(function (z, j) {
+            return '<button type="button" class="aw-zelle aw-' + z + '" data-i="' + i + '" data-j="' + j + '" aria-label="' + esc(l[0]) + ', ' + TAGE[j] + ': ' + NAME[z] + '">' + ZEICHEN[z] + '</button>';
+          }).join('');
+        }).join('');
+      var da = 0, fehlt = 0;
+      leute.forEach(function (l) { l[1].forEach(function (z) { if (z === 'da') da++; if (z === 'fehlt') fehlt++; }); });
+      fuss.innerHTML = '<span>Stundenliste KW ' + kw + ' · <b>' + (da * STUNDEN).toLocaleString('de-AT') + ' h</b></span>' +
+        (fehlt ? '<span class="nb-chip nb-krit">⚠ ' + fehlt + ' Fehltag' + (fehlt > 1 ? 'e' : '') + ' ohne Grund</span>' : '<span class="nb-chip nb-brand">✓ Woche vollständig</span>');
+    }
+    tab.addEventListener('click', function (e) {
+      var b = e.target.closest('.aw-zelle');
+      if (!b) return;
+      var l = leute[+b.dataset.i][1], j = +b.dataset.j;
+      l[j] = { da: 'krank', krank: 'fehlt', fehlt: 'da' }[l[j]];
+      malen();
+      var neu = tab.querySelector('[data-i="' + b.dataset.i + '"][data-j="' + j + '"]');
+      if (neu) { neu.focus(); neu.classList.add('nb-ein'); }
+    });
+    malen();
+  }
+
   // ============================================================ Aufnahme-Portal
   // Die Seite der Teilnehmerin (portal/public, Farben aus stil.css) auf dem
   // Handy; rechts die Akte, in der die Unterlagen verschlüsselt ankommen.
@@ -571,7 +621,7 @@
     });
   }
 
-  var BAU = { pipeline: pipeline, vorlage: vorlage, teilnehmer: teilnehmer, amsfelder: amsfelder, portal: portal };
+  var BAU = { pipeline: pipeline, vorlage: vorlage, teilnehmer: teilnehmer, amsfelder: amsfelder, portal: portal, anwesenheit: anwesenheit };
   Array.prototype.forEach.call(document.querySelectorAll('[data-nachbau]'), function (el) {
     var f = BAU[el.dataset.nachbau];
     if (f) f(el);

@@ -374,6 +374,9 @@
       '@media (max-width:760px){.kr-buehne{transform:rotateX(10deg) rotateY(-12deg) rotateZ(2deg)}}',
       '@media (prefers-reduced-motion:reduce){.kr-buehne{transition:none}}',
       '.kr-kopf{display:flex;align-items:center;gap:12px;margin-bottom:18px}',
+      // In der Tür im Hero: nur Kopf und Bogen.
+      '#nf-kreis[data-kompakt] .kr-legende,#nf-kreis[data-kompakt] .kr-naechst{display:none}',
+      '#nf-kreis[data-kompakt]{max-width:340px}',
       '.kr-avatar{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#0EA5E9;color:#fff;font-size:14px;font-weight:600}',
       '.kr-name{font-size:16px;font-weight:600;line-height:1.2}',
       '.kr-sub{font-size:12px;color:#71717a}',
