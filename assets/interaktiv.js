@@ -292,7 +292,7 @@
     var aktualisieren = function () {
       var g = gewaehlt();
       stand.textContent = g.length
-        ? g.length + ' von ' + zeilen.length + ' Pflichten ausgewählt — alle in AQUAflow abgebildet'
+        ? g.length + ' von ' + zeilen.length + ' Pflichten ausgewählt — alle in der Software abgebildet'
         : 'Noch nichts ausgewählt';
       los.disabled = !g.length;
     };
@@ -551,7 +551,7 @@
         farbe: ROT
       },
       lokal: {
-        knopf: 'AQUAflow',
+        knopf: 'Mit unserer Software',
         links: ['Ihr Büro', 'Die Daten bleiben hier', 'Verschlüsselte Datenbank auf Ihrem Gerät oder Server. Wer die Datei kopiert, hat nichts Lesbares.'],
         label: 'nur bei mehreren Standorten: verschlüsselte Pakete',
         pakete: ['🔒 a8f3…', '🔒 c71e…', '🔒 09bd…'],
@@ -615,13 +615,13 @@
   if (!root) return;
   var G = '#135A3F', H = '#7FD1A6';
   var ST = [
-    { id: 'aufnahme', x: 60, y: 90, name: 'Prozessaufnahme', dauer: '1–2 Tage vor Ort', text: 'Ich begleite Ihr Team im Alltag und halte fest, welche Handgriffe sich wiederholen, wie lange sie dauern und wo Daten doppelt entstehen.' },
-    { id: 'bauplan', x: 270, y: 90, name: 'Bauplan', dauer: 'schriftlich, auch ohne Folgeauftrag nutzbar', text: 'Jeder Ablauf gezeichnet, mit Zeitaufwand pro Schritt und dem Vorschlag, was die Software übernimmt — und was nicht.' },
-    { id: 'software', x: 560, y: 40, name: 'Software einrichten', dauer: 'wenige Wochen', text: 'Datenübernahme aus Ihren Listen, Vorlagen hinterlegen, Rollen einrichten, Ihr Team schulen. Danach läuft der erste Ablauf im Alltag.' },
-    { id: 'individuell', x: 560, y: 150, name: 'Individuell bauen', dauer: 'nach Aufwand', text: 'Was sich nicht einstellen lässt, wird gebaut: eigene Berichtsformate, Anbindung an ein Bestandssystem, Sonderabläufe.' },
-    { id: 'betrieb', x: 860, y: 90, name: 'Betrieb & Ausbau', dauer: 'laufend, fester Ansprechpartner', text: 'Updates, Anpassung an geänderte Richtlinien, Unterstützung im Alltag. Weitere Abläufe kommen dazu, sobald der vorige sitzt.' }
+    { id: 'aufnahme', x: 60, y: 70, name: 'Prozessaufnahme', dauer: '1–2 Tage vor Ort', text: 'Ich begleite Ihr Team im Alltag und halte fest, welche Handgriffe sich wiederholen, wie lange sie dauern und wo Daten doppelt entstehen.' },
+    { id: 'bauplan', x: 320, y: 70, name: 'Bauplan', dauer: 'schriftlich, auch ohne Folgeauftrag nutzbar', text: 'Jeder Ablauf gezeichnet, mit Zeitaufwand pro Schritt und dem Vorschlag, was die Software übernimmt — und was nicht.' },
+    { id: 'software', x: 600, y: 70, name: 'Einrichtung', dauer: 'wenige Wochen', text: 'Datenübernahme aus Ihren Listen, Vorlagen hinterlegen, Rollen einrichten, Ihr Team schulen. Danach läuft der erste Ablauf im Alltag.' },
+    { id: 'individuell', x: 735, y: 175, name: 'Individuell bauen', dauer: 'nur falls nötig, nach Aufwand', text: 'Was sich nicht einstellen lässt, wird dazugebaut: eigene Berichtsformate, Anbindung an ein Bestandssystem, Sonderabläufe. Ein Zusatz, kein Muss.' },
+    { id: 'betrieb', x: 870, y: 70, name: 'Betrieb & Ausbau', dauer: 'laufend, fester Ansprechpartner', text: 'Updates, Anpassung an geänderte Richtlinien, Unterstützung im Alltag. Abgerechnet wird nur, wer in Ausbildung ist.' }
   ];
-  var LINIEN = [['aufnahme', 'bauplan'], ['bauplan', 'software'], ['bauplan', 'individuell'], ['software', 'betrieb'], ['individuell', 'betrieb']];
+  var LINIEN = [['aufnahme', 'bauplan'], ['bauplan', 'software'], ['software', 'betrieb'], ['software', 'individuell'], ['individuell', 'betrieb']];
   var by = {}; ST.forEach(function (s) { by[s.id] = s; });
   var st = document.createElement('style');
   st.textContent = [
@@ -629,6 +629,8 @@
     '.ln-plan{width:100%;height:auto;overflow:visible}',
     '.ln-weg{fill:none;stroke:' + G + ';stroke-width:6;stroke-linecap:round;stroke-linejoin:round;opacity:.25;transition:opacity .3s}',
     '.ln-weg.an{opacity:1}',
+    '.ln-weg[data-l*="individuell"]{stroke-dasharray:2 12}',
+    '.ln-st[data-s="individuell"] circle{stroke-dasharray:4 4}',
     '.ln-st{cursor:pointer;outline:none}',
     '.ln-st circle{fill:#F4F3EE;stroke:' + G + ';stroke-width:5;transition:r .2s,fill .2s}',
     '.ln-st:hover circle,.ln-st:focus-visible circle{r:16}',
@@ -654,8 +656,8 @@
     var p = by[a], q = by[b], mx = (p.x + q.x) / 2;
     return 'M' + p.x + ',' + p.y + ' C' + mx + ',' + p.y + ' ' + mx + ',' + q.y + ' ' + q.x + ',' + q.y;
   };
-  root.innerHTML = '<div class="ln-tipp">Stationen anklicken — die Gabelung zeigt: fertige Software einrichten oder Eigenes bauen lassen, oft beides.</div>' +
-    '<svg class="ln-plan" viewBox="0 -10 920 230" role="group" aria-label="Ablauf der Zusammenarbeit">' +
+  root.innerHTML = '<div class="ln-tipp">Stationen anklicken. Der gestrichelte Abzweig ist optional — nur wenn sich etwas nicht einstellen lässt.</div>' +
+    '<svg class="ln-plan" viewBox="0 10 930 225" role="group" aria-label="Ablauf der Zusammenarbeit">' +
     LINIEN.map(function (l) { return '<path class="ln-weg" data-l="' + l.join('-') + '" d="' + weg(l[0], l[1]) + '"/>'; }).join('') +
     ST.map(function (s) {
       return '<g class="ln-st" data-s="' + s.id + '" tabindex="0" role="button" aria-label="' + s.name + '"><circle cx="' + s.x + '" cy="' + s.y + '" r="13"/>' +
@@ -664,18 +666,16 @@
     '<ul class="ln-liste">' + ST.map(function (s) { return '<li><button type="button" data-s="' + s.id + '">' + s.name + '<small>' + s.dauer.split(',')[0] + '</small></button></li>'; }).join('') + '</ul>' +
     '<div class="ln-detail" aria-live="polite"></div>';
   var detail = root.querySelector('.ln-detail');
-  var REIHE = ['aufnahme', 'bauplan', 'software', 'individuell', 'betrieb'];
+  var HAUPT = ['aufnahme', 'bauplan', 'software', 'betrieb'];
   function waehle(id) {
-    var bis = REIHE.indexOf(id);
+    var ab = id === 'individuell', bis = ab ? 2 : HAUPT.indexOf(id);
     root.querySelectorAll('[data-s]').forEach(function (g) {
-      var k = g.dataset.s, n = REIHE.indexOf(k);
-      var an = n <= bis && !(id === 'software' && k === 'individuell') && !(id === 'individuell' && k === 'software');
-      g.classList.toggle('an', an);
+      var k = g.dataset.s;
+      g.classList.toggle('an', k === 'individuell' ? ab : HAUPT.indexOf(k) <= bis);
     });
     root.querySelectorAll('.ln-weg').forEach(function (p) {
-      var ab = p.dataset.l.split('-');
-      var an = REIHE.indexOf(ab[1]) <= bis && !(id === 'software' && ab[1] === 'individuell') && !(id === 'individuell' && ab[1] === 'software') &&
-        !(id === 'software' && ab[0] === 'individuell') && !(id === 'individuell' && ab[0] === 'software');
+      var e = p.dataset.l.split('-');
+      var an = e[1] === 'individuell' ? ab : e[0] === 'individuell' ? false : HAUPT.indexOf(e[1]) <= bis;
       p.classList.toggle('an', an);
     });
     var s = by[id];
