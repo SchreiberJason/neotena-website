@@ -288,6 +288,9 @@ RUNTIME_CSS = """
   .nb-tuer-los { width: auto; padding: 11px 20px; border-radius: 999px; border: 1px solid #135A3F; background: #135A3F; color: #F4F3EE;
     font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .04em; cursor: pointer; text-decoration: none; }
   .nb-tuer-los:hover { background: #0B3D2A; }
+  /* Dunkelgrünes Band: bricht die Papierfläche auf; Kacheln stehen hell darauf. */
+  .nb-band .nb-tuer { background: #F4F3EE; border-color: transparent; color: #121A22; }
+  .nb-band .nb-tuer:hover { background: #FFFFFF; box-shadow: 0 30px 60px -20px rgba(0,0,0,.45); }
   /* Weg 1: das Paket als drei aufgefächerte Karten. */
   .nb-paket { position: relative; display: grid; gap: 12px; max-width: 400px; width: 100%; margin: 0 auto; }
   .nb-paket-karte { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-items: baseline; padding: 18px 20px;

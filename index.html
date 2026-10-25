@@ -129,6 +129,9 @@
   .nb-tuer-los { width: auto; padding: 11px 20px; border-radius: 999px; border: 1px solid #135A3F; background: #135A3F; color: #F4F3EE;
     font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .04em; cursor: pointer; text-decoration: none; }
   .nb-tuer-los:hover { background: #0B3D2A; }
+  /* Dunkelgrünes Band: bricht die Papierfläche auf; Kacheln stehen hell darauf. */
+  .nb-band .nb-tuer { background: #F4F3EE; border-color: transparent; color: #121A22; }
+  .nb-band .nb-tuer:hover { background: #FFFFFF; box-shadow: 0 30px 60px -20px rgba(0,0,0,.45); }
   /* Weg 1: das Paket als drei aufgefächerte Karten. */
   .nb-paket { position: relative; display: grid; gap: 12px; max-width: 400px; width: 100%; margin: 0 auto; }
   .nb-paket-karte { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-items: baseline; padding: 18px 20px;
@@ -242,10 +245,10 @@
       </div>
     </section>
 
-    <section style="padding: clamp(64px, 8vw, 120px) clamp(20px, 5vw, 40px); border-bottom: 1px solid rgba(19,90,63,.25);">
+    <section class="nb-band" style="padding: clamp(72px, 9vw, 130px) clamp(20px, 5vw, 40px); background: #0C2E22; color: #EAF2ED;">
       <div style="max-width: 1160px; margin: 0 auto;">
-        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 04 · Zwei Wege</div>
-        <h2 style="font-size: clamp(30px, 3.6vw, 46px); line-height: 1.05; letter-spacing: -.03em; font-weight: 600; margin: 0 0 clamp(32px, 4vw, 48px);">Zwei Wege. <span style="color: #135A3F;">Ein Ziel.</span></h2>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #7FD1A6; margin-bottom: 18px;">Blatt 04 · Zwei Wege</div>
+        <h2 style="font-size: clamp(30px, 3.6vw, 46px); line-height: 1.05; letter-spacing: -.03em; font-weight: 600; margin: 0 0 clamp(32px, 4vw, 48px);">Zwei Wege. <span style="color: #7FD1A6;">Ein Ziel.</span></h2>
         <div class="nb-tueren">
           <div class="nb-tuer">
             <div class="nb-tuer-weg">Weg 1</div>
