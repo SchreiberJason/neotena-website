@@ -155,6 +155,14 @@
     font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .04em; text-decoration: none; transition: background .3s; }
   .nb-pilot-los:hover { background: #A6E3C3; }
   @media (max-width: 860px) { .nb-pilot { grid-template-columns: 1fr; } }
+  /* Sicherheit: drei Gruppen, je Schicht ein Satz und die Technik. */
+  .nb-schutz { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 16px; }
+  .nb-sg { display: grid; align-content: start; gap: 0; padding: clamp(20px, 2.6vw, 30px); border-radius: 24px; border: 1px solid rgba(19,90,63,.16); background: rgba(255,255,255,.5); }
+  .nb-sg .nb-k-label { margin-bottom: 10px; }
+  .nb-sz { display: grid; gap: 4px; padding: 16px 0; border-top: 1px solid rgba(19,90,63,.14); }
+  .nb-sz b { font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+  .nb-sz span { font-size: 15px; line-height: 1.55; color: #3C4A58; }
+  .nb-sz code { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #135A3F; }
   /* Kosten: welche Stages verrechnet werden. */
   .nb-zaehlt { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
   .nb-z-st { display: grid; gap: 6px; padding: 14px; border-radius: 14px; border: 1px dashed rgba(127,209,166,.3);
@@ -620,53 +628,26 @@
       </div>
     </section>
 
-    <section style="padding: clamp(30px, 7vw, 40px) clamp(20px, 5vw, 40px) clamp(52px, 7vw, 76px);">
-      <div style="max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 20px;">
-          <div style="border-radius: 18px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 30px;">
-            <h3 style="font-size: 21px; font-weight: 600; margin: 0 0 10px;">Die Daten bleiben bei Ihnen</h3>
-            <p style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58; margin: 0 0 14px;">Die Datenbank liegt als verschlüsselte Datei auf Ihrem Gerät oder Ihrem Server. Es gibt keinen zentralen Dienst, bei dem Ihre Daten liegen und der kompromittiert werden könnte.</p>
-            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">lokale Datenhaltung · kein SaaS-Login</div>
+    <section style="padding: clamp(40px, 6vw, 80px) clamp(20px, 5vw, 40px) clamp(52px, 7vw, 90px);">
+      <div style="max-width: 1160px; margin: 0 auto;">
+        <h2 style="font-size: clamp(28px, 3.2vw, 40px); line-height: 1.06; letter-spacing: -.03em; font-weight: 600; margin: 0 0 clamp(28px, 4vw, 44px);">Neun Schutzschichten. <span style="color: #135A3F;">In einem Satz je Schicht.</span></h2>
+        <div class="nb-schutz">
+          <div class="nb-sg"><div class="nb-k-label">Speichern</div>
+            <div class="nb-sz"><b>Die Daten bleiben bei Ihnen</b><span>Verschlüsselte Datei auf Ihrem Gerät oder Server — kein zentraler Dienst.</span><code>lokale Datenhaltung · kein SaaS-Login</code></div>
+            <div class="nb-sz"><b>Verschlüsselt abgelegt</b><span>Wer die Datei kopiert, hat nichts Lesbares.</span><code>AES-256-GCM · NIST SP 800-38D</code></div>
+            <div class="nb-sz"><b>Mehrere Standorte, kein Einblick</b><span>Zwischen Standorten nur Ende-zu-Ende-verschlüsselte Pakete.</span><code>X25519 · ChaCha20-Poly1305</code></div>
           </div>
-          <div style="border-radius: 18px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 30px;">
-            <h3 style="font-size: 21px; font-weight: 600; margin: 0 0 10px;">Verschlüsselt abgelegt</h3>
-            <p style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58; margin: 0 0 14px;">Zugangsdaten, Tokens und sensible Felder werden authentifiziert verschlüsselt, mit eigenem Nonce pro Eintrag. Wer die Datei kopiert, hat nichts Lesbares.</p>
-            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">AES-256-GCM · NIST SP 800-38D</div>
+          <div class="nb-sg"><div class="nb-k-label">Zugreifen</div>
+            <div class="nb-sz"><b>Geschützter Zugang</b><span>Eine gestohlene Datenbank hilft niemandem weiter.</span><code>Argon2id · 64 MB Memory · 3 Iterations</code></div>
+            <div class="nb-sz"><b>Entsperren per Fingerabdruck</b><span>Der Schlüssel verlässt den Sicherheitschip nie.</span><code>Secure Enclave · TPM 2.0</code></div>
+            <div class="nb-sz"><b>Rollen und Sichtbarkeiten</b><span>Nicht jeder sieht alles — Datenminimierung im Alltag.</span><code>drei Sicherheitsstufen</code></div>
           </div>
-          <div style="border-radius: 18px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 30px;">
-            <h3 style="font-size: 21px; font-weight: 600; margin: 0 0 10px;">Geschützter Zugang</h3>
-            <p style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58; margin: 0 0 14px;">Das Master-Passwort wird nach OWASP-Empfehlung gehasht. Ein Angreifer mit entwendeter Datenbank kommt damit nicht weiter.</p>
-            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">Argon2id · 64 MB Memory · 3 Iterations</div>
+          <div class="nb-sg"><div class="nb-k-label">Betreiben</div>
+            <div class="nb-sz"><b>Revisionssichere Protokollierung</b><span>Jede Änderung mit Zeit und Person — bereit für Vor-Ort-Prüfungen.</span><code>vollständige Änderungshistorie</code></div>
+            <div class="nb-sz"><b>Updates, die geprüft ankommen</b><span>Signiert und notarisiert — Manipuliertes startet nicht.</span><code>Apple Notarization · Authenticode</code></div>
+            <div class="nb-sz"><b>Keine Telemetrie</b><span>Keine Nutzungsdaten. Fehlerberichte nur, wenn Sie sie schicken.</span><code>kein Tracking · kein Profiling</code></div>
           </div>
-          <div style="border-radius: 18px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 30px;">
-            <h3 style="font-size: 21px; font-weight: 600; margin: 0 0 10px;">Entsperren per Fingerabdruck</h3>
-            <p style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58; margin: 0 0 14px;">Touch ID und Windows Hello entsperren die Anwendung, ohne dass der Schlüssel die Secure Enclave beziehungsweise das TPM verlässt.</p>
-            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">Secure Enclave · TPM 2.0</div>
-          </div>
-          <div style="border-radius: 18px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 30px;">
-            <h3 style="font-size: 21px; font-weight: 600; margin: 0 0 10px;">Rollen und Sichtbarkeiten</h3>
-            <p style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58; margin: 0 0 14px;">Nicht jeder sieht alles. Rollen begrenzen den Zugriff auf Projekte, Standorte und Dokumentarten — die Grundlage für Datenminimierung im Alltag.</p>
-            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">drei Sicherheitsstufen</div>
-          </div>
-          <div style="border-radius: 18px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 30px;">
-            <h3 style="font-size: 21px; font-weight: 600; margin: 0 0 10px;">Revisionssichere Protokollierung</h3>
-            <p style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58; margin: 0 0 14px;">Jede Änderung ist mit Zeitpunkt und Benutzer nachvollziehbar. Das ist die Voraussetzung für unangekündigte Vor-Ort-Prüfungen.</p>
-            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">vollständige Änderungshistorie</div>
-          </div>
-          <div style="border-radius: 18px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 30px;">
-            <h3 style="font-size: 21px; font-weight: 600; margin: 0 0 10px;">Mehrere Standorte, kein Einblick</h3>
-            <p style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58; margin: 0 0 14px;">Wenn Standorte Daten austauschen müssen, werden ausschließlich Ende-zu-Ende-verschlüsselte Pakete übertragen. Die Zwischenstelle kann den Inhalt nicht lesen.</p>
-            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">X25519 · ChaCha20-Poly1305</div>
-          </div>
-          <div style="border-radius: 18px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 30px;">
-            <h3 style="font-size: 21px; font-weight: 600; margin: 0 0 10px;">Updates, die geprüft ankommen</h3>
-            <p style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58; margin: 0 0 14px;">Jede Version ist signiert und notarisiert. Manipulierte Dateien lässt das Betriebssystem nicht starten.</p>
-            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">Apple Notarization · Authenticode</div>
-          </div>
-          <div style="border-radius: 18px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 30px;">
-            <h3 style="font-size: 21px; font-weight: 600; margin: 0 0 10px;">Keine Telemetrie</h3>
-            <p style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58; margin: 0 0 14px;">Die Anwendung sendet keine Nutzungsdaten. Fehlerberichte gehen nur, wenn ein Mitarbeiter sie aktiv abschickt.</p>
-            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">kein Tracking · kein Profiling</div>
-          </div>
+        </div>
       </div>
     </section>
 

@@ -314,6 +314,14 @@ RUNTIME_CSS = """
     font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .04em; text-decoration: none; transition: background .3s; }
   .nb-pilot-los:hover { background: #A6E3C3; }
   @media (max-width: 860px) { .nb-pilot { grid-template-columns: 1fr; } }
+  /* Sicherheit: drei Gruppen, je Schicht ein Satz und die Technik. */
+  .nb-schutz { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 16px; }
+  .nb-sg { display: grid; align-content: start; gap: 0; padding: clamp(20px, 2.6vw, 30px); border-radius: 24px; border: 1px solid rgba(19,90,63,.16); background: rgba(255,255,255,.5); }
+  .nb-sg .nb-k-label { margin-bottom: 10px; }
+  .nb-sz { display: grid; gap: 4px; padding: 16px 0; border-top: 1px solid rgba(19,90,63,.14); }
+  .nb-sz b { font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+  .nb-sz span { font-size: 15px; line-height: 1.55; color: #3C4A58; }
+  .nb-sz code { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #135A3F; }
   /* Kosten: welche Stages verrechnet werden. */
   .nb-zaehlt { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
   .nb-z-st { display: grid; gap: 6px; padding: 14px; border-radius: 14px; border: 1px dashed rgba(127,209,166,.3);
