@@ -366,10 +366,7 @@
     kcss.textContent = [
       '#nf-kreis{font-family:' + APP + ';color:#18181b;max-width:480px;margin:0 auto;width:100%;perspective:1600px}',
       // Schräg gestellt wie ein Produktbild; beim Zeigen richtet er sich auf.
-      '.kr-buehne{padding:28px 30px 26px;border-radius:28px;background:linear-gradient(160deg,rgba(255,255,255,.82),rgba(255,255,255,.5));' +
-        'box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 40px 80px -20px rgba(12,46,34,.22),0 18px 36px -18px rgba(12,46,34,.18);' +
-        'transform:rotateX(16deg) rotateY(-22deg) rotateZ(4deg);transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.7,.2,1),box-shadow .9s}',
-      '#nf-kreis:hover .kr-buehne{box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 24px 50px -20px rgba(12,46,34,.18)}',
+      '.kr-buehne{transform:rotateX(16deg) rotateY(-22deg) rotateZ(4deg);transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.7,.2,1)}',
       '#nf-kreis:hover .kr-buehne,#nf-kreis:focus-within .kr-buehne{transform:rotateX(6deg) rotateY(-8deg) rotateZ(1deg)}',
       '.kr-kopf{transform:translateZ(40px)}',
       '.kr-naechst{transform:translateZ(56px)}',
