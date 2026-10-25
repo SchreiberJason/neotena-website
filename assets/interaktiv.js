@@ -384,7 +384,7 @@
       '.kr-bogen{position:relative}',
       '.kr-bogen svg{display:block;width:100%;height:auto;overflow:visible}',
       '.kr-bogen path{transition:fill .5s ease,opacity .15s ease;cursor:pointer}',
-      '.kr-mitte{position:absolute;left:19%;right:19%;top:24%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;pointer-events:none}',
+      '.kr-mitte{position:absolute;left:20%;right:20%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;pointer-events:none}',
       '.kr-mitte b{font-size:22px;font-weight:600;line-height:1.15;letter-spacing:-.01em}',
       '.kr-mitte span{font-size:12px;color:#71717a}',
       '.kr-mitte.kr-neu{animation:kr-ein .45s ease}',
@@ -450,6 +450,7 @@
       '<div class="kr-naechst"><small>Als Nächstes</small><div class="kr-aufgabe"></div></div></div>';
     kreisRoot.setAttribute('role', 'img');
     var svgK = $('svg', kreisRoot), mitte = $('.kr-mitte', kreisRoot), legende = $('.kr-legende', kreisRoot);
+    mitte.style.top = (cyK / vbH * 100).toFixed(2) + '%';
     var chip = $('.kr-chip', kreisRoot), aufgabe = $('.kr-aufgabe', kreisRoot);
     var pfade = STAGES.map(function (s, i) {
       var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -468,15 +469,18 @@
     });
 
     var jetzt = 2, hervorIdx = null;
+    // Feste Zeitleiste: alle 9 Tage eine Stage weiter, der Abschluss vor 3 Tagen.
+    // Vergangene Daten bleiben stehen, während die Person weiterwandert.
+    var eintritt = function (i) { return -3 - (STAGES.length - 1 - i) * 9; };
     var wert = function (i) {
-      if (i < jetzt) return tag(-(jetzt - i) * 9);
-      if (i === jetzt) return 'seit ' + tag(-3);
+      if (i < jetzt) return tag(eintritt(i));
+      if (i === jetzt) return 'seit ' + tag(eintritt(i));
       if (i === jetzt + 1) return 'möglich';
       return '—';
     };
     var mitteText = function (i) {
-      if (i === jetzt) return 'seit ' + tag(-3);
-      if (i < jetzt) return 'war dort · ' + tag(-(jetzt - i) * 9);
+      if (i === jetzt) return 'seit ' + tag(eintritt(i));
+      if (i < jetzt) return 'war dort ab ' + tag(eintritt(i));
       if (i === jetzt + 1) return 'als Nächstes möglich';
       return 'noch nicht erreicht';
     };
@@ -502,7 +506,7 @@
       kreisRoot.setAttribute('aria-label', 'Prozess-Kreis: Alex Beispiel steht in „' + STAGES[jetzt].name + '“');
       if (neu) {
         var t = STAGES[jetzt].aufgabe;
-        aufgabe.innerHTML = '<div><b>' + t[0] + '</b><span>' + t[1] + '</span></div><span class="kr-faellig">fällig ' + tag(3) + '</span>';
+        aufgabe.innerHTML = '<div><b>' + t[0] + '</b><span>' + t[1] + '</span></div><span class="kr-faellig">fällig ' + tag(2 + jetzt) + '</span>';
         [mitte, aufgabe].forEach(function (x) { x.classList.remove('kr-neu'); void x.offsetWidth; x.classList.add('kr-neu'); });
       }
     };
