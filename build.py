@@ -33,16 +33,11 @@ src = SRC.read_text(encoding="utf-8")
 helmet = re.search(r"<helmet>(.*?)</helmet>", src, re.S).group(1)
 body = re.search(r"</helmet>(.*?)</x-dc>", src, re.S).group(1)
 
-# Thumbnail-Template wird zum Favicon, nicht zum Markup.
-thumb = re.search(
-    r'<template id="__bundler_thumbnail">(.*?)</template>', helmet, re.S
-).group(1).strip()
+# Thumbnail-Template ist nur die Vorschau im Design-Canvas. Das Favicon liegt
+# als PNG unter assets/ (favicon-32.png, apple-touch-icon.png).
 helmet = re.sub(
     r'<template id="__bundler_thumbnail">.*?</template>', "", helmet, flags=re.S
 )
-favicon = "data:image/svg+xml;utf8," + re.sub(r"\s+", " ", thumb).replace(
-    "#", "%23"
-).replace('"', "'")
 
 # image-slot.js / support.js sind Canvas-Runtime, in der Seite ueberfluessig.
 helmet = re.sub(r'<script src="\./(image-slot|support)\.js"></script>\s*', "", helmet)
@@ -408,7 +403,8 @@ out = """<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#F4F3EE">
-<link rel="icon" href="{favicon}">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 {helmet}
 <style>{runtime_css}</style>
 </head>
@@ -418,7 +414,6 @@ out = """<!DOCTYPE html>
 </body>
 </html>
 """.format(
-    favicon=favicon,
     helmet=helmet.strip().replace(
         "</style>", "\n" + "\n".join("  " + r for r in extra_css) + "\n</style>"
     ),
