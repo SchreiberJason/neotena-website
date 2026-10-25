@@ -232,8 +232,11 @@ RUNTIME_CSS = """
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   img { max-width: 100%; display: block; }
   /* Lange deutsche Wörter (Datenschutzbeauftragter) trennen statt aus dem Fenster zu ragen. */
-  h1, h2, h3 { overflow-wrap: break-word; }
-  @media (max-width: 600px) { h1, h2, h3 { hyphens: auto; -webkit-hyphens: auto; } }
+  h1, h2, h3 { overflow-wrap: break-word; text-wrap: balance; }
+  /* Nur wirklich lange Wörter trennen (Datenschutzbeauftragter), nicht „ver-langt“. */
+  @media (max-width: 600px) { h1, h2, h3 { hyphens: auto; -webkit-hyphens: auto; hyphenate-limit-chars: 16 7 7; } }
+  /* Prozesse: auf dem Handy immer erst Text, dann Bild. */
+  @media (max-width: 760px) { [data-nf="ablauf"] > div { order: 0 !important; } }
   :focus-visible { outline: 2px solid #135A3F; outline-offset: 3px; }
   .ax-page[hidden] { display: none; }
   .ax-nav { width: auto; background: none; border: none; font: inherit; cursor: pointer;
@@ -269,6 +272,7 @@ RUNTIME_CSS = """
   .nb-kb-zeile:hover .nb-kb-bsp { opacity: 0; }
   @media (max-width: 820px) {
     .nb-kb-kopf { display: none; }
+    .nb-kb-zeile { padding-right: 28px; }
     .nb-kb-zeile { grid-template-columns: 2.4em minmax(0, 1fr); }
     .nb-kb-bringt, .nb-kb-bsp { grid-column: 2; }
     .nb-kb-bsp { justify-self: start; }

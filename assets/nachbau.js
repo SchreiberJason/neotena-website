@@ -137,8 +137,9 @@
     // AMS-Felder
     '.nb-ams{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start}',
     '.nb-zuord{display:grid;gap:8px}',
-    '.nb-zu{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.75);font-size:12px}',
+    '.nb-zu{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 8px;align-items:center;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.75);font-size:12px}',
     '.nb-zu em{font-style:normal;color:#a1a1aa}',
+    '.nb-zu .nb-chip{white-space:normal;text-align:right;max-width:100%}',
     '.nb-maske{padding:16px;border-radius:10px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06),0 24px 48px -24px rgba(12,46,34,.25)}',
     '.nb-maske-kopf{display:flex;justify-content:space-between;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c8102e;font-size:12px;font-weight:600}',
     '.nb-mf{display:grid;gap:3px;margin-bottom:9px;font-size:11px;color:#52525b}',
@@ -149,7 +150,7 @@
     '.nb-senden.bereit b{background:' + GRUEN + ';color:#fff}',
 
     // Anwesenheit
-    '.aw-tab{display:grid;grid-template-columns:auto repeat(5,minmax(30px,44px));gap:6px;align-items:center;justify-content:start}',
+    '.aw-tab{display:grid;grid-template-columns:auto repeat(5,minmax(26px,44px));gap:6px;align-items:center;justify-content:start}',
     '.aw-tag{font-size:11px;font-weight:600;color:#71717a;text-align:center}',
     '.aw-name{padding-right:10px;font-size:13px;font-weight:500;white-space:nowrap}',
     '.aw-zelle{width:100%;aspect-ratio:1;border:0;border-radius:10px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s,transform .15s}',

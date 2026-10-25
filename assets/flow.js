@@ -253,6 +253,7 @@
   }
   var pattern = bg.querySelector('pattern');
   function draw() {
+    if (mode === null) return; // Lage erst nach dem ersten Einpassen bekannt
     vp.style.transform = 'translate(' + view.x + 'px,' + view.y + 'px) scale(' + view.k + ')';
     pattern.setAttribute('width', GAP * view.k);
     pattern.setAttribute('height', GAP * view.k);

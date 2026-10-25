@@ -93,7 +93,8 @@
       '.dw-label{top:auto;bottom:6px;left:calc(50% + 14px);right:0;text-align:left}' +
       '.dw-paket{left:calc(50% - 30px);animation-name:dw-fahrt-v}' +
       '@keyframes dw-fahrt-v{0%{top:0;opacity:0}10%{opacity:1}85%{opacity:1}100%{top:calc(100% - 24px);opacity:0}}}',
-    '@media (prefers-reduced-motion:reduce){.nf-datei,.dw-paket{animation:none}.dw-paket{opacity:1}.dw-paket:nth-of-type(2){left:40%}.dw-paket:nth-of-type(3){left:70%}}'
+    '@media (prefers-reduced-motion:reduce){.nf-datei,.dw-paket{animation:none}.dw-paket{opacity:1}.dw-paket:nth-of-type(2){left:40%}.dw-paket:nth-of-type(3){left:70%}}',
+    '@media (prefers-reduced-motion:reduce) and (max-width:760px){.dw-paket{left:calc(50% + 12px)!important;top:6px}.dw-paket:nth-of-type(2){top:34px}.dw-paket:nth-of-type(3){display:none}.dw-label{bottom:2px}}'
   ].join('\n');
   var style = document.createElement('style');
   style.textContent = CSS;
@@ -371,7 +372,7 @@
       '.kr-kopf{transform:translateZ(40px)}',
       '.kr-naechst{transform:translateZ(56px)}',
       '.kr-legende{transform:translateZ(20px)}',
-      '@media (max-width:760px){.kr-buehne{transform:rotateX(10deg) rotateY(-12deg) rotateZ(2deg)}}',
+      '@media (max-width:760px){.kr-buehne{transform:none}.kr-kopf,.kr-naechst,.kr-legende{transform:none}}',
       '@media (prefers-reduced-motion:reduce){.kr-buehne{transition:none}}',
       '.kr-kopf{display:flex;align-items:center;gap:12px;margin-bottom:18px}',
       // In der Tür im Hero: nur Kopf und Bogen.

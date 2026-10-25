@@ -81,8 +81,8 @@
 
       <div style="position: relative; max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: clamp(40px, 6vw, 88px); align-items: center;">
         <div>
-          <span style="display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; border: 1px solid rgba(19,90,63,.3); background: rgba(255,255,255,.7); padding: 9px 20px; max-width: 100%; flex-wrap: wrap; text-align: left; line-height: 1.5; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .04em; color: #135A3F;">
-            <span style="width: 7px; height: 7px; border-radius: 50%; background: #135A3F;"></span>
+          <span style="display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; border: 1px solid rgba(19,90,63,.3); background: rgba(255,255,255,.7); padding: 9px 20px; max-width: 100%; text-align: left; line-height: 1.5; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .04em; color: #135A3F;">
+            <span style="flex: none; width: 7px; height: 7px; border-radius: 50%; background: #135A3F;"></span>
             Software und Automatisierung für AMS-Bildungsträger
           </span>
           <h1 style="font-size: clamp(38px, 5.2vw, 66px); line-height: 1.02; letter-spacing: -.04em; font-weight: 600; margin: 30px 0 26px; text-wrap: balance;">Ihre Arbeit gehört den Menschen, <span style="color: #135A3F;">nicht den Tabellen.</span></h1>
@@ -285,32 +285,7 @@
             </div>
           </div>
           <div style="order: 1;">
-            <div style="border-radius: 18px; overflow: hidden; border: 1px solid rgba(19,90,63,.22); background: #FFFFFF; box-shadow: 0 16px 36px rgba(19,90,63,.08);">
-              <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 11px 14px; border-bottom: 1px solid rgba(19,90,63,.22); background: #F7F6F2; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">
-                <span>Anwesenheit · KW 12</span><span style="color: #135A3F;">AQUAflow</span>
-              </div>
-              <div style="padding: 18px;"><div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 14px;">
-                  <div style="display: grid; gap: 6px; justify-items: center;">
-                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">Mo</span>
-                    <span style="width: 100%; aspect-ratio: 1; border-radius: 8px; border: 1px solid rgba(19,90,63,.3); display: flex; align-items: center; justify-content: center; font-size: 13px; color: #135A3F; background: rgba(19,90,63,.07); animation: axCheck 4.4s ease-in-out infinite 0s;">✓</span>
-                  </div><div style="display: grid; gap: 6px; justify-items: center;">
-                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">Di</span>
-                    <span style="width: 100%; aspect-ratio: 1; border-radius: 8px; border: 1px solid rgba(19,90,63,.3); display: flex; align-items: center; justify-content: center; font-size: 13px; color: #135A3F; background: rgba(19,90,63,.07); animation: axCheck 4.4s ease-in-out infinite 0.18s;">✓</span>
-                  </div><div style="display: grid; gap: 6px; justify-items: center;">
-                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">Mi</span>
-                    <span style="width: 100%; aspect-ratio: 1; border-radius: 8px; border: 1px solid rgba(19,90,63,.3); display: flex; align-items: center; justify-content: center; font-size: 13px; color: #B3402E; background: rgba(179,64,46,.07); animation: axCheck 4.4s ease-in-out infinite 0.36s;">–</span>
-                  </div><div style="display: grid; gap: 6px; justify-items: center;">
-                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">Do</span>
-                    <span style="width: 100%; aspect-ratio: 1; border-radius: 8px; border: 1px solid rgba(19,90,63,.3); display: flex; align-items: center; justify-content: center; font-size: 13px; color: #135A3F; background: rgba(19,90,63,.07); animation: axCheck 4.4s ease-in-out infinite 0.54s;">✓</span>
-                  </div><div style="display: grid; gap: 6px; justify-items: center;">
-                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">Fr</span>
-                    <span style="width: 100%; aspect-ratio: 1; border-radius: 8px; border: 1px solid rgba(19,90,63,.3); display: flex; align-items: center; justify-content: center; font-size: 13px; color: #135A3F; background: rgba(19,90,63,.07); animation: axCheck 4.4s ease-in-out infinite 0.72s;">✓</span>
-                  </div>
-                </div>
-                <div style="display: flex; justify-content: space-between; gap: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #3C4A58; padding-top: 12px; border-top: 1px dashed rgba(19,90,63,.3);">
-                  <span>Stundenliste</span><span style="color: #135A3F;">aktualisiert</span>
-                </div></div>
-            </div>
+            <div data-nachbau="anwesenheit"></div>
           </div>
         </div>
         <div id="ablauf-05" data-nf="ablauf" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 52px; align-items: center; padding: 56px 0; border-top: 1px solid rgba(19,90,63,.28);">
@@ -871,7 +846,7 @@
     <div style="max-width: 840px; margin: 0 auto;">
       <div style="text-align: center; margin-bottom: 52px;">
         <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 20px;">Formblatt K—01</div>
-        <h2 style="font-size: clamp(34px, 4.4vw, 54px); line-height: 1.02; letter-spacing: -.035em; font-weight: 600; margin: 0 0 16px;">Welcher Ablauf kostet Sie<br />am meisten Zeit?</h2>
+        <h2 style="font-size: clamp(34px, 4.4vw, 54px); line-height: 1.02; letter-spacing: -.035em; font-weight: 600; margin: 0 0 16px;">Welcher Ablauf kostet Sie am meisten Zeit?</h2>
         <p style="font-size: clamp(16px, 1.6vw, 17px); line-height: 1.6; color: #3C4A58; margin: 0 auto; max-width: 34em;">Schreiben Sie ihn auf. Ich melde mich mit einer Einschätzung und einem Vorschlag für die Prozessaufnahme.</p>
       </div>
 
