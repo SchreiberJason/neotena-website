@@ -136,6 +136,25 @@
   /* Dunkelgrünes Band: bricht die Papierfläche auf; Kacheln stehen hell darauf. */
   .nb-band .nb-tuer { background: #F4F3EE; border-color: transparent; color: #121A22; }
   .nb-band .nb-tuer:hover { background: #FFFFFF; box-shadow: 0 30px 60px -20px rgba(0,0,0,.45); }
+  /* Wer dahintersteht: freigestelltes Foto vor einem grünen Bogen. */
+  .nb-portrait { position: relative; max-width: 420px; width: 100%; margin: 0 auto; aspect-ratio: 720 / 994; }
+  .nb-portrait::before { content: ""; position: absolute; left: 4%; right: 4%; top: 18%; bottom: 0;
+    border-radius: 999px 999px 32px 32px; background: #0C2E22; }
+  .nb-portrait::after { content: ""; position: absolute; left: 4%; right: 4%; top: 18%; bottom: 0; border-radius: 999px 999px 32px 32px;
+    background: radial-gradient(circle at 50% 30%, rgba(127,209,166,.28), transparent 60%); }
+  .nb-portrait img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; object-position: bottom; }
+  /* Pilotangebot: dunkle Karte über die Breite. */
+  .nb-pilot { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 28px 56px; align-items: center;
+    padding: clamp(28px, 4vw, 56px); border-radius: 28px; background: #0C2E22; color: #EAF2ED; }
+  .nb-pilot-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .nb-pilot-liste li { display: grid; grid-template-columns: 2.4em 1fr; gap: 2px 10px; padding: 14px 0; border-top: 1px solid rgba(127,209,166,.22);
+    font-size: 14px; color: rgba(234,242,237,.7); }
+  .nb-pilot-liste li span { grid-row: span 2; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #7FD1A6; }
+  .nb-pilot-liste b { font-size: 17px; font-weight: 600; color: #EAF2ED; }
+  .nb-pilot-los { grid-column: 1 / -1; justify-self: start; padding: 14px 26px; border-radius: 999px; background: #7FD1A6; color: #0C2E22;
+    font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .04em; text-decoration: none; transition: background .3s; }
+  .nb-pilot-los:hover { background: #A6E3C3; }
+  @media (max-width: 860px) { .nb-pilot { grid-template-columns: 1fr; } }
   /* Weg 1: das Paket als drei aufgefächerte Karten. */
   .nb-paket { position: relative; display: grid; gap: 12px; max-width: 400px; width: 100%; margin: 0 auto; }
   .nb-paket-karte { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-items: baseline; padding: 18px 20px;
@@ -202,12 +221,12 @@
 
       <div style="position: relative; max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: clamp(40px, 6vw, 88px); align-items: center;">
         <div>
-          <span style="display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; border: 1px solid rgba(19,90,63,.3); background: rgba(255,255,255,.7); padding: 9px 20px; max-width: 100%; text-align: left; line-height: 1.5; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .04em; color: #135A3F;">
+          <a href="#pilot" style="display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; border: 1px solid rgba(19,90,63,.3); background: rgba(255,255,255,.7); padding: 9px 20px; max-width: 100%; text-align: left; line-height: 1.5; text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .04em; color: #135A3F;">
             <span style="flex: none; width: 7px; height: 7px; border-radius: 50%; background: #135A3F;"></span>
-            Software und Automatisierung für AMS-Bildungsträger
-          </span>
-          <h1 style="font-size: clamp(38px, 5.2vw, 66px); line-height: 1.02; letter-spacing: -.04em; font-weight: 600; margin: 30px 0 26px; text-wrap: balance;">Ihre Arbeit gehört den Menschen, <span style="color: #135A3F;">nicht den Tabellen.</span></h1>
-          <p style="font-size: clamp(17px, 1.8vw, 20px); line-height: 1.6; color: #3C4A58; max-width: 26em; margin: 0 0 36px;">Eine Akte pro Person. Formulare, Anwesenheiten und Meldungen entstehen daraus von selbst.</p>
+            Neu · Pilotträger gesucht
+          </a>
+          <h1 style="font-size: clamp(38px, 5.2vw, 66px); line-height: 1.02; letter-spacing: -.04em; font-weight: 600; margin: 30px 0 26px; text-wrap: balance;">Die Software für <span style="color: #135A3F; white-space: nowrap;">AMS‑Bildungsträger.</span></h1>
+          <p style="font-size: clamp(17px, 1.8vw, 20px); line-height: 1.6; color: #3C4A58; max-width: 26em; margin: 0 0 36px;">Eine Akte pro Person. Formulare, Anwesenheiten und Meldungen entstehen daraus von selbst — lokal und verschlüsselt, auf Ihren Geräten.</p>
           <div style="display: flex; gap: 14px; flex-wrap: wrap;">
             <a href="#kontakt" style="width: auto; border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 14px; letter-spacing: .04em; padding: 17px 34px; background: #135A3F; color: #F4F3EE; box-shadow: 0 12px 28px rgba(19,90,63,.22); transition: transform .3s ease, background-color .3s ease;" class="hv7">Anfrage senden</a>
             <a href="#erledigt" style="width: auto; border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 14px; letter-spacing: .04em; padding: 17px 34px; border: 1px solid rgba(19,90,63,.35); background: rgba(255,255,255,.6); color: #135A3F; transition: transform .3s ease, background-color .3s ease;" class="hv8">Was sie erledigt</a>
@@ -279,10 +298,45 @@
       </div>
     </section>
 
+    <section id="wer" style="padding: clamp(72px, 9vw, 130px) clamp(20px, 5vw, 40px); border-bottom: 1px solid rgba(19,90,63,.25);">
+      <div style="max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: clamp(40px, 6vw, 96px); align-items: center;">
+        <div class="nb-portrait"><img src="assets/jason.webp" width="720" height="994" alt="Jason Schreiber" loading="lazy" decoding="async" /></div>
+        <div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 05 · Wer dahintersteht</div>
+          <h2 style="font-size: clamp(30px, 3.6vw, 46px); line-height: 1.05; letter-spacing: -.03em; font-weight: 600; margin: 0 0 22px;">Ich kenne den Papierkram. <span style="color: #135A3F;">Von beiden Seiten.</span></h2>
+          <p style="font-size: clamp(16px, 1.6vw, 18px); line-height: 1.65; color: #3C4A58; margin: 0 0 16px; max-width: 32em;">Ich bin Jason Schreiber aus Wien. Hauptberuflich automatisiere ich bei Helferline Prozesse — wiederkehrende Abläufe raus aus der Handarbeit, in laufenden Betrieben.</p>
+          <p style="font-size: clamp(16px, 1.6vw, 18px); line-height: 1.65; color: #3C4A58; margin: 0 0 16px; max-width: 32em;">Daneben bin ich selbst Vermögensberater und Versicherungsagent. Dokumentationspflichten, Portalmasken und dieselbe Angabe in fünf Listen kenne ich aus eigener Erfahrung. Deshalb wollte ich das Problem zuerst für mich lösen.</p>
+          <p style="font-size: clamp(16px, 1.6vw, 18px); line-height: 1.65; color: #121A22; font-weight: 500; margin: 0 0 26px; max-width: 32em;">Sie sprechen direkt mit mir — vom ersten Gespräch bis zum laufenden Betrieb.</p>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px;">
+            <a href="#kontakt" class="nb-tuer-los">Gespräch vereinbaren →</a>
+            <a href="https://jasonschreiber.at" target="_blank" rel="noopener" style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; line-height: 1.7; text-decoration: underline; text-underline-offset: 3px;">jasonschreiber.at</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pilot" style="padding: clamp(64px, 8vw, 110px) clamp(20px, 5vw, 40px); border-bottom: 1px solid rgba(19,90,63,.25); scroll-margin-top: 80px;">
+      <div style="max-width: 1160px; margin: 0 auto;">
+        <div class="nb-pilot">
+          <div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #7FD1A6; margin-bottom: 18px;">Pilotträger gesucht</div>
+            <h2 style="font-size: clamp(28px, 3.4vw, 42px); line-height: 1.06; letter-spacing: -.03em; font-weight: 600; margin: 0 0 16px;">Die Software ist gebaut. <span style="color: #7FD1A6;">Jetzt suchen wir die ersten Träger.</span></h2>
+            <p style="font-size: clamp(16px, 1.6vw, 17px); line-height: 1.65; color: rgba(234,242,237,.78); margin: 0; max-width: 30em;">Für zwei bis drei Träger gibt es Pilotplätze. Sie bekommen die Software früher und günstiger — und wir bekommen ehrliche Rückmeldung aus dem Alltag.</p>
+          </div>
+          <ul class="nb-pilot-liste">
+            <li><span>01</span><b>Reduzierte Konditionen</b>im ersten Jahr</li>
+            <li><span>02</span><b>Enge Begleitung</b>direkter Draht statt Ticket</li>
+            <li><span>03</span><b>Mitsprache</b>Ihre Abläufe prägen, was als Nächstes kommt</li>
+          </ul>
+          <a href="#kontakt" class="nb-pilot-los">Pilotplatz anfragen →</a>
+        </div>
+      </div>
+    </section>
+
     <section style="padding: clamp(56px, 7vw, 88px) clamp(20px, 5vw, 40px); border-bottom: 1px solid rgba(19,90,63,.25);">
       <div style="max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 64px; align-items: center;">
         <div>
-          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 05 · Überschlagsrechnung</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 06 · Überschlagsrechnung</div>
           <h2 style="font-size: clamp(30px, 3.4vw, 42px); line-height: 1.05; letter-spacing: -.03em; font-weight: 600; margin: 0 0 16px;">Was kostet Sie die Routine? <span style="color: #135A3F;">Grob geschätzt, in Stunden und Euro.</span></h2>
           <p style="font-size: clamp(16px, 1.6vw, 17px); line-height: 1.55; color: #3C4A58; margin: 0 0 30px; max-width: 34em;">Belastbare Zahlen liefert erst die Prozessaufnahme.</p>
           <div style="display: grid; gap: 26px; max-width: 460px;">

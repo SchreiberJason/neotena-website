@@ -295,6 +295,25 @@ RUNTIME_CSS = """
   /* Dunkelgrünes Band: bricht die Papierfläche auf; Kacheln stehen hell darauf. */
   .nb-band .nb-tuer { background: #F4F3EE; border-color: transparent; color: #121A22; }
   .nb-band .nb-tuer:hover { background: #FFFFFF; box-shadow: 0 30px 60px -20px rgba(0,0,0,.45); }
+  /* Wer dahintersteht: freigestelltes Foto vor einem grünen Bogen. */
+  .nb-portrait { position: relative; max-width: 420px; width: 100%; margin: 0 auto; aspect-ratio: 720 / 994; }
+  .nb-portrait::before { content: ""; position: absolute; left: 4%; right: 4%; top: 18%; bottom: 0;
+    border-radius: 999px 999px 32px 32px; background: #0C2E22; }
+  .nb-portrait::after { content: ""; position: absolute; left: 4%; right: 4%; top: 18%; bottom: 0; border-radius: 999px 999px 32px 32px;
+    background: radial-gradient(circle at 50% 30%, rgba(127,209,166,.28), transparent 60%); }
+  .nb-portrait img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; object-position: bottom; }
+  /* Pilotangebot: dunkle Karte über die Breite. */
+  .nb-pilot { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 28px 56px; align-items: center;
+    padding: clamp(28px, 4vw, 56px); border-radius: 28px; background: #0C2E22; color: #EAF2ED; }
+  .nb-pilot-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .nb-pilot-liste li { display: grid; grid-template-columns: 2.4em 1fr; gap: 2px 10px; padding: 14px 0; border-top: 1px solid rgba(127,209,166,.22);
+    font-size: 14px; color: rgba(234,242,237,.7); }
+  .nb-pilot-liste li span { grid-row: span 2; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #7FD1A6; }
+  .nb-pilot-liste b { font-size: 17px; font-weight: 600; color: #EAF2ED; }
+  .nb-pilot-los { grid-column: 1 / -1; justify-self: start; padding: 14px 26px; border-radius: 999px; background: #7FD1A6; color: #0C2E22;
+    font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .04em; text-decoration: none; transition: background .3s; }
+  .nb-pilot-los:hover { background: #A6E3C3; }
+  @media (max-width: 860px) { .nb-pilot { grid-template-columns: 1fr; } }
   /* Weg 1: das Paket als drei aufgefächerte Karten. */
   .nb-paket { position: relative; display: grid; gap: 12px; max-width: 400px; width: 100%; margin: 0 auto; }
   .nb-paket-karte { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-items: baseline; padding: 18px 20px;
