@@ -68,7 +68,7 @@
       <button onClick="{{ goProzesse }}" style="{{ navProzesse }}" style-hover="color: #135A3F;">Prozesse</button>
       <button onClick="{{ goTraeger }}" style="{{ navTraeger }}" style-hover="color: #135A3F;">Für Bildungsträger</button>
       <button onClick="{{ goSicherheit }}" style="{{ navSicherheit }}" style-hover="color: #135A3F;">Sicherheit</button>
-      <button onClick="{{ goPreise }}" style="{{ navPreise }}" style-hover="color: #135A3F;">Ablauf &amp; Preise</button>
+      <button onClick="{{ goPreise }}" style="{{ navPreise }}" style-hover="color: #135A3F;">Ablauf &amp; Kosten</button>
     </nav>
     <a href="#kontakt" style="width: auto; white-space: nowrap; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .05em; padding: 10px 18px; border-radius: 999px; border: 1px solid #135A3F; color: #135A3F;" style-hover="background: #135A3F; color: #F4F3EE;">Anfrage senden</a>
   </header>
@@ -146,7 +146,7 @@
             <div class="nb-tuer-weg">Weg 1</div>
             <h2 class="nb-tuer-titel">Fertige Software <span style="color: #135A3F;">für AMS‑Träger.</span></h2>
             <div class="nb-tuer-bild"><div class="nb-paket"><div class="nb-paket-karte"><span class="nb-paket-nr">01</span><b>Software</b><span>alle Module, lokal und verschlüsselt</span></div><div class="nb-paket-karte"><span class="nb-paket-nr">02</span><b>Einrichtung</b><span>Datenübernahme aus Ihren Listen, Vorlagen, Rollen, Schulung</span></div><div class="nb-paket-karte"><span class="nb-paket-nr">03</span><b>Betrieb</b><span>Updates, Anpassung an neue Richtlinien, Support</span></div></div></div>
-            <div class="nb-tuer-fuss"><span>eingerichtet in wenigen Wochen · ab 390 € im Monat</span><button onClick="{{ goPreise }}" class="nb-tuer-los">Pakete ansehen →</button></div>
+            <div class="nb-tuer-fuss"><span>eingerichtet in wenigen Wochen · monatliche Pauschale</span><button onClick="{{ goPreise }}" class="nb-tuer-los">So läuft die Einführung →</button></div>
           </div>
           <div class="nb-tuer">
             <div class="nb-tuer-weg">Weg 2</div>
@@ -634,7 +634,7 @@
   <div>
     <section style="padding: clamp(56px, 7vw, 84px) clamp(20px, 5vw, 40px) clamp(52px, 7vw, 60px);">
       <div style="max-width: 1160px; margin: 0 auto;">
-        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 40 · Ablauf &amp; Preise</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 40 · Ablauf &amp; Kosten</div>
         <h1 style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1.02; letter-spacing: -.03em; font-weight: 600; margin: 0 0 20px; max-width: 15em;">Erst der Bauplan, dann die Automatisierung</h1>
         <p style="font-size: clamp(17px, 1.8vw, 19px); line-height: 1.6; color: #3C4A58; max-width: 44em; margin: 0;">Nach dem ersten Schritt wissen Sie, welche Abläufe sich lohnen und welche nicht — bevor Sie über die Umsetzung entscheiden.</p>
       </div>
@@ -669,100 +669,22 @@
       </div>
     </section>
 
-    <section style="padding: 0 clamp(20px, 5vw, 40px) clamp(52px, 7vw, 76px);">
+    <section style="padding: clamp(40px, 6vw, 80px) clamp(20px, 5vw, 40px);">
       <div style="max-width: 1160px; margin: 0 auto;">
-        <h2 style="font-size: clamp(28px, 3.2vw, 40px); line-height: 1.06; letter-spacing: -.03em; font-weight: 600; margin: 0 0 14px;">Vier Größen, ein Modell</h2>
-        <p style="font-size: clamp(16px, 1.6vw, 17px); line-height: 1.6; color: #3C4A58; max-width: 44em; margin: 0 0 36px;">Der Preis richtet sich nach der Größe des Standorts, nicht nach der Teilnehmerzahl — damit er über ein Förderjahr planbar bleibt. Alle Beträge netto, als Richtwert für das Gespräch.</p>
-        <div data-nf="pakete" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 18px;">
-          <div style="border-radius: 20px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 30px; display: grid; gap: 14px; align-content: start;">
-            <div>
-              <div style="font-size: 21px; font-weight: 600;">Kurs</div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; margin-top: 4px;">standardisierte Kursformate</div>
-            </div>
-            <div style="display: grid; gap: 3px; padding: 14px 0; border-top: 1px solid rgba(19,90,63,.18); border-bottom: 1px solid rgba(19,90,63,.18);">
-              <div style="font-size: 26px; font-weight: 600; letter-spacing: -.02em; color: #135A3F;">390 €<span style="font-size: 13px; font-weight: 400; color: #616C79;"> / Monat</span></div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">4.500 € Einrichtung</div>
-            </div>
-            <p style="font-size: 15px; line-height: 1.65; color: #3C4A58; margin: 0;">Anwesenheit, Lehrstoffdokumentation, Lernerfolgskontrollen und Meldeexport für Kursträger mit einheitlicher Vorgabe.</p>
+        <div class="nb-pilot" style="grid-template-columns: 1fr;">
+          <div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #7FD1A6; margin-bottom: 18px;">Kosten</div>
+            <h2 style="font-size: clamp(28px, 3.2vw, 40px); line-height: 1.06; letter-spacing: -.03em; font-weight: 600; margin: 0 0 18px;">Eine monatliche Pauschale. <span style="color: #7FD1A6;">Planbar über das Förderjahr.</span></h2>
+            <p style="font-size: clamp(16px, 1.6vw, 18px); line-height: 1.65; color: rgba(234,242,237,.78); margin: 0; max-width: 40em;">Die Pauschale richtet sich nach der Größe Ihres Standorts, nicht nach der Zahl der Teilnehmenden. Dazu kommt einmalig die Einrichtung. Ein genaues Angebot bekommen Sie nach der Prozessaufnahme — wenn klar ist, was Sie wirklich brauchen.</p>
           </div>
-          <div style="border-radius: 20px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 30px; display: grid; gap: 14px; align-content: start;">
-            <div>
-              <div style="font-size: 21px; font-weight: 600;">Klein</div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; margin-top: 4px;">ein Standort, ein Projekt</div>
-            </div>
-            <div style="display: grid; gap: 3px; padding: 14px 0; border-top: 1px solid rgba(19,90,63,.18); border-bottom: 1px solid rgba(19,90,63,.18);">
-              <div style="font-size: 26px; font-weight: 600; letter-spacing: -.02em; color: #135A3F;">490 €<span style="font-size: 13px; font-weight: 400; color: #616C79;"> / Monat</span></div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">6.900 € Einrichtung</div>
-            </div>
-            <p style="font-size: 15px; line-height: 1.65; color: #3C4A58; margin: 0;">Bis rund 60 laufende Teilnehmer, voller Funktionsumfang, ein Standort.</p>
-          </div>
-          <div style="border-radius: 20px; border: 1px solid #135A3F; background: rgba(19,90,63,.05); padding: 30px; display: grid; gap: 14px; align-content: start;">
-            <div>
-              <div style="font-size: 21px; font-weight: 600;">Standard</div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; margin-top: 4px;">5 bis 15 Mitarbeiter</div>
-            </div>
-            <div style="display: grid; gap: 3px; padding: 14px 0; border-top: 1px solid rgba(19,90,63,.18); border-bottom: 1px solid rgba(19,90,63,.18);">
-              <div style="font-size: 26px; font-weight: 600; letter-spacing: -.02em; color: #135A3F;">1.190 €<span style="font-size: 13px; font-weight: 400; color: #616C79;"> / Monat</span></div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">14.000 € Einrichtung</div>
-            </div>
-            <p style="font-size: 15px; line-height: 1.65; color: #3C4A58; margin: 0;">Mehrere parallele Maßnahmenarten, 100 bis 250 Teilnehmer, differenziertes Rollenmodell.</p>
-          </div>
-          <div style="border-radius: 20px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 30px; display: grid; gap: 14px; align-content: start;">
-            <div>
-              <div style="font-size: 21px; font-weight: 600;">Verbund</div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; margin-top: 4px;">Trägergruppe</div>
-            </div>
-            <div style="display: grid; gap: 3px; padding: 14px 0; border-top: 1px solid rgba(19,90,63,.18); border-bottom: 1px solid rgba(19,90,63,.18);">
-              <div style="font-size: 26px; font-weight: 600; letter-spacing: -.02em; color: #135A3F;">2.900 €<span style="font-size: 13px; font-weight: 400; color: #616C79;"> / Monat</span></div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">28.000 € Einrichtung</div>
-            </div>
-            <p style="font-size: 15px; line-height: 1.65; color: #3C4A58; margin: 0;">Mehrere Standorte oder Projekte unter einem Vertrag, gemeinsames Controlling, mehrere Fördergeber parallel.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section style="padding: 0 clamp(20px, 5vw, 40px) clamp(52px, 7vw, 76px);">
-      <div style="max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 20px;">
-        <div style="border-radius: 20px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 32px;">
-          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #616C79; margin-bottom: 16px;">Wenn Konfiguration nicht reicht</div>
-          <h3 style="font-size: 24px; font-weight: 600; margin: 0 0 12px;">Individualentwicklung</h3>
-          <p style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58; margin: 0 0 16px;">Manche Abläufe lassen sich nicht einstellen, sondern müssen gebaut werden: Dienstverhältnisse mit Lohnverrechnung, eigene Berichtsformate, Anbindung an ein Bestandssystem. Abrechnung nach Aufwand, Festpreis auf Wunsch.</p>
-          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: #135A3F;">1.150 € je Tag</div>
-        </div>
-        <div style="border-radius: 20px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 32px;">
-          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #616C79; margin-bottom: 16px;">Wenn Ihre Förderlogik keine Abos kennt</div>
-          <h3 style="font-size: 24px; font-weight: 600; margin: 0 0 12px;">Kauf statt Abonnement</h3>
-          <p style="font-size: clamp(15px, 1.4vw, 16px); line-height: 1.65; color: #3C4A58; margin: 0 0 16px;">Dieselbe Software, andere Verrechnung: als Anschaffung mit Abschreibung statt als laufende Pauschale. Für Träger, deren Richtlinie Software als Investition kennt.</p>
-          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: #135A3F;">42.000 € einmalig · 700 € Wartung / Monat</div>
-        </div>
-      </div>
-    </section>
-
-    <section style="padding: clamp(56px, 7vw, 76px) clamp(20px, 5vw, 40px); background: #0C2E22; color: #EAF2ED;">
-      <div style="max-width: 1160px; margin: 0 auto;">
-        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #7FD1A6; margin-bottom: 18px;">Einordnung</div>
-        <h2 style="font-size: clamp(28px, 3.2vw, 40px); line-height: 1.06; letter-spacing: -.03em; font-weight: 600; margin: 0 0 40px; max-width: 16em;">Drei Maßstäbe, an denen Sie den Betrag messen können</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 32px;">
-          <div style="border-left: 2px solid rgba(127,209,166,.5); padding-left: 20px;">
-            <div style="font-size: 28px; font-weight: 600; letter-spacing: -.02em; margin-bottom: 8px;">Anteil am Standortumsatz</div>
-            <p style="font-size: 15px; line-height: 1.7; color: rgba(234,242,237,.68); margin: 0;">Beim Standardpaket liegt die Monatspauschale bei etwa zwei Prozent des Umsatzes, den ein Standort in Referenzgröße erwirtschaftet.</p>
-          </div>
-          <div style="border-left: 2px solid rgba(127,209,166,.5); padding-left: 20px;">
-            <div style="font-size: 28px; font-weight: 600; letter-spacing: -.02em; margin-bottom: 8px;">Anteil einer Stelle</div>
-            <p style="font-size: 15px; line-height: 1.7; color: rgba(234,242,237,.68); margin: 0;">Rund ein Drittel der Vollkosten einer Verwaltungskraft. Wenn die Software eine halbe Stelle freispielt, ist die Rechnung eindeutig.</p>
-          </div>
-          <div style="border-left: 2px solid rgba(127,209,166,.5); padding-left: 20px;">
-            <div style="font-size: 28px; font-weight: 600; letter-spacing: -.02em; margin-bottom: 8px;">Wert je Vermittlung</div>
-            <p style="font-size: 15px; line-height: 1.7; color: rgba(234,242,237,.68); margin: 0;">Wenige zusätzliche Vermittlungen im Jahr decken die Jahreskosten des Standardpakets vollständig.</p>
-          </div>
+          <a href="#kontakt" class="nb-pilot-los">Gespräch vereinbaren →</a>
         </div>
       </div>
     </section>
 
     <section style="padding: clamp(56px, 7vw, 84px) clamp(20px, 5vw, 40px) clamp(52px, 7vw, 92px);">
       <div style="max-width: 1160px; margin: 0 auto;">
-        <h2 style="font-size: clamp(26px, 3vw, 36px); line-height: 1.08; letter-spacing: -.03em; font-weight: 600; margin: 0 0 30px;">Was im Preis enthalten ist</h2>
+        <h2 style="font-size: clamp(26px, 3vw, 36px); line-height: 1.08; letter-spacing: -.03em; font-weight: 600; margin: 0 0 30px;">Was dazugehört</h2>
         <div style="border-radius: 20px; border: 1px solid rgba(19,90,63,.22); background: rgba(255,255,255,.6); padding: 10px 28px 28px; margin-bottom: 36px;">
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 16px; padding: 22px 0; ">
             <span style="font-size: 16px; font-weight: 500;">Einrichtung</span>
