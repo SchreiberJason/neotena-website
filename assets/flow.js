@@ -84,7 +84,8 @@
   // Schmale Schirme bekommen ein eigenes Layout statt einer Verkleinerung,
   // bei der niemand mehr etwas lesen kann.
   var LAYOUT = {
-    breit: { eingabe: [0, 0, 180], vorlage: [24, 128, 160], automatik: [0, 290, 180], ergebnis: [270, 70, 290] },
+    breit: { eingabe: [100, 0, 180], vorlage: [0, 150, 180], automatik: [100, 330, 180], ergebnis: [430, 50, 260] },
+    mittel: { eingabe: [80, 0, 160], vorlage: [0, 124, 160], automatik: [80, 282, 160], ergebnis: [336, 30, 176] },
     schmal: { eingabe: [0, 0, 160], vorlage: [0, 124, 160], automatik: [0, 280, 160], ergebnis: [176, 80, 176] }
   };
   var NODES = [
@@ -266,7 +267,7 @@
   function fit() {
     var W = root.clientWidth, H = root.clientHeight;
     if (!W || !H) return;
-    var m = W < 560 ? 'schmal' : 'breit';
+    var m = W < 440 ? 'schmal' : W < 640 ? 'mittel' : 'breit';
     if (m !== mode) applyLayout(m);
     var x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
     NODES.forEach(function (n) {
