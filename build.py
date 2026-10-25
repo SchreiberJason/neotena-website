@@ -231,6 +231,8 @@ RUNTIME_CSS = """
   html { scroll-behavior: smooth; }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   img { max-width: 100%; display: block; }
+  /* Lange deutsche Wörter (Datenschutzbeauftragter) trennen statt aus dem Fenster zu ragen. */
+  h1, h2, h3 { overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; }
   :focus-visible { outline: 2px solid #135A3F; outline-offset: 3px; }
   .ax-page[hidden] { display: none; }
   .ax-nav { width: auto; background: none; border: none; font: inherit; cursor: pointer;

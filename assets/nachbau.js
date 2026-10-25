@@ -62,6 +62,7 @@
     '.nb-karte:hover{box-shadow:0 1px 2px rgba(0,0,0,.06),0 12px 24px -10px rgba(0,0,0,.18)}',
     '.nb-karte.frisch{outline-color:var(--f)}',
     '.nb-karte b{font-size:14px;font-weight:600}',
+    '.nb-karte .nb-chip{white-space:normal;line-height:1.35}',
     '.nb-karte .nb-sub{font-size:12px;color:#71717a}',
     '.nb-zieh{position:fixed;z-index:50;pointer-events:none;transform:rotate(2deg);box-shadow:0 24px 48px -12px rgba(0,0,0,.28)!important;width:200px}',
     '.nb-platz{border:2px dashed rgba(0,0,0,.12);border-radius:12px;min-height:70px;background:transparent}',
@@ -128,6 +129,7 @@
     // Nach dem eigenen Platz, nicht nach dem Bildschirm: die halbe Spalte bei A—0x ist auch am Desktop schmal.
     '[data-nachbau]{container-type:inline-size}',
     '@container (max-width:680px){.nb-vorlage,.nb-ams{grid-template-columns:1fr}.nb-blatt{max-width:420px}}',
+    '@container (max-width:420px){.nb-tab th:nth-child(2),.nb-tab .nb-art{display:none}.nb-tab .nb-chip{white-space:normal}}',
     '@container (max-width:520px){.nb-tn{grid-template-columns:auto minmax(0,1fr) auto}.nb-tn .nb-zeit{display:none}}',
     '@media (prefers-reduced-motion:reduce){.nb-ein{animation:none}}'
   ].join('\n');
