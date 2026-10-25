@@ -52,18 +52,20 @@
   .hv4:hover { color: #135A3F !important; }
   .hv5:hover { color: #135A3F !important; }
   .hv6:hover { background: #135A3F !important; color: #F4F3EE !important; }
-  .hv7:hover { background: #135A3F !important; color: #F4F3EE !important; }
-  .hv8:hover { background: #135A3F !important; color: #F4F3EE !important; }
-  .hv9:hover { background: #0B3D2A !important; }
-  .hv10:hover { background: #0B3D2A !important; transform: translateY(-2px) !important; }
-  .hv11:hover { color: #135A3F !important; }
-  .hv12:hover { color: #135A3F !important; }
+  .hv7:hover { background: #0B3D2A !important; transform: translateY(-2px) !important; }
+  .hv8:hover { background: #FFFFFF !important; transform: translateY(-2px) !important; }
+  .hv9:hover { background: #135A3F !important; color: #F4F3EE !important; }
+  .hv10:hover { background: #135A3F !important; color: #F4F3EE !important; }
+  .hv11:hover { background: #0B3D2A !important; }
+  .hv12:hover { background: #0B3D2A !important; transform: translateY(-2px) !important; }
   .hv13:hover { color: #135A3F !important; }
-  .fc14:focus { outline: none !important; border-bottom-color: #135A3F !important; }
-  .fc15:focus { outline: none !important; border-bottom-color: #135A3F !important; }
+  .hv14:hover { color: #135A3F !important; }
+  .hv15:hover { color: #135A3F !important; }
   .fc16:focus { outline: none !important; border-bottom-color: #135A3F !important; }
   .fc17:focus { outline: none !important; border-bottom-color: #135A3F !important; }
   .fc18:focus { outline: none !important; border-bottom-color: #135A3F !important; }
+  .fc19:focus { outline: none !important; border-bottom-color: #135A3F !important; }
+  .fc20:focus { outline: none !important; border-bottom-color: #135A3F !important; }
 </style>
 <style>
   *, *::before, *::after { box-sizing: border-box; }
@@ -100,6 +102,17 @@
   .nb-tuer-los { width: auto; padding: 11px 20px; border-radius: 999px; border: 1px solid #135A3F; background: #135A3F; color: #F4F3EE;
     font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .04em; cursor: pointer; text-decoration: none; }
   .nb-tuer-los:hover { background: #0B3D2A; }
+  /* Weg 1: das Paket als drei aufgefächerte Karten. */
+  .nb-paket { position: relative; display: grid; gap: 12px; max-width: 400px; width: 100%; margin: 0 auto; }
+  .nb-paket-karte { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-items: baseline; padding: 18px 20px;
+    border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 16px 32px -20px rgba(12,46,34,.3);
+    transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+  .nb-paket-karte:nth-child(1) { transform: rotate(-2deg) translateX(-8px); }
+  .nb-paket-karte:nth-child(3) { transform: rotate(1.5deg) translateX(10px); }
+  .nb-tuer:hover .nb-paket-karte { transform: none; }
+  .nb-paket-nr { grid-row: span 2; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #135A3F; }
+  .nb-paket-karte b { font-size: 17px; font-weight: 600; }
+  .nb-paket-karte span:last-child { font-size: 14px; line-height: 1.45; color: #3C4A58; }
   /* Bento: Kacheln in verschiedenen Größen, jede zum Anfassen. */
   .nb-bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
   .nb-kachel { display: flex; flex-direction: column; min-width: 0; padding: clamp(20px, 2.6vw, 32px);
@@ -142,27 +155,20 @@
       <div style="position: absolute; top: -180px; left: -120px; width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle, rgba(19,90,63,.13), rgba(19,90,63,0) 68%); pointer-events: none;"></div>
       <div style="position: absolute; top: 120px; right: -200px; width: 640px; height: 640px; border-radius: 50%; background: radial-gradient(circle, rgba(127,209,166,.22), rgba(127,209,166,0) 66%); pointer-events: none;"></div>
 
-      <div style="position: relative; max-width: 1160px; margin: 0 auto;">
-        <span style="display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; border: 1px solid rgba(19,90,63,.3); background: rgba(255,255,255,.7); padding: 9px 20px; max-width: 100%; flex-wrap: wrap; text-align: left; line-height: 1.5; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .04em; color: #135A3F;">
-          <span style="width: 7px; height: 7px; border-radius: 50%; background: #135A3F;"></span>
-          Software und Automatisierung für AMS-Bildungsträger
-        </span>
-        <h1 style="font-size: clamp(38px, 5.6vw, 72px); max-width: 15em; line-height: 1.02; letter-spacing: -.04em; font-weight: 600; margin: 30px 0 26px; text-wrap: balance;">Ihre Arbeit gehört den Menschen, <span style="color: #135A3F;">nicht den Tabellen.</span></h1>
-        <p style="font-size: clamp(17px, 1.8vw, 20px); line-height: 1.6; color: #3C4A58; max-width: 32em; margin: 0 0 clamp(36px, 5vw, 56px);">Zwei Wege zum selben Ziel: weniger Listen, mehr Zeit für die Vermittlung.</p>
-        <div class="nb-tueren">
-          <div class="nb-tuer">
-            <div class="nb-tuer-weg">Weg 1</div>
-            <h2 class="nb-tuer-titel">Fertige Software <span style="color: #135A3F;">für AMS‑Träger.</span></h2>
-            <div class="nb-tuer-bild"><div id="nf-kreis" data-kompakt="1"></div></div>
-            <div class="nb-tuer-fuss"><span>eingerichtet in wenigen Wochen · ab 390 € im Monat</span><a href="#erledigt" class="nb-tuer-los">Was sie erledigt ↓</a></div>
-          </div>
-          <div class="nb-tuer">
-            <div class="nb-tuer-weg">Weg 2</div>
-            <h2 class="nb-tuer-titel">Ihre Abläufe <span style="color: #135A3F;">automatisieren lassen.</span></h2>
-            <div class="nb-tuer-bild"><div id="nf-flow" style="position: relative; min-height: 340px;"></div></div>
-            <div class="nb-tuer-fuss"><span>Aufnahme vor Ort · Bauplan · Umsetzung</span><button type="button" data-go="preise" class="nb-tuer-los">Ablauf &amp; Preise →</button></div>
+      <div style="position: relative; max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: clamp(40px, 6vw, 88px); align-items: center;">
+        <div>
+          <span style="display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; border: 1px solid rgba(19,90,63,.3); background: rgba(255,255,255,.7); padding: 9px 20px; max-width: 100%; flex-wrap: wrap; text-align: left; line-height: 1.5; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .04em; color: #135A3F;">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: #135A3F;"></span>
+            Software und Automatisierung für AMS-Bildungsträger
+          </span>
+          <h1 style="font-size: clamp(38px, 5.2vw, 66px); line-height: 1.02; letter-spacing: -.04em; font-weight: 600; margin: 30px 0 26px; text-wrap: balance;">Ihre Arbeit gehört den Menschen, <span style="color: #135A3F;">nicht den Tabellen.</span></h1>
+          <p style="font-size: clamp(17px, 1.8vw, 20px); line-height: 1.6; color: #3C4A58; max-width: 26em; margin: 0 0 36px;">Eine Akte pro Person. Formulare, Anwesenheiten und Meldungen entstehen daraus von selbst.</p>
+          <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            <a href="#kontakt" style="width: auto; border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 14px; letter-spacing: .04em; padding: 17px 34px; background: #135A3F; color: #F4F3EE; box-shadow: 0 12px 28px rgba(19,90,63,.22); transition: transform .3s ease, background-color .3s ease;" class="hv7">Anfrage senden</a>
+            <a href="#erledigt" style="width: auto; border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 14px; letter-spacing: .04em; padding: 17px 34px; border: 1px solid rgba(19,90,63,.35); background: rgba(255,255,255,.6); color: #135A3F; transition: transform .3s ease, background-color .3s ease;" class="hv8">Was sie erledigt</a>
           </div>
         </div>
+        <div id="nf-kreis" style="position: relative; min-height: 420px;"></div>
       </div>
     </section>
 
@@ -194,7 +200,28 @@
         </div>
         <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-top: 28px;">
           <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; line-height: 1.7; margin: 0;">Nachgebaut aus der Software, mit erfundenen Daten.</p>
-          <button type="button" data-go="prozesse" style="width: auto; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .05em; padding: 11px 20px; border-radius: 999px; border: 1px solid #135A3F; background: transparent; color: #135A3F; cursor: pointer;" class="hv7">Alle Abläufe im Detail →</button>
+          <button type="button" data-go="prozesse" style="width: auto; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .05em; padding: 11px 20px; border-radius: 999px; border: 1px solid #135A3F; background: transparent; color: #135A3F; cursor: pointer;" class="hv9">Alle Abläufe im Detail →</button>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding: clamp(64px, 8vw, 120px) clamp(20px, 5vw, 40px); border-bottom: 1px solid rgba(19,90,63,.25);">
+      <div style="max-width: 1160px; margin: 0 auto;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 04 · Zwei Wege</div>
+        <h2 style="font-size: clamp(30px, 3.6vw, 46px); line-height: 1.05; letter-spacing: -.03em; font-weight: 600; margin: 0 0 clamp(32px, 4vw, 48px);">Zwei Wege. <span style="color: #135A3F;">Ein Ziel.</span></h2>
+        <div class="nb-tueren">
+          <div class="nb-tuer">
+            <div class="nb-tuer-weg">Weg 1</div>
+            <h2 class="nb-tuer-titel">Fertige Software <span style="color: #135A3F;">für AMS‑Träger.</span></h2>
+            <div class="nb-tuer-bild"><div class="nb-paket"><div class="nb-paket-karte"><span class="nb-paket-nr">01</span><b>Software</b><span>alle Module, lokal und verschlüsselt</span></div><div class="nb-paket-karte"><span class="nb-paket-nr">02</span><b>Einrichtung</b><span>Datenübernahme aus Ihren Listen, Vorlagen, Rollen, Schulung</span></div><div class="nb-paket-karte"><span class="nb-paket-nr">03</span><b>Betrieb</b><span>Updates, Anpassung an neue Richtlinien, Support</span></div></div></div>
+            <div class="nb-tuer-fuss"><span>eingerichtet in wenigen Wochen · ab 390 € im Monat</span><button type="button" data-go="preise" class="nb-tuer-los">Pakete ansehen →</button></div>
+          </div>
+          <div class="nb-tuer">
+            <div class="nb-tuer-weg">Weg 2</div>
+            <h2 class="nb-tuer-titel">Ihre Abläufe <span style="color: #135A3F;">automatisieren lassen.</span></h2>
+            <div class="nb-tuer-bild"><div id="nf-flow" style="position: relative; min-height: 340px;"></div></div>
+            <div class="nb-tuer-fuss"><span>Aufnahme vor Ort · Bauplan · Umsetzung</span><button type="button" data-go="preise" class="nb-tuer-los">So läuft die Aufnahme →</button></div>
+          </div>
         </div>
       </div>
     </section>
@@ -202,7 +229,7 @@
     <section style="padding: clamp(56px, 7vw, 88px) clamp(20px, 5vw, 40px); border-bottom: 1px solid rgba(19,90,63,.25);">
       <div style="max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 64px; align-items: center;">
         <div>
-          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 04 · Überschlagsrechnung</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 05 · Überschlagsrechnung</div>
           <h2 style="font-size: clamp(30px, 3.4vw, 42px); line-height: 1.05; letter-spacing: -.03em; font-weight: 600; margin: 0 0 16px;">Was kostet Sie die Routine? <span style="color: #135A3F;">Grob geschätzt, in Stunden und Euro.</span></h2>
           <p style="font-size: clamp(16px, 1.6vw, 17px); line-height: 1.55; color: #3C4A58; margin: 0 0 30px; max-width: 34em;">Belastbare Zahlen liefert erst die Prozessaufnahme.</p>
           <div style="display: grid; gap: 26px; max-width: 460px;">
@@ -242,7 +269,7 @@
 
     <section style="padding: clamp(56px, 7vw, 92px) clamp(20px, 5vw, 40px); border-bottom: 1px solid rgba(19,90,63,.25);">
       <div style="max-width: 1160px; margin: 0 auto;">
-        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 05 · Referenzprojekt</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 06 · Referenzprojekt</div>
         <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 44px;">
           <h2 style="font-size: clamp(30px, 3.4vw, 44px); line-height: 1.05; letter-spacing: -.03em; font-weight: 600; margin: 0; max-width: 16em;">AQUAflow ist gebaut und im Einsatz. <span style="color: #135A3F;">Keine Ankündigung — Echtbetrieb bei einem Träger.</span></h2>
         </div>
@@ -521,7 +548,7 @@
           <h2 style="font-size: clamp(26px, 3vw, 36px); line-height: 1.08; letter-spacing: -.03em; font-weight: 600; margin: 0 0 18px;">Der Umstieg passiert in Etappen</h2>
           <p style="font-size: clamp(16px, 1.6vw, 17px); line-height: 1.65; color: #3C4A58; margin: 0 0 16px; max-width: 34em;">Kein Stichtag, an dem alles neu ist. Wir beginnen mit dem Ablauf, der am meisten Zeit kostet, und lassen die übrigen Listen zunächst bestehen. Erst wenn der erste Prozess läuft, kommt der nächste dazu.</p>
           <p style="font-size: clamp(16px, 1.6vw, 17px); line-height: 1.65; color: #3C4A58; margin: 0 0 24px; max-width: 34em;">Ihre Mitarbeiter behalten ihre gewohnten Ausgaben: Excel bleibt als Export möglich, Ihre Word-Vorlagen bleiben Ihre Vorlagen.</p>
-          <button type="button" data-go="preise" style="width: auto; border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .05em; padding: 13px 22px; border: 1px solid #135A3F; background: transparent; color: #135A3F; cursor: pointer;" class="hv8">Ablauf und Preise ansehen</button>
+          <button type="button" data-go="preise" style="width: auto; border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .05em; padding: 13px 22px; border: 1px solid #135A3F; background: transparent; color: #135A3F; cursor: pointer;" class="hv10">Ablauf und Preise ansehen</button>
         </div>
         <div style="border-radius: 20px; overflow: hidden; border: 1px solid rgba(19,90,63,.22); background: #FFFFFF; box-shadow: 0 18px 40px rgba(19,90,63,.08);">
           <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid rgba(19,90,63,.22); background: #F7F6F2; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">
@@ -846,7 +873,7 @@
         </div>
         <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px;">
           <p style="font-size: 16px; line-height: 1.65; color: #3C4A58; margin: 0; max-width: 34em;">Welche Größe zu Ihnen passt und was die Einrichtung bei Ihrem Datenbestand bedeutet, ergibt sich aus der Prozessaufnahme.</p>
-          <a href="#kontakt" style="width: auto; border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .05em; padding: 15px 28px; background: #135A3F; color: #F4F3EE; box-shadow: 0 12px 28px rgba(19,90,63,.22);" class="hv9">Anfrage senden</a>
+          <a href="#kontakt" style="width: auto; border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .05em; padding: 15px 28px; background: #135A3F; color: #F4F3EE; box-shadow: 0 12px 28px rgba(19,90,63,.22);" class="hv11">Anfrage senden</a>
         </div>
       </div>
     </section>
@@ -946,17 +973,17 @@
 
       <form id="ax-form" novalidate style="display: grid; gap: 30px;">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 30px;">
-          <label style="display: grid; gap: 2px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #616C79; margin-bottom: 2px;">Name</span><input placeholder="Vor- und Nachname" name="name" required style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; padding: 10px 2px; border: none; border-bottom: 1px solid rgba(19,90,63,.4); background: transparent; color: #101922;" class="fc14"/></label>
-          <label style="display: grid; gap: 2px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #616C79; margin-bottom: 2px;">Organisation</span><input placeholder="Institut, Verein, Betrieb" name="organisation" style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; padding: 10px 2px; border: none; border-bottom: 1px solid rgba(19,90,63,.4); background: transparent; color: #101922;" class="fc15"/></label>
+          <label style="display: grid; gap: 2px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #616C79; margin-bottom: 2px;">Name</span><input placeholder="Vor- und Nachname" name="name" required style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; padding: 10px 2px; border: none; border-bottom: 1px solid rgba(19,90,63,.4); background: transparent; color: #101922;" class="fc16"/></label>
+          <label style="display: grid; gap: 2px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #616C79; margin-bottom: 2px;">Organisation</span><input placeholder="Institut, Verein, Betrieb" name="organisation" style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; padding: 10px 2px; border: none; border-bottom: 1px solid rgba(19,90,63,.4); background: transparent; color: #101922;" class="fc17"/></label>
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 30px;">
-          <label style="display: grid; gap: 2px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #616C79; margin-bottom: 2px;">E-Mail</span><input placeholder="name@organisation.at" name="email" type="email" required style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; padding: 10px 2px; border: none; border-bottom: 1px solid rgba(19,90,63,.4); background: transparent; color: #101922;" class="fc16"/></label>
-          <label style="display: grid; gap: 2px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #616C79; margin-bottom: 2px;">Telefon (optional)</span><input placeholder="+43" name="telefon" type="tel" style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; padding: 10px 2px; border: none; border-bottom: 1px solid rgba(19,90,63,.4); background: transparent; color: #101922;" class="fc17"/></label>
+          <label style="display: grid; gap: 2px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #616C79; margin-bottom: 2px;">E-Mail</span><input placeholder="name@organisation.at" name="email" type="email" required style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; padding: 10px 2px; border: none; border-bottom: 1px solid rgba(19,90,63,.4); background: transparent; color: #101922;" class="fc18"/></label>
+          <label style="display: grid; gap: 2px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #616C79; margin-bottom: 2px;">Telefon (optional)</span><input placeholder="+43" name="telefon" type="tel" style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; padding: 10px 2px; border: none; border-bottom: 1px solid rgba(19,90,63,.4); background: transparent; color: #101922;" class="fc19"/></label>
         </div>
-        <label style="display: grid; gap: 2px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #616C79; margin-bottom: 2px;">Der Ablauf</span><textarea rows="3" name="ablauf" required placeholder="z. B. Teilnehmerdaten in mehreren Listen pflegen" style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; padding: 10px 2px; border: none; border-bottom: 1px solid rgba(19,90,63,.4); background: transparent; color: #101922; resize: vertical; line-height: 1.6;" class="fc18"></textarea></label>
+        <label style="display: grid; gap: 2px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #616C79; margin-bottom: 2px;">Der Ablauf</span><textarea rows="3" name="ablauf" required placeholder="z. B. Teilnehmerdaten in mehreren Listen pflegen" style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; padding: 10px 2px; border: none; border-bottom: 1px solid rgba(19,90,63,.4); background: transparent; color: #101922; resize: vertical; line-height: 1.6;" class="fc20"></textarea></label>
         <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; margin-top: 8px;">
           <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; line-height: 1.7; max-width: 30em;">Ihre Angaben werden ausschließlich zur Kontaktaufnahme verwendet.<br />office@jasonschreiber.at · Jason Schreiber, Österreich</span>
-          <button type="submit" style="width: auto; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .06em; padding: clamp(13px, 7vw, 17px) clamp(20px, 5vw, 40px); border-radius: 999px; background: #135A3F; color: #F4F3EE; border: none; cursor: pointer; box-shadow: 0 12px 28px rgba(19,90,63,.22); transition: background-color .3s ease, transform .3s ease;" class="hv10">Absenden →</button>
+          <button type="submit" style="width: auto; font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .06em; padding: clamp(13px, 7vw, 17px) clamp(20px, 5vw, 40px); border-radius: 999px; background: #135A3F; color: #F4F3EE; border: none; cursor: pointer; box-shadow: 0 12px 28px rgba(19,90,63,.22); transition: background-color .3s ease, transform .3s ease;" class="hv12">Absenden →</button>
         </div>
       </form>
     </div>
@@ -966,9 +993,9 @@
   <footer style="border-top: 1px solid rgba(19,90,63,.25); padding: clamp(20px, 7vw, 26px) clamp(20px, 5vw, 40px); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79;">
     <span>© 2026 Jason Schreiber</span>
     <span style="display: flex; gap: 22px;">
-      <button type="button" data-go="impressum" style="width: auto; background: none; border: none; padding: 8px 0; cursor: pointer; font: inherit; color: #616C79;" class="hv11">Impressum</button>
-      <button type="button" data-go="datenschutz" style="width: auto; background: none; border: none; padding: 8px 0; cursor: pointer; font: inherit; color: #616C79;" class="hv12">Datenschutz</button>
-      <button type="button" data-go="agb" style="width: auto; background: none; border: none; padding: 8px 0; cursor: pointer; font: inherit; color: #616C79;" class="hv13">AGB</button>
+      <button type="button" data-go="impressum" style="width: auto; background: none; border: none; padding: 8px 0; cursor: pointer; font: inherit; color: #616C79;" class="hv13">Impressum</button>
+      <button type="button" data-go="datenschutz" style="width: auto; background: none; border: none; padding: 8px 0; cursor: pointer; font: inherit; color: #616C79;" class="hv14">Datenschutz</button>
+      <button type="button" data-go="agb" style="width: auto; background: none; border: none; padding: 8px 0; cursor: pointer; font: inherit; color: #616C79;" class="hv15">AGB</button>
     </span>
   </footer>
 </div>

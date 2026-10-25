@@ -79,27 +79,20 @@
       <div style="position: absolute; top: -180px; left: -120px; width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle, rgba(19,90,63,.13), rgba(19,90,63,0) 68%); pointer-events: none;"></div>
       <div style="position: absolute; top: 120px; right: -200px; width: 640px; height: 640px; border-radius: 50%; background: radial-gradient(circle, rgba(127,209,166,.22), rgba(127,209,166,0) 66%); pointer-events: none;"></div>
 
-      <div style="position: relative; max-width: 1160px; margin: 0 auto;">
-        <span style="display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; border: 1px solid rgba(19,90,63,.3); background: rgba(255,255,255,.7); padding: 9px 20px; max-width: 100%; flex-wrap: wrap; text-align: left; line-height: 1.5; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .04em; color: #135A3F;">
-          <span style="width: 7px; height: 7px; border-radius: 50%; background: #135A3F;"></span>
-          Software und Automatisierung für AMS-Bildungsträger
-        </span>
-        <h1 style="font-size: clamp(38px, 5.6vw, 72px); max-width: 15em; line-height: 1.02; letter-spacing: -.04em; font-weight: 600; margin: 30px 0 26px; text-wrap: balance;">Ihre Arbeit gehört den Menschen, <span style="color: #135A3F;">nicht den Tabellen.</span></h1>
-        <p style="font-size: clamp(17px, 1.8vw, 20px); line-height: 1.6; color: #3C4A58; max-width: 32em; margin: 0 0 clamp(36px, 5vw, 56px);">Zwei Wege zum selben Ziel: weniger Listen, mehr Zeit für die Vermittlung.</p>
-        <div class="nb-tueren">
-          <div class="nb-tuer">
-            <div class="nb-tuer-weg">Weg 1</div>
-            <h2 class="nb-tuer-titel">Fertige Software <span style="color: #135A3F;">für AMS‑Träger.</span></h2>
-            <div class="nb-tuer-bild"><div id="nf-kreis" data-kompakt="1"></div></div>
-            <div class="nb-tuer-fuss"><span>eingerichtet in wenigen Wochen · ab 390 € im Monat</span><a href="#erledigt" class="nb-tuer-los">Was sie erledigt ↓</a></div>
-          </div>
-          <div class="nb-tuer">
-            <div class="nb-tuer-weg">Weg 2</div>
-            <h2 class="nb-tuer-titel">Ihre Abläufe <span style="color: #135A3F;">automatisieren lassen.</span></h2>
-            <div class="nb-tuer-bild"><div id="nf-flow" style="position: relative; min-height: 340px;"></div></div>
-            <div class="nb-tuer-fuss"><span>Aufnahme vor Ort · Bauplan · Umsetzung</span><button onClick="{{ goPreise }}" class="nb-tuer-los">Ablauf &amp; Preise →</button></div>
+      <div style="position: relative; max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: clamp(40px, 6vw, 88px); align-items: center;">
+        <div>
+          <span style="display: inline-flex; align-items: center; gap: 10px; border-radius: 999px; border: 1px solid rgba(19,90,63,.3); background: rgba(255,255,255,.7); padding: 9px 20px; max-width: 100%; flex-wrap: wrap; text-align: left; line-height: 1.5; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .04em; color: #135A3F;">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: #135A3F;"></span>
+            Software und Automatisierung für AMS-Bildungsträger
+          </span>
+          <h1 style="font-size: clamp(38px, 5.2vw, 66px); line-height: 1.02; letter-spacing: -.04em; font-weight: 600; margin: 30px 0 26px; text-wrap: balance;">Ihre Arbeit gehört den Menschen, <span style="color: #135A3F;">nicht den Tabellen.</span></h1>
+          <p style="font-size: clamp(17px, 1.8vw, 20px); line-height: 1.6; color: #3C4A58; max-width: 26em; margin: 0 0 36px;">Eine Akte pro Person. Formulare, Anwesenheiten und Meldungen entstehen daraus von selbst.</p>
+          <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            <a href="#kontakt" style="width: auto; border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 14px; letter-spacing: .04em; padding: 17px 34px; background: #135A3F; color: #F4F3EE; box-shadow: 0 12px 28px rgba(19,90,63,.22); transition: transform .3s ease, background-color .3s ease;" style-hover="background: #0B3D2A; transform: translateY(-2px);">Anfrage senden</a>
+            <a href="#erledigt" style="width: auto; border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 14px; letter-spacing: .04em; padding: 17px 34px; border: 1px solid rgba(19,90,63,.35); background: rgba(255,255,255,.6); color: #135A3F; transition: transform .3s ease, background-color .3s ease;" style-hover="background: #FFFFFF; transform: translateY(-2px);">Was sie erledigt</a>
           </div>
         </div>
+        <div id="nf-kreis" style="position: relative; min-height: 420px;"></div>
       </div>
     </section>
 
@@ -136,10 +129,31 @@
       </div>
     </section>
 
+    <section style="padding: clamp(64px, 8vw, 120px) clamp(20px, 5vw, 40px); border-bottom: 1px solid rgba(19,90,63,.25);">
+      <div style="max-width: 1160px; margin: 0 auto;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 04 · Zwei Wege</div>
+        <h2 style="font-size: clamp(30px, 3.6vw, 46px); line-height: 1.05; letter-spacing: -.03em; font-weight: 600; margin: 0 0 clamp(32px, 4vw, 48px);">Zwei Wege. <span style="color: #135A3F;">Ein Ziel.</span></h2>
+        <div class="nb-tueren">
+          <div class="nb-tuer">
+            <div class="nb-tuer-weg">Weg 1</div>
+            <h2 class="nb-tuer-titel">Fertige Software <span style="color: #135A3F;">für AMS‑Träger.</span></h2>
+            <div class="nb-tuer-bild"><div class="nb-paket"><div class="nb-paket-karte"><span class="nb-paket-nr">01</span><b>Software</b><span>alle Module, lokal und verschlüsselt</span></div><div class="nb-paket-karte"><span class="nb-paket-nr">02</span><b>Einrichtung</b><span>Datenübernahme aus Ihren Listen, Vorlagen, Rollen, Schulung</span></div><div class="nb-paket-karte"><span class="nb-paket-nr">03</span><b>Betrieb</b><span>Updates, Anpassung an neue Richtlinien, Support</span></div></div></div>
+            <div class="nb-tuer-fuss"><span>eingerichtet in wenigen Wochen · ab 390 € im Monat</span><button onClick="{{ goPreise }}" class="nb-tuer-los">Pakete ansehen →</button></div>
+          </div>
+          <div class="nb-tuer">
+            <div class="nb-tuer-weg">Weg 2</div>
+            <h2 class="nb-tuer-titel">Ihre Abläufe <span style="color: #135A3F;">automatisieren lassen.</span></h2>
+            <div class="nb-tuer-bild"><div id="nf-flow" style="position: relative; min-height: 340px;"></div></div>
+            <div class="nb-tuer-fuss"><span>Aufnahme vor Ort · Bauplan · Umsetzung</span><button onClick="{{ goPreise }}" class="nb-tuer-los">So läuft die Aufnahme →</button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section style="padding: clamp(56px, 7vw, 88px) clamp(20px, 5vw, 40px); border-bottom: 1px solid rgba(19,90,63,.25);">
       <div style="max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 64px; align-items: center;">
         <div>
-          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 04 · Überschlagsrechnung</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 05 · Überschlagsrechnung</div>
           <h2 style="font-size: clamp(30px, 3.4vw, 42px); line-height: 1.05; letter-spacing: -.03em; font-weight: 600; margin: 0 0 16px;">Was kostet Sie die Routine? <span style="color: #135A3F;">Grob geschätzt, in Stunden und Euro.</span></h2>
           <p style="font-size: clamp(16px, 1.6vw, 17px); line-height: 1.55; color: #3C4A58; margin: 0 0 30px; max-width: 34em;">Belastbare Zahlen liefert erst die Prozessaufnahme.</p>
           <div style="display: grid; gap: 26px; max-width: 460px;">
@@ -179,7 +193,7 @@
 
     <section style="padding: clamp(56px, 7vw, 92px) clamp(20px, 5vw, 40px); border-bottom: 1px solid rgba(19,90,63,.25);">
       <div style="max-width: 1160px; margin: 0 auto;">
-        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 05 · Referenzprojekt</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 06 · Referenzprojekt</div>
         <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 44px;">
           <h2 style="font-size: clamp(30px, 3.4vw, 44px); line-height: 1.05; letter-spacing: -.03em; font-weight: 600; margin: 0; max-width: 16em;">AQUAflow ist gebaut und im Einsatz. <span style="color: #135A3F;">Keine Ankündigung — Echtbetrieb bei einem Träger.</span></h2>
         </div>

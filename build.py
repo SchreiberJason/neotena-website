@@ -261,6 +261,17 @@ RUNTIME_CSS = """
   .nb-tuer-los { width: auto; padding: 11px 20px; border-radius: 999px; border: 1px solid #135A3F; background: #135A3F; color: #F4F3EE;
     font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .04em; cursor: pointer; text-decoration: none; }
   .nb-tuer-los:hover { background: #0B3D2A; }
+  /* Weg 1: das Paket als drei aufgefächerte Karten. */
+  .nb-paket { position: relative; display: grid; gap: 12px; max-width: 400px; width: 100%; margin: 0 auto; }
+  .nb-paket-karte { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-items: baseline; padding: 18px 20px;
+    border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 16px 32px -20px rgba(12,46,34,.3);
+    transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+  .nb-paket-karte:nth-child(1) { transform: rotate(-2deg) translateX(-8px); }
+  .nb-paket-karte:nth-child(3) { transform: rotate(1.5deg) translateX(10px); }
+  .nb-tuer:hover .nb-paket-karte { transform: none; }
+  .nb-paket-nr { grid-row: span 2; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #135A3F; }
+  .nb-paket-karte b { font-size: 17px; font-weight: 600; }
+  .nb-paket-karte span:last-child { font-size: 14px; line-height: 1.45; color: #3C4A58; }
   /* Bento: Kacheln in verschiedenen Größen, jede zum Anfassen. */
   .nb-bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
   .nb-kachel { display: flex; flex-direction: column; min-width: 0; padding: clamp(20px, 2.6vw, 32px);

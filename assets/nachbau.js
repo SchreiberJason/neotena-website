@@ -156,36 +156,41 @@
     '.aw-fehlt{background:rgba(179,64,46,.14);color:' + ROT + '}',
     '.aw-fuss{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin-top:16px;font-size:12px;color:#52525b}',
     '.aw-fuss b{color:#18181b}',
-    // Aufnahme-Portal (Farben aus portal/public/stil.css)
-    '.pt-buehne{display:grid;grid-template-columns:auto minmax(48px,.5fr) minmax(0,1.1fr);align-items:center;gap:0}',
-    '.pt-handy{width:250px;padding:10px;border-radius:38px;background:#1a202c;box-shadow:0 30px 60px -20px rgba(12,46,34,.35)}',
-    '.pt-schirm{height:470px;overflow:hidden;border-radius:30px;background:rgb(247,248,250);color:rgb(26,32,44)}',
-    '.pt-kopf{padding:26px 16px 12px;background:#fff;border-bottom:1px solid rgb(205,213,224);font-size:15px;font-weight:600;text-align:center}',
-    '.pt-inhalt{display:grid;gap:10px;padding:14px}',
-    '.pt-schritte{display:flex;align-items:center;justify-content:center;gap:6px}',
-    '.pt-schritte span{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid rgb(205,213,224);font-size:11px;font-weight:600;color:rgb(92,103,122)}',
-    '.pt-schritte span.jetzt{border-color:rgb(31,90,142);color:rgb(31,90,142)}',
-    '.pt-schritte span.ok{background:rgb(3,112,78);border-color:rgb(3,112,78);color:#fff}',
-    '.pt-schritte i{width:30px;height:1.5px;background:rgb(205,213,224)}',
-    '.pt-titel{font-size:12px;font-weight:600;text-align:center;color:rgb(74,85,104)}',
-    '.pt-karte{display:grid;gap:8px;padding:12px;border:1px solid rgb(205,213,224);border-radius:10px;background:#fff;font-size:13px;transition:opacity .3s}',
-    '.pt-zu{opacity:.45}',
-    '.pt-knopf{padding:10px;border:0;border-radius:8px;background:rgb(31,90,142);color:#fff;font:inherit;font-size:12px;font-weight:600;cursor:pointer;width:100%}',
-    '.pt-knopf:disabled{opacity:.4;cursor:default}',
-    '.pt-senden{margin-top:4px}',
-    '.pt-leise{padding:8px;border:1px solid rgb(205,213,224);border-radius:8px;background:rgb(248,250,252);color:rgb(26,32,44);font:inherit;font-size:11px;cursor:pointer;width:100%}',
-    '.pt-leise:disabled{cursor:default}',
-    '.pt-zeile{display:grid;grid-template-columns:1fr 1fr;gap:6px}',
-    '.pt-gut{font-size:12px;font-weight:600;color:rgb(3,112,78)}',
-    '.pt-datei{font-size:11px;color:rgb(26,32,44);animation:nb-ein .3s ease}',
-    '.pt-datei em{font-style:normal;color:rgb(3,112,78)}',
-    '.pt-danke{display:grid;justify-items:center;gap:8px;padding:40px 10px;text-align:center}',
-    '.pt-danke span{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:rgb(3,112,78);color:#fff;font-size:20px}',
-    '.pt-danke p{margin:0;font-size:12px;color:rgb(74,85,104)}',
+    // Aufnahme-Portal — Werte aus portal/public/stil.css (Schrift 18 px, Karten 12 px, Kopf mit 5 px Linie)
+    '.pt-buehne{display:grid;grid-template-columns:auto minmax(48px,.5fr) minmax(0,1.1fr);align-items:center}',
+    '.pt-handy{width:252px;padding:9px;border-radius:40px;background:#1a202c;box-shadow:0 30px 60px -20px rgba(12,46,34,.35)}',
+    '.pt-schirm{height:500px;overflow-y:auto;overflow-x:hidden;border-radius:31px;background:rgb(247,248,250);scrollbar-width:none}',
+    '.pt-schirm::-webkit-scrollbar{display:none}',
+    '.pt-seite{width:390px;zoom:.6;padding:0 16px 40px;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:18px;line-height:1.5;color:rgb(26,32,44)}',
+    '.ps-kopfzeile{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:5px solid rgb(31,90,142);border-bottom:1px solid rgb(205,213,224);margin:0 -16px;padding-left:16px;padding-right:16px}',
+    '.ps-zeichen{display:grid;place-items:center;width:44px;height:44px;border-radius:8px;background:rgb(31,90,142);color:#fff;font-size:20px;font-weight:700}',
+    '.ps-name{font-weight:700;font-size:18px;line-height:1.2}.ps-zusatz{font-size:14px;color:rgb(74,85,104)}',
+    '.ps-h1{margin:20px 0 6px;font-size:28px;line-height:1.2;font-weight:700}',
+    '.ps-h2{margin:0 0 16px;font-size:20px;line-height:1.3;font-weight:600}',
+    '.ps-schritt{margin-bottom:12px;padding:10px 13px;border:1px solid rgb(205,213,224);border-radius:12px;background:#fff}',
+    '.ps-schritt-jetzt{border:2px solid rgb(31,90,142);padding:9px 12px}',
+    '.ps-kopf{display:flex;align-items:center;gap:14px}',
+    '.ps-punkt{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;border:2px solid rgb(205,213,224);font-size:16px;font-weight:700;color:rgb(74,85,104)}',
+    '.ps-jetzt{border-color:rgb(31,90,142);color:rgb(31,90,142)}',
+    '.ps-fertig{background:rgb(31,90,142);border-color:rgb(31,90,142);color:#fff}',
+    '.ps-titel{font-size:18px;font-weight:700;line-height:1.3}',
+    '.ps-wort{font-size:16px;color:rgb(74,85,104)}',
+    '.ps-gut{color:rgb(3,112,78);font-weight:600}',
+    '.ps-doks{margin:8px 0 4px 48px}',
+    '.ps-dok{padding:14px 0 6px;border-top:1px solid rgb(205,213,224)}',
+    '.ps-dok:first-child{border-top:0}',
+    '.ps-dokname{font-weight:700;margin-bottom:6px}',
+    '.ps-stand{font-size:18px}',
+    '.ps-knopf{display:block;width:100%;margin:8px 0 4px;padding:11px 20px;border:0;border-radius:12px;background:rgb(31,90,142);color:#fff;font:inherit;font-weight:600;cursor:pointer}',
+    '.ps-knopf:disabled{opacity:.45;cursor:default}',
+    '.ps-knopf-zweit{background:#fff;color:rgb(26,32,44);border:2px solid rgb(74,85,104);padding:9px 18px}',
+    '.ps-knoepfe{display:grid;grid-template-columns:1fr 1fr;gap:8px}',
+    '.ps-datei{display:flex;justify-content:space-between;gap:8px;padding:6px 0;font-size:16px}',
+    '.ps-klein{margin:16px 0 0;font-size:16px;color:rgb(74,85,104)}',
     '.pt-weg{position:relative;height:40px}',
     '.pt-linie{position:absolute;left:8px;right:8px;top:50%;border-top:2px dashed #c2c2bc}',
     '.pt-paket{position:absolute;top:calc(50% - 12px);left:0;padding:3px 8px;border-radius:6px;background:rgba(19,90,63,.1);color:' + GRUEN + ';font-family:"IBM Plex Mono",monospace;font-size:10px;white-space:nowrap;opacity:0}',
-    '.pt-weg.faehrt .pt-paket{animation:pt-fahrt .9s ease-in-out}',
+    '.pt-weg.faehrt .pt-paket{animation:pt-fahrt .85s ease-in-out}',
     '@keyframes pt-fahrt{0%{left:0;opacity:0}15%{opacity:1}85%{opacity:1}100%{left:calc(100% - 90px);opacity:0}}',
     '.pt-akte{display:grid;gap:10px;padding:16px;border-radius:16px;background:rgba(255,255,255,.75)}',
     '.pt-akte-kopf{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,.06)}',
@@ -491,55 +496,97 @@
   }
 
   // ============================================================ Aufnahme-Portal
-  // Die Seite der Teilnehmerin (portal/public, Farben aus stil.css) auf dem
-  // Handy; rechts die Akte, in der die Unterlagen verschlüsselt ankommen.
+  // Die Seite der Teilnehmerin wie in portal/public (aufnahme.html, stil.css):
+  // in echter Breite (390 px) gebaut und ins Handy verkleinert, damit die
+  // Verhältnisse stimmen. Rechts die Akte, in der die Unterlagen ankommen.
+  // Name des Trägers bewusst neutral — kein Kundenname auf dieser Seite.
   function portal(root) {
-    var stand = { unterschrieben: false, dateien: [], gesendet: false };
+    var gueltig = (function () {
+      var d = new Date(); d.setDate(d.getDate() + 20);
+      return d.toLocaleDateString('de-AT', { timeZone: 'Europe/Vienna', day: 'numeric', month: 'long', year: 'numeric' });
+    })();
+    var neu = function () { return { sig: [false, false], offen2: false, dateien: { lebenslauf: [], foto: [] }, gesendet: false }; };
+    var st = neu();
     root.innerHTML =
       '<div class="pt-buehne">' +
-        '<div class="pt-handy"><div class="pt-schirm">' +
-          '<div class="pt-kopf">Unterlagen abgeben</div><div class="pt-inhalt"></div>' +
-        '</div></div>' +
+        '<div class="pt-handy"><div class="pt-schirm"><div class="pt-seite"></div></div></div>' +
         '<div class="pt-weg" aria-hidden="true"><span class="pt-linie"></span><span class="pt-paket">🔒 nur Chiffrat</span></div>' +
         '<div class="pt-akte"><div class="pt-akte-kopf"><span class="nb-ava" style="background:#0EA5E9">AB</span><div><b>Alex Beispiel</b><small>Akte · Dokumente</small></div></div>' +
           '<div class="pt-eingang"></div></div>' +
       '</div>';
-    var inhalt = root.querySelector('.pt-inhalt'), eingang = root.querySelector('.pt-eingang'), weg = root.querySelector('.pt-weg');
+    var seite = root.querySelector('.pt-seite'), eingang = root.querySelector('.pt-eingang'), weg = root.querySelector('.pt-weg');
+    var DOKS = ['Datenschutzvereinbarung', 'Aufnahmeantrag'];
+    var FAECHER = [['lebenslauf', 'Lebenslauf'], ['foto', 'Bewerbungsfoto']];
+
+    function punkt(nr, zustand) {
+      return '<span class="ps-punkt ps-' + zustand + '">' + (zustand === 'fertig' ? '✓' : nr) + '</span>';
+    }
+    function schritt(nr, titel, zustand, wort, rumpf) {
+      return '<section class="ps-schritt' + (zustand === 'jetzt' ? ' ps-schritt-jetzt' : '') + '"><div class="ps-kopf">' + punkt(nr, zustand) +
+        '<div><div class="ps-titel">Schritt ' + nr + ' von 3: ' + titel + '</div><div class="ps-wort' + (zustand === 'fertig' ? ' ps-gut' : '') + '">' + wort + '</div></div></div>' +
+        (rumpf || '') + '</section>';
+    }
     function malen() {
-      if (stand.gesendet) {
-        inhalt.innerHTML = '<div class="pt-danke"><span>✓</span><b>Danke!</b><p>Ihre Unterlagen sind angekommen. Sie können diese Seite schließen.</p>' +
-          '<button type="button" class="pt-leise" data-a="neu">Noch einmal</button></div>';
+      var s1fertig = st.sig[0] && st.sig[1];
+      var s2fertig = st.gesendet;
+      var h = '<div class="ps-kopfzeile"><span class="ps-zeichen">B</span><div><div class="ps-name">Ihr Bildungsträger</div><div class="ps-zusatz">Aufnahme</div></div></div>' +
+        '<h1 class="ps-h1">Hallo Alex!</h1><h2 class="ps-h2">Ihre Aufnahme in 3 Schritten.</h2>';
+      // Schritt 1
+      var r1 = '';
+      if (!s1fertig) {
+        r1 = '<div class="ps-doks">' + DOKS.map(function (d, i) {
+          return '<div class="ps-dok"><div class="ps-dokname">' + d + '</div>' + (st.sig[i]
+            ? '<div class="ps-gut ps-stand">✓ Unterschrieben</div>'
+            : '<button type="button" class="ps-knopf ps-knopf-zweit" data-a="sig" data-i="' + i + '">Ansehen und unterschreiben</button>') + '</div>';
+        }).join('') + '</div>';
       } else {
-        var schritt = stand.unterschrieben ? 2 : 1;
-        inhalt.innerHTML =
-          '<div class="pt-schritte"><span class="' + (schritt > 1 ? 'ok' : 'jetzt') + '">1</span><i></i><span class="' + (schritt === 2 ? 'jetzt' : '') + '">2</span></div>' +
-          '<div class="pt-titel">Schritt ' + schritt + ' von 2: ' + (schritt === 1 ? 'Unterschreiben' : 'Unterlagen hochladen') + '</div>' +
-          '<div class="pt-karte"><b>Vereinbarung</b>' + (stand.unterschrieben
-            ? '<span class="pt-gut">✓ unterschrieben</span>'
-            : '<button type="button" class="pt-knopf" data-a="unterschreiben">Ansehen und unterschreiben</button>') + '</div>' +
-          '<div class="pt-karte' + (stand.unterschrieben ? '' : ' pt-zu') + '"><b>Lebenslauf</b>' +
-            stand.dateien.map(function (d) { return '<span class="pt-datei">' + d + ' <em>verschlüsselt</em></span>'; }).join('') +
-            '<div class="pt-zeile"><button type="button" class="pt-leise" data-a="foto"' + (stand.unterschrieben ? '' : ' disabled') + '>Foto aufnehmen</button>' +
-            '<button type="button" class="pt-leise" data-a="foto"' + (stand.unterschrieben ? '' : ' disabled') + '>Datei wählen</button></div></div>' +
-          '<button type="button" class="pt-knopf pt-senden" data-a="senden"' + (stand.dateien.length ? '' : ' disabled') + '>Abschicken</button>';
+        r1 = '<div class="ps-doks">' + DOKS.map(function (d) { return '<div class="ps-dok"><div class="ps-dokname">' + d + '</div><div class="ps-gut ps-stand">✓ Unterschrieben</div></div>'; }).join('') + '</div>';
       }
-      eingang.innerHTML = stand.gesendet
-        ? ['Vereinbarung · unterschrieben'].concat(stand.dateien.map(function (d) { return 'Lebenslauf · ' + d; })).map(function (t, i) {
-            return '<div class="pt-doc nb-ein" style="animation-delay:' + (i * 120) + 'ms"><span class="nb-pdf">' + (/jpg/.test(t) ? 'JPG' : 'PDF') + '</span>' + t + '<span class="nb-ok">✓</span></div>';
-          }).join('')
+      h += schritt(1, 'Unterschreiben', s1fertig ? 'fertig' : 'jetzt', s1fertig ? '✓ Unterschrieben' : 'Jetzt dran', r1);
+      // Schritt 2
+      if (!s1fertig) h += schritt(2, 'Lebenslauf und Foto', 'offen', 'Noch offen');
+      else if (s2fertig) h += schritt(2, 'Lebenslauf und Foto', 'fertig', '✓ Abgeschickt');
+      else if (!st.offen2) h += schritt(2, 'Lebenslauf und Foto', 'jetzt', 'Noch offen', '<button type="button" class="ps-knopf" data-a="weiter">Weiter: Lebenslauf und Foto</button>');
+      else {
+        var komplett = FAECHER.every(function (f) { return st.dateien[f[0]].length; });
+        h += schritt(2, 'Lebenslauf und Foto', 'jetzt', 'Jetzt dran',
+          '<div class="ps-doks">' + FAECHER.map(function (f) {
+            return '<div class="ps-dok"><div class="ps-dokname">' + f[1] + '</div>' +
+              st.dateien[f[0]].map(function (n) { return '<div class="ps-datei"><span>' + n + '</span><span class="ps-gut">✓ verschlüsselt</span></div>'; }).join('') +
+              (st.dateien[f[0]].length ? '' : '<div class="ps-knoepfe"><button type="button" class="ps-knopf ps-knopf-zweit" data-a="datei" data-f="' + f[0] + '">Foto aufnehmen</button>' +
+                '<button type="button" class="ps-knopf ps-knopf-zweit" data-a="datei" data-f="' + f[0] + '">Datei wählen</button></div>') + '</div>';
+          }).join('') + '</div>' +
+          '<button type="button" class="ps-knopf" data-a="senden"' + (komplett ? '' : ' disabled') + '>Abschicken</button>');
+      }
+      // Schritt 3
+      h += schritt(3, 'Zeugnisse und Zertifikate', s2fertig ? 'jetzt' : 'offen', s2fertig ? 'Jetzt dran' : 'Noch offen');
+      h += '<p class="ps-klein">Dieser Link gilt bis ' + gueltig + '. Sie können jederzeit aufhören und später mit diesem Link weitermachen.</p>' +
+        '<p class="ps-klein">Ihre Angaben und Dateien werden auf Ihrem Gerät verschlüsselt. Nur Ihr Bildungsträger kann sie öffnen.</p>';
+      seite.innerHTML = h;
+      var doks = [];
+      if (s1fertig) doks.push(['PDF', 'Datenschutzvereinbarung · unterschrieben'], ['PDF', 'Aufnahmeantrag · unterschrieben']);
+      if (s2fertig) FAECHER.forEach(function (f) { st.dateien[f[0]].forEach(function (n) { doks.push(['JPG', f[1] + ' · ' + n]); }); });
+      eingang.innerHTML = doks.length
+        ? doks.map(function (d) { return '<div class="pt-doc nb-ein"><span class="nb-pdf">' + d[0] + '</span>' + d[1] + '<span class="nb-ok">✓</span></div>'; }).join('') +
+          (s2fertig ? '<button type="button" class="nb-zurueck" data-a="neu" style="justify-self:start;margin-top:6px">Noch einmal</button>' : '')
         : '<div class="pt-wartet">Wartet auf Unterlagen …</div>';
     }
-    inhalt.addEventListener('click', function (e) {
-      var a = e.target.dataset && e.target.dataset.a;
-      if (!a || e.target.disabled) return;
-      if (a === 'unterschreiben') stand.unterschrieben = true;
-      if (a === 'foto') stand.dateien.push('Foto_' + (stand.dateien.length + 1) + '.jpg');
-      if (a === 'senden') {
-        weg.classList.remove('faehrt'); void weg.offsetWidth; weg.classList.add('faehrt');
-        setTimeout(function () { stand.gesendet = true; malen(); }, ruhig ? 0 : 900);
-        return;
+    function fahren(dann) {
+      weg.classList.remove('faehrt'); void weg.offsetWidth; weg.classList.add('faehrt');
+      setTimeout(dann, ruhig ? 0 : 850);
+    }
+    root.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-a]');
+      if (!b || b.disabled) return;
+      var a = b.dataset.a;
+      if (a === 'sig') {
+        st.sig[+b.dataset.i] = true;
+        if (st.sig[0] && st.sig[1]) { fahren(malen); malen(); return; }
       }
-      if (a === 'neu') stand = { unterschrieben: false, dateien: [], gesendet: false };
+      if (a === 'weiter') st.offen2 = true;
+      if (a === 'datei') st.dateien[b.dataset.f].push((b.textContent.indexOf('Foto') > -1 ? 'Foto_' : 'Scan_') + (st.dateien[b.dataset.f].length + 1) + '.jpg');
+      if (a === 'senden') { st.gesendet = true; fahren(malen); return; }
+      if (a === 'neu') st = neu();
       malen();
     });
     malen();
