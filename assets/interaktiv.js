@@ -354,6 +354,165 @@
     }
   }
 
+  // ------------------------------------------- Hero: Prozess-Kreis der Akte
+  // Nachbau von ProzessKreis/SegmentedDonut aus AQUAflow: 270°-Bogen, ein
+  // Segment je Stage, die jetzige in voller Dicke, die übrigen von außen um
+  // 20 % schmaler; besucht in voller Farbe, als Nächstes möglich mit
+  // Deckung 0,45, offen mit 0,2. Die Person wandert langsam weiter.
+  var kreisRoot = document.getElementById('nf-kreis');
+  if (kreisRoot) {
+    var APP = '-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif';
+    var kcss = document.createElement('style');
+    kcss.textContent = [
+      '#nf-kreis{font-family:' + APP + ';color:#18181b;max-width:440px;margin:0 auto;width:100%}',
+      '.kr-kopf{display:flex;align-items:center;gap:12px;margin-bottom:18px}',
+      '.kr-avatar{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#0EA5E9;color:#fff;font-size:14px;font-weight:600}',
+      '.kr-name{font-size:16px;font-weight:600;line-height:1.2}',
+      '.kr-sub{font-size:12px;color:#71717a}',
+      '.kr-chip{margin-left:auto;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:500;transition:background .4s,color .4s}',
+      '.kr-bogen{position:relative}',
+      '.kr-bogen svg{display:block;width:100%;height:auto;overflow:visible}',
+      '.kr-bogen path{transition:fill .5s ease,opacity .15s ease;cursor:pointer}',
+      '.kr-mitte{position:absolute;left:19%;right:19%;top:24%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;pointer-events:none}',
+      '.kr-mitte b{font-size:22px;font-weight:600;line-height:1.15;letter-spacing:-.01em}',
+      '.kr-mitte span{font-size:12px;color:#71717a}',
+      '.kr-mitte.kr-neu{animation:kr-ein .45s ease}',
+      '@keyframes kr-ein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}',
+      '.kr-legende{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:2px 18px;margin:6px 0 0;padding:0;font-size:12px}',
+      '.kr-legende li{display:flex;align-items:center;gap:8px;padding:3px 6px;border-radius:6px;color:#18181b;transition:opacity .15s,background .15s;cursor:default}',
+      '.kr-legende li.blass{color:#a1a1aa}',
+      '.kr-legende li.jetzt{font-weight:600}',
+      '.kr-legende li.hervor{background:rgba(0,0,0,.04)}',
+      '.kr-legende i{flex:none;width:8px;height:8px;border-radius:50%;transition:background .5s}',
+      '.kr-legende em{margin-left:auto;font-style:normal;font-variant-numeric:tabular-nums;color:#71717a}',
+      '.kr-naechst{margin-top:22px;padding-top:16px;border-top:1px solid rgba(19,90,63,.18)}',
+      '.kr-naechst small{display:block;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#71717a;margin-bottom:6px}',
+      '.kr-aufgabe{display:flex;align-items:center;gap:12px}',
+      '.kr-aufgabe b{font-size:15px;font-weight:600}',
+      '.kr-aufgabe span{display:block;font-size:12px;color:#71717a}',
+      '.kr-faellig{margin-left:auto;flex:none;padding:3px 9px;border-radius:999px;background:rgba(245,158,11,.14);color:#B45309;font-size:12px;font-variant-numeric:tabular-nums}',
+      '.kr-aufgabe.kr-neu{animation:kr-ein .45s ease}'
+    ].join('\n');
+    document.head.appendChild(kcss);
+
+    var STAGES = [
+      { name: 'Aufgebucht', farbe: [59, 130, 246], aufgabe: ['Erstkontakt herstellen', 'Einladung aus der Vorlage vorbereitet'] },
+      { name: 'Erstkontakt', farbe: [99, 102, 241], aufgabe: ['Erstgespräch führen', 'Termin steht im Kalender'] },
+      { name: 'Suche', farbe: [139, 92, 246], aufgabe: ['Stellen vorschlagen', 'Drei passende Betriebe gefunden'] },
+      { name: 'Vorstellung', farbe: [192, 38, 211], aufgabe: ['Gespräch nachfassen', 'Mail an den Betrieb vorbereitet'] },
+      { name: 'In Maßnahme', farbe: [22, 163, 74], aufgabe: ['Anwesenheit eintragen', 'Liste der Woche vollständig'] },
+      { name: 'Abschluss', farbe: [249, 115, 22], aufgabe: ['Abschlussbericht erstellen', 'Aus der Akte befüllt'] }
+    ];
+    var rgb = function (c, a) { return a == null ? 'rgb(' + c.join(',') + ')' : 'rgba(' + c.join(',') + ',' + a + ')'; };
+    var tag = function (offset) {
+      var d = new Date();
+      d.setDate(d.getDate() + offset);
+      return d.toLocaleDateString('de-AT', { timeZone: 'Europe/Vienna', day: '2-digit', month: '2-digit' }).replace(/\.?$/, '.');
+    };
+
+    // Geometrie wie SegmentedDonut (size 340, thickness 30, arcDeg 270, gapDeg 3).
+    var SIZE = 340, DICKE = 30, BOGEN = 270, LUECKE = 3, DEG = 180 / Math.PI;
+    var cx = SIZE / 2, ro = SIZE / 2 - 2, ri = ro - DICKE, roSchmal = ro - DICKE * 0.2, cyK = ro + 2;
+    var vbH = cyK + ro * Math.max(0, -Math.cos(BOGEN / 2 / DEG)) + 4;
+    var polar = function (r, deg) { var a = deg / DEG; return [cx + r * Math.cos(a), cyK + r * Math.sin(a)]; };
+    var sektor = function (rI, rO, a1, a2, cr) {
+      var span = (a2 - a1) / DEG;
+      var r = Math.max(0.5, Math.min(cr, (rO - rI) / 2, (rI * span / 2) * 0.95));
+      var dO = (r / rO) * DEG, dI = (r / rI) * DEG;
+      var f = function (p) { return p[0].toFixed(2) + ' ' + p[1].toFixed(2); };
+      var A = polar(rO, a1 + dO), B = polar(rO, a2 - dO), C = polar(rO - r, a2), D = polar(rI + r, a2);
+      var E = polar(rI, a2 - dI), F = polar(rI, a1 + dI), G = polar(rI + r, a1), H = polar(rO - r, a1);
+      var lO = a2 - dO - (a1 + dO) > 180 ? 1 : 0, lI = a2 - dI - (a1 + dI) > 180 ? 1 : 0;
+      return 'M ' + f(A) + ' A ' + rO + ' ' + rO + ' 0 ' + lO + ' 1 ' + f(B) + ' A ' + r + ' ' + r + ' 0 0 1 ' + f(C) +
+        ' L ' + f(D) + ' A ' + r + ' ' + r + ' 0 0 1 ' + f(E) + ' A ' + rI + ' ' + rI + ' 0 ' + lI + ' 0 ' + f(F) +
+        ' A ' + r + ' ' + r + ' 0 0 1 ' + f(G) + ' L ' + f(H) + ' A ' + r + ' ' + r + ' 0 0 1 ' + f(A) + ' Z';
+    };
+    var n = STAGES.length, spanje = (BOGEN - (n - 1) * LUECKE) / n, start = -90 - BOGEN / 2;
+    var winkel = STAGES.map(function (s, i) { var a = start + i * (spanje + LUECKE); return [a, a + spanje]; });
+
+    kreisRoot.innerHTML =
+      '<div class="kr-kopf"><span class="kr-avatar">AB</span><div><div class="kr-name">Alex Beispiel</div>' +
+      '<div class="kr-sub">Teilnehmer:in · Akte</div></div><span class="kr-chip"></span></div>' +
+      '<div class="kr-bogen"><svg viewBox="0 0 ' + SIZE + ' ' + vbH.toFixed(1) + '" aria-hidden="true"></svg>' +
+      '<div class="kr-mitte"></div></div>' +
+      '<ol class="kr-legende" aria-label="Stages des Ablaufs"></ol>' +
+      '<div class="kr-naechst"><small>Als Nächstes</small><div class="kr-aufgabe"></div></div>';
+    kreisRoot.setAttribute('role', 'img');
+    var svgK = $('svg', kreisRoot), mitte = $('.kr-mitte', kreisRoot), legende = $('.kr-legende', kreisRoot);
+    var chip = $('.kr-chip', kreisRoot), aufgabe = $('.kr-aufgabe', kreisRoot);
+    var pfade = STAGES.map(function (s, i) {
+      var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.addEventListener('mouseenter', function () { hervor(i); });
+      p.addEventListener('mouseleave', function () { hervor(null); });
+      svgK.appendChild(p);
+      return p;
+    });
+    var zeilen = STAGES.map(function (s, i) {
+      var li = el('li');
+      li.innerHTML = '<i></i><span></span><em></em>';
+      li.addEventListener('mouseenter', function () { hervor(i); });
+      li.addEventListener('mouseleave', function () { hervor(null); });
+      legende.appendChild(li);
+      return li;
+    });
+
+    var jetzt = 2, hervorIdx = null;
+    var wert = function (i) {
+      if (i < jetzt) return tag(-(jetzt - i) * 9);
+      if (i === jetzt) return 'seit ' + tag(-3);
+      if (i === jetzt + 1) return 'möglich';
+      return '—';
+    };
+    var mitteText = function (i) {
+      if (i === jetzt) return 'seit ' + tag(-3);
+      if (i < jetzt) return 'war dort · ' + tag(-(jetzt - i) * 9);
+      if (i === jetzt + 1) return 'als Nächstes möglich';
+      return 'noch nicht erreicht';
+    };
+    var malenK = function (neu) {
+      STAGES.forEach(function (s, i) {
+        var a = i === jetzt + 1 ? 0.45 : i > jetzt ? 0.2 : null;
+        pfade[i].setAttribute('d', sektor(ri, i === jetzt ? ro : roSchmal, winkel[i][0], winkel[i][1], DICKE * 0.4));
+        pfade[i].style.fill = rgb(s.farbe, a);
+        pfade[i].style.opacity = hervorIdx == null || hervorIdx === i ? 1 : 0.3;
+        var z = zeilen[i];
+        z.className = (i === jetzt ? 'jetzt' : i > jetzt + 1 ? 'blass' : '') + (hervorIdx === i ? ' hervor' : '');
+        z.style.opacity = hervorIdx == null || hervorIdx === i ? 1 : 0.4;
+        z.children[0].style.background = rgb(s.farbe, a);
+        z.children[1].textContent = s.name;
+        z.children[2].textContent = wert(i);
+      });
+      var zeig = hervorIdx == null ? jetzt : hervorIdx;
+      mitte.innerHTML = '<b>' + STAGES[zeig].name + '</b><span>' + mitteText(zeig) + '</span>';
+      var f = STAGES[jetzt].farbe;
+      chip.textContent = STAGES[jetzt].name;
+      chip.style.background = rgb(f, 0.12);
+      chip.style.color = rgb(f);
+      kreisRoot.setAttribute('aria-label', 'Prozess-Kreis: Alex Beispiel steht in „' + STAGES[jetzt].name + '“');
+      if (neu) {
+        var t = STAGES[jetzt].aufgabe;
+        aufgabe.innerHTML = '<div><b>' + t[0] + '</b><span>' + t[1] + '</span></div><span class="kr-faellig">fällig ' + tag(3) + '</span>';
+        [mitte, aufgabe].forEach(function (x) { x.classList.remove('kr-neu'); void x.offsetWidth; x.classList.add('kr-neu'); });
+      }
+    };
+    function hervor(i) { hervorIdx = i; malenK(false); }
+    malenK(true);
+
+    // Langsam weiter durch den Ablauf — nur sichtbar, nicht beim Zeigen mit der Maus.
+    if (!ruhig && 'IntersectionObserver' in window) {
+      var sichtbar = false, uhr = 0;
+      var weiter = function () {
+        clearTimeout(uhr);
+        uhr = setTimeout(function () {
+          if (sichtbar && hervorIdx == null) { jetzt = (jetzt + 1) % n; malenK(true); }
+          weiter();
+        }, jetzt === n - 1 ? 4200 : 2800);
+      };
+      new IntersectionObserver(function (e) { sichtbar = e[0].isIntersecting; }, { threshold: 0.4 }).observe(kreisRoot);
+      weiter();
+    }
+  }
+
   // --------------------------------------------- Sicherheit: Datenweg
   var dw = document.getElementById('nf-datenweg');
   if (dw) {
