@@ -34,10 +34,6 @@
     '.nf-node{position:absolute;left:0;top:0;display:flex;flex-direction:column;box-sizing:border-box;border:1px solid #e4e4e7;border-radius:16px;' +
       'background:rgba(255,255,255,.7);box-shadow:0 7px 9px 0 rgba(0,0,0,.02);color:#18181b;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;transition:box-shadow .2s}',
     '.nf-node:hover{box-shadow:0 7px 18px 0 rgba(0,0,0,.06)}',
-    // Aufbau beim ersten Sichtkontakt (data-aufbau): Knoten und Kanten blenden nacheinander ein.
-    '.nf-node,.nf-edge{transition:opacity .45s ease,scale .45s cubic-bezier(.2,.7,.2,1),box-shadow .2s,stroke .3s}',
-    '.nf-node.nf-wait{opacity:0;scale:.94}',
-    '.nf-edge.nf-wait{opacity:0}',
     '.nf-node.is-dragging{cursor:grabbing;box-shadow:0 12px 28px 0 rgba(0,0,0,.08)}',
     '.nf-head{padding:8px 12px;border-bottom:1px solid #e4e4e7;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;font-weight:600;line-height:16px}',
     '.nf-body{position:relative;padding:12px;border-radius:0 0 16px 16px;background:#fff;font-size:12px;line-height:1.4}',
@@ -72,7 +68,7 @@
     '@keyframes nf-pop{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}',
     '.nf-fresh{animation:nf-fresh .5s ease}',
     '@keyframes nf-fresh{from{opacity:.35}to{opacity:1}}',
-    '@media (prefers-reduced-motion:reduce){.nf-edge,.nf-bar,.nf-chip,.nf-fresh{animation:none}.nf-node,.nf-edge{transition:none}}'
+    '@media (prefers-reduced-motion:reduce){.nf-edge,.nf-bar,.nf-chip,.nf-fresh{animation:none}}'
   ].join('\n');
 
   // ----------------------------------------------------------------- Knoten
@@ -81,10 +77,7 @@
     bestaetigung: { label: 'Bestätigung', titel: 'Bestätigung', bars: [80, 88, 52] },
     meldung: { label: 'Meldung', titel: 'Meldung', bars: [70, 90, 64, 82] }
   };
-  var BEISPIEL = 'Alex Beispiel';
-  var aufbau = root.dataset.aufbau === '1' && 'IntersectionObserver' in window &&
-    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var state = { name: aufbau ? '' : BEISPIEL, vorlage: 'vereinbarung', mail: true, frist: true };
+  var state = { name: 'Alex Beispiel', vorlage: 'vereinbarung', mail: true, frist: true };
 
   // Lagen im Ablauf (Flusskoordinaten): [x, y, Breite]. Ziel-Griffe am
   // Ergebnis wie auf reactflow.dev: drei Griffe untereinander, 20 px Abstand.
@@ -313,45 +306,8 @@
   root.addEventListener('pointerup', stop);
   root.addEventListener('pointercancel', stop);
 
-  // ----------------------------------------------------------------- Aufbau
-  // Knoten erscheinen nacheinander, ihre Kanten kurz danach; zuletzt wird der
-  // Name eingetippt. Wer selbst ins Feld klickt, übernimmt.
-  function zeigeAufbau() {
-    var feld = root.querySelector('.nf-input');
-    var tippen = 0, eigene = false;
-    feld.addEventListener('focus', function () { eigene = true; clearTimeout(tippen); }, { once: true });
-    NODES.forEach(function (n, i) {
-      setTimeout(function () {
-        n.el.classList.remove('nf-wait');
-        if (n.edge) setTimeout(function () { n.edge.classList.remove('nf-wait'); }, 180);
-      }, i * 230);
-    });
-    var k = 0;
-    function tipp() {
-      if (eigene || k > BEISPIEL.length) return;
-      state.name = BEISPIEL.slice(0, k++);
-      feld.value = state.name;
-      var ziel = out.querySelector('.nf-doc-name');
-      if (ziel) ziel.textContent = state.name || '—';
-      if (k <= BEISPIEL.length) { pulse('eingabe'); tippen = setTimeout(tipp, 70); }
-    }
-    tippen = setTimeout(tipp, NODES.length * 230 + 400);
-  }
-
   // ------------------------------------------------------------------ Start
   render();
-  if (aufbau) {
-    NODES.forEach(function (n) {
-      n.el.classList.add('nf-wait');
-      if (n.edge) n.edge.classList.add('nf-wait');
-    });
-    var sicht = new IntersectionObserver(function (e) {
-      if (!e[0].isIntersecting) return;
-      sicht.disconnect();
-      setTimeout(zeigeAufbau, 250);
-    }, { threshold: 0.3 });
-    sicht.observe(root);
-  }
   // Die Seite blendet Unterseiten per [hidden] aus — eingepasst wird, sobald
   // die Fläche eine Größe hat, und bei jeder Größenänderung neu.
   new ResizeObserver(fit).observe(root);
