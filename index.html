@@ -147,6 +147,15 @@
   .nb-bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
   .nb-kachel { display: flex; flex-direction: column; min-width: 0; padding: clamp(20px, 2.6vw, 32px);
     border-radius: 24px; border: 1px solid rgba(19,90,63,.16); background: rgba(255,255,255,.5); }
+  /* Dunkelgrüne Kacheln: dasselbe Grün wie das Band, Inhalt bleibt hell. */
+  .nb-kachel.nb-dunkel { background: #0C2E22; border-color: #0C2E22; color: #EAF2ED; }
+  .nb-dunkel .nb-k-label { color: #7FD1A6; }
+  .nb-dunkel .nb-k-tipp { background: #7FD1A6; color: #0C2E22; }
+  .nb-dunkel .pt-linie { border-color: rgba(127,209,166,.45) !important; }
+  .nb-dunkel .pt-akte { background: rgba(255,255,255,.96); color: #18181b; }
+  .nb-dunkel .nb-suche { background: #FFFFFF; }
+  .nb-dunkel .nb-tn { background: rgba(255,255,255,.94); color: #18181b; }
+  .nb-dunkel .nb-nichts { color: rgba(234,242,237,.7); }
   .nb-k4 { grid-column: span 4; } .nb-k6 { grid-column: span 6; } .nb-k8 { grid-column: span 8; } .nb-k12 { grid-column: span 12; }
   .nb-hoch { grid-row: span 2; }
   .nb-k-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #135A3F;
@@ -226,17 +235,17 @@
     </section>
 
     <section id="erledigt" style="padding: clamp(64px, 8vw, 120px) clamp(20px, 5vw, 40px); border-bottom: 1px solid rgba(19,90,63,.25); scroll-margin-top: 80px;">
-      <div style="max-width: 1160px; margin: 0 auto;">
+      <div style="max-width: 1400px; margin: 0 auto;">
         <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #135A3F; margin-bottom: 18px;">Blatt 03 · Was erledigt wird</div>
         <h2 style="font-size: clamp(30px, 3.6vw, 46px); line-height: 1.05; letter-spacing: -.03em; font-weight: 600; margin: 0 0 clamp(32px, 4vw, 48px); max-width: 18em;">Das übernimmt die Software. <span style="color: #135A3F;">Probieren Sie es aus.</span></h2>
         <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; line-height: 1.7; margin: calc(-1 * clamp(16px, 2vw, 28px)) 0 clamp(28px, 3vw, 40px);">Alles hier lässt sich bedienen — ziehen, antippen, tippen. Was gerade leicht pulsiert, ist der erste Schritt.</p>
         <div class="nb-bento">
           <div id="k-pipeline" class="nb-kachel nb-k12"><div class="nb-k-label"><span>Teilnehmerverwaltung</span><span class="nb-k-tipp">↔ Karte ziehen</span></div><div class="nb-k-titel">Karte weiterziehen — der nächste Schritt passiert von selbst.</div><div data-nachbau="pipeline"></div></div>
-          <div id="k-portal" class="nb-kachel nb-k12"><div class="nb-k-label"><span>Aufnahme-Portal</span><span class="nb-k-tipp">● Antippen</span></div><div class="nb-k-titel">Unterlagen kommen vom Handy, verschlüsselt, direkt in die Akte.</div><div data-nachbau="portal"></div></div>
+          <div id="k-portal" class="nb-kachel nb-dunkel nb-k12"><div class="nb-k-label"><span>Aufnahme-Portal</span><span class="nb-k-tipp">● Antippen</span></div><div class="nb-k-titel">Unterlagen kommen vom Handy, verschlüsselt, direkt in die Akte.</div><div data-nachbau="portal"></div></div>
           <div id="k-vorlage" class="nb-kachel nb-k8"><div class="nb-k-label"><span>Word- und PDF-Formulare</span><span class="nb-k-tipp">↔ Felder ziehen</span></div><div class="nb-k-titel">Felder ziehen, testen, PDF erstellen.</div><div data-nachbau="vorlage"></div></div>
           <div id="k-anwesenheit" class="nb-kachel nb-k4"><div class="nb-k-label"><span>Anwesenheit</span><span class="nb-k-tipp">● Antippen</span></div><div class="nb-k-titel">Fehltage fallen sofort auf.</div><div data-nachbau="anwesenheit"></div></div>
           <div id="k-ams" class="nb-kachel nb-k8"><div class="nb-k-label"><span>Portale befüllen</span><span class="nb-k-tipp">▶ Ansehen</span></div><div class="nb-k-titel">Die Maske füllt sich selbst. Sie prüfen und senden.</div><div data-nachbau="amsfelder"></div></div>
-          <div id="k-akte" class="nb-kachel nb-k4"><div class="nb-k-label"><span>Eine Akte pro Person</span><span class="nb-k-tipp">⌨ Namen tippen</span></div><div class="nb-k-titel">Zwei Buchstaben, und der Mensch ist da.</div><div data-nachbau="teilnehmer"></div></div>
+          <div id="k-akte" class="nb-kachel nb-dunkel nb-k4"><div class="nb-k-label"><span>Eine Akte pro Person</span><span class="nb-k-tipp">⌨ Namen tippen</span></div><div class="nb-k-titel">Zwei Buchstaben, und der Mensch ist da.</div><div data-nachbau="teilnehmer"></div></div>
         </div>
         <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-top: 28px;">
           <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; line-height: 1.7; margin: 0;">Nachgebaut aus der Software, mit erfundenen Daten.</p>

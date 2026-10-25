@@ -306,6 +306,15 @@ RUNTIME_CSS = """
   .nb-bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
   .nb-kachel { display: flex; flex-direction: column; min-width: 0; padding: clamp(20px, 2.6vw, 32px);
     border-radius: 24px; border: 1px solid rgba(19,90,63,.16); background: rgba(255,255,255,.5); }
+  /* Dunkelgrüne Kacheln: dasselbe Grün wie das Band, Inhalt bleibt hell. */
+  .nb-kachel.nb-dunkel { background: #0C2E22; border-color: #0C2E22; color: #EAF2ED; }
+  .nb-dunkel .nb-k-label { color: #7FD1A6; }
+  .nb-dunkel .nb-k-tipp { background: #7FD1A6; color: #0C2E22; }
+  .nb-dunkel .pt-linie { border-color: rgba(127,209,166,.45) !important; }
+  .nb-dunkel .pt-akte { background: rgba(255,255,255,.96); color: #18181b; }
+  .nb-dunkel .nb-suche { background: #FFFFFF; }
+  .nb-dunkel .nb-tn { background: rgba(255,255,255,.94); color: #18181b; }
+  .nb-dunkel .nb-nichts { color: rgba(234,242,237,.7); }
   .nb-k4 { grid-column: span 4; } .nb-k6 { grid-column: span 6; } .nb-k8 { grid-column: span 8; } .nb-k12 { grid-column: span 12; }
   .nb-hoch { grid-row: span 2; }
   .nb-k-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #135A3F;
