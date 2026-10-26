@@ -639,3 +639,76 @@
   });
   waehle('aufnahme');
 })();
+
+// -------------------------------------------- Was Neotena kann: Team-Illustration
+// Ihr Team am Tisch, darüber die sechs Module von Neotena. Jedes Modul gehört
+// zu einer Zeile der Liste darunter: Zeigen auf das eine hebt das andere hervor.
+// Figuren: Open Peeps (Pablo Stanley, CC0), lokal unter assets/peeps/.
+(function () {
+  'use strict';
+  var root = document.getElementById('nf-team');
+  if (!root) return;
+  var G = '#135A3F';
+  var ICON = {
+    akte: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/>',
+    vorlage: '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
+    frist: '<circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 2.5M9 2.5h6"/>',
+    portal: '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>',
+    eams: '<rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M7 10h4M7 14h10M14 10h3"/>',
+    daten: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'
+  };
+  // [Schlüssel, Zeile in der Liste (0-basiert), x, y in %]
+  var MOD = [['akte', 0, 8, 46], ['vorlage', 1, 22, 16], ['frist', 2, 41, 4], ['portal', 3, 60, 4], ['eams', 4, 78, 16], ['daten', 5, 92, 46]];
+  var st = document.createElement('style');
+  st.textContent = [
+    '.nb-kb-oben{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:24px 48px;align-items:end;margin-bottom:clamp(24px,3vw,40px)}',
+    '.nb-kb-oben h2{margin-bottom:0!important}',
+    '@media (max-width:860px){.nb-kb-oben{grid-template-columns:1fr}}',
+    '#nf-team{position:relative;aspect-ratio:1.55;width:100%;max-width:560px;justify-self:end}',
+    '.tm-linien{position:absolute;inset:0;width:100%;height:100%;overflow:visible}',
+    '.tm-linien path{fill:none;stroke:#8fbfa6;stroke-width:1.5;stroke-dasharray:4 5;transition:stroke .2s,stroke-width .2s}',
+    '.tm-linien path.an{stroke:' + G + ';stroke-width:2.5;stroke-dasharray:none}',
+    '.tm-mod{position:absolute;width:13%;aspect-ratio:1;margin:-6.5% 0 0 -6.5%;display:grid;place-items:center;border-radius:50%;background:#FBFAF7;border:1.5px solid ' + G + ';box-shadow:0 6px 14px -8px rgba(12,46,34,.35);transition:transform .2s,background .2s}',
+    '.tm-mod svg{width:46%;height:46%;fill:none;stroke:#18181b;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}',
+    '.tm-mod.an{transform:scale(1.12);background:' + G + '}',
+    '.tm-mod.an svg{stroke:#F4F3EE}',
+    '.tm-leute{position:absolute;left:6%;right:6%;bottom:16%;display:flex;justify-content:center}',
+    '.tm-leute img{width:21%;height:auto;margin:0 -1.5%;}',
+    '.tm-tisch{position:absolute;left:4%;right:4%;bottom:6%;height:12%;border-radius:4px;background:linear-gradient(#fff,#ecebe6);box-shadow:0 10px 24px -14px rgba(12,46,34,.4)}',
+    '.tm-laptop{position:absolute;left:50%;bottom:15%;width:10%;aspect-ratio:1.5;margin-left:-5%;border:1.5px solid #18181b;border-radius:4px 4px 0 0;background:#fff;display:grid;place-items:center;font:700 13px "Space Grotesk",sans-serif;color:' + G + '}',
+    '.tm-laptop::after{content:"";position:absolute;left:-14%;right:-14%;bottom:-6px;height:5px;border-radius:0 0 4px 4px;background:#18181b}',
+    '.tm-label{position:absolute;left:0;right:0;bottom:0;text-align:center;font:500 10px "IBM Plex Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:' + G + '}',
+    '.nb-kb-zeile.tm-an{background:rgba(255,255,255,.7);padding-left:14px;padding-right:14px}'
+  ].join('\n');
+  document.head.appendChild(st);
+  var NS = 'http://www.w3.org/2000/svg';
+  var ziel = [50, 56]; // Sammelpunkt über dem Laptop, in %
+  var linien = MOD.map(function (m) {
+    return '<path data-m="' + m[0] + '" d="M' + m[2] + ' ' + m[3] + ' C' + m[2] + ' ' + (m[3] + 30) + ' ' + ziel[0] + ' ' + (ziel[1] - 22) + ' ' + ziel[0] + ' ' + ziel[1] + '"/>';
+  }).join('');
+  root.innerHTML = '<svg class="tm-linien" viewBox="0 0 100 100" preserveAspectRatio="none">' + linien + '</svg>' +
+    MOD.map(function (m) { return '<span class="tm-mod" data-m="' + m[0] + '" style="left:' + m[2] + '%;top:' + m[3] + '%"><svg viewBox="0 0 24 24">' + ICON[m[0]] + '</svg></span>'; }).join('') +
+    '<div class="tm-leute">' + [1, 2, 3, 4, 5].map(function (n) { return '<img src="/assets/peeps/p' + n + '.svg" alt="" width="704" height="704" loading="lazy" />'; }).join('') + '</div>' +
+    '<div class="tm-tisch"></div><div class="tm-laptop">N</div><div class="tm-label">Ihr Team</div>';
+  root.querySelectorAll('.tm-linien path').forEach(function (p) { p.setAttribute('vector-effect', 'non-scaling-stroke'); });
+  var zeilen = document.querySelectorAll('.nb-kb-zeile');
+  function an(key) {
+    MOD.forEach(function (m) {
+      var ja = m[0] === key;
+      root.querySelector('.tm-mod[data-m="' + m[0] + '"]').classList.toggle('an', ja);
+      root.querySelector('path[data-m="' + m[0] + '"]').classList.toggle('an', ja);
+      if (zeilen[m[1]]) zeilen[m[1]].classList.toggle('tm-an', ja);
+    });
+  }
+  MOD.forEach(function (m) {
+    var z = zeilen[m[1]];
+    if (z) { z.addEventListener('mouseenter', function () { an(m[0]); }); z.addEventListener('mouseleave', function () { an(null); }); }
+    var k = root.querySelector('.tm-mod[data-m="' + m[0] + '"]');
+    k.addEventListener('mouseenter', function () { an(m[0]); });
+    k.addEventListener('mouseleave', function () { an(null); });
+  });
+  // Ohne Maus: die Module leuchten nacheinander auf.
+  if (!window.matchMedia('(hover: hover)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var i = 0; setInterval(function () { an(MOD[i % MOD.length][0]); i++; }, 1600);
+  }
+})();
