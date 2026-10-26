@@ -284,6 +284,7 @@
     '.pt-fehlt{margin-left:auto;font-size:11px;color:#a1a1aa}',
     '.pt-wartet{padding:20px 0;font-size:12px;color:#a1a1aa;text-align:center}',
     '@container (max-width:500px){.pt-buehne{grid-template-columns:1fr;justify-items:center;gap:10px}.pt-weg{width:40px;height:50px}.pt-linie{left:50%;right:auto;top:0;bottom:0;border-top:0;border-left:2px dashed #c2c2bc}.pt-weg .pt-paket{display:none}.pt-akte{width:100%;max-width:340px}}',
+    '@container (max-width:330px){.pt-handy{width:100%;box-sizing:border-box}.pt-seite{zoom:.62}.pt-schirm{height:540px}}',
     // Nach dem eigenen Platz, nicht nach dem Bildschirm: die halbe Spalte bei A—0x ist auch am Desktop schmal.
     '[data-nachbau]{container-type:inline-size}',
     '@container (max-width:680px){.nb-vorlage,.nb-ams{grid-template-columns:1fr}.nb-blatt{max-width:420px}}',

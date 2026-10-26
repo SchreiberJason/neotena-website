@@ -26,7 +26,7 @@
 <link rel="preload" href="/assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin="" />
 <script src="/assets/flow.js?v=0f6fc328" defer></script>
 <script src="/assets/interaktiv.js?v=47416688" defer></script>
-<script src="/assets/nachbau.js?v=3f961842" defer></script>
+<script src="/assets/nachbau.js?v=98a91b4d" defer></script>
 <style>
   body { margin: 0; background: #F4F3EE; }
   a { color: #135A3F; text-decoration: none; }
@@ -215,43 +215,32 @@
     .nb-k4, .nb-k6, .nb-k8, .nb-k12 { grid-column: auto; } .nb-hoch { grid-row: auto; }
   }
   /* Schmaler Viewport: Logo und Anfrage-Button in die erste Zeile, Navigation darunter. */
-  /* „Was erledigt wird“ als Abfolge: eine Station nach der anderen, Text und
-     Vorführung abwechselnd links/rechts; im Fokus ist, was gerade mittig steht. */
-  .nb-bento { display: flex !important; flex-direction: column; gap: clamp(28px, 4vw, 56px); counter-reset: station; }
-  .nb-bento > .nb-kachel { counter-increment: station; display: grid; grid-column: auto !important; grid-row: auto !important;
-    grid-template-columns: minmax(0, .75fr) minmax(0, 1.5fr); grid-template-rows: auto 1fr; gap: 10px clamp(28px, 4vw, 64px);
-    align-items: start; padding: clamp(28px, 4vw, 56px);
-    opacity: .35; transform: scale(.975); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
-  .nb-bento > .nb-kachel.is-fokus { opacity: 1; transform: none; }
-  .nb-bento > .nb-kachel > .nb-k-label { grid-column: 1; grid-row: 1; flex-direction: column; align-items: flex-start; gap: 14px; }
-  .nb-bento > .nb-kachel > .nb-k-label::before { content: counter(station, decimal-leading-zero); font-size: clamp(40px, 5vw, 64px);
-    letter-spacing: -.04em; line-height: 1; font-family: 'Space Grotesk', sans-serif; font-weight: 500; text-transform: none; opacity: .9; }
-  .nb-bento > .nb-kachel > .nb-k-titel { grid-column: 1; grid-row: 2; margin: 4px 0 0; font-size: clamp(22px, 2.4vw, 30px); line-height: 1.15; }
-  .nb-bento > .nb-kachel > [data-nachbau] { grid-column: 2; grid-row: 1 / 3; align-self: center; }
-  .nb-bento > .nb-kachel:nth-child(even) { grid-template-columns: minmax(0, 1.5fr) minmax(0, .75fr); }
-  .nb-bento > .nb-kachel:nth-child(even) > .nb-k-label, .nb-bento > .nb-kachel:nth-child(even) > .nb-k-titel { grid-column: 2; }
-  .nb-bento > .nb-kachel:nth-child(even) > [data-nachbau] { grid-column: 1; }
-  /* Aufgebrochen: nicht jede Station über die volle Breite. 03 und 04 stehen
-     nebeneinander und versetzt, 05 rückt nach rechts ein. */
+  /* „Was erledigt wird“ als Rundgang: links bleibt die Liste der Stationen
+     stehen, rechts wechselt beim Scrollen die Vorführung. */
+  .nb-rg-nav { display: none; }
   @media (min-width: 961px) {
-    .nb-bento { display: grid !important; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(20px, 2.4vw, 32px); }
-    .nb-bento > .nb-kachel:nth-child(1), .nb-bento > .nb-kachel:nth-child(2) { grid-column: 1 / -1 !important; }
-    .nb-bento > .nb-kachel:nth-child(3) { grid-column: 1 / span 7 !important; }
-    .nb-bento > .nb-kachel:nth-child(4) { grid-column: 8 / -1 !important; margin-top: clamp(80px, 12vw, 180px); align-self: start; }
-    .nb-bento > .nb-kachel:nth-child(5) { grid-column: 3 / -1 !important; }
-    .nb-bento > .nb-kachel:nth-child(3), .nb-bento > .nb-kachel:nth-child(4) {
-      grid-template-columns: 1fr !important; grid-template-rows: auto; min-height: 0; }
-    .nb-bento > .nb-kachel:nth-child(3) > *, .nb-bento > .nb-kachel:nth-child(4) > * { grid-column: 1 !important; grid-row: auto !important; }
-    .nb-bento > .nb-kachel:nth-child(3) > .nb-k-titel, .nb-bento > .nb-kachel:nth-child(4) > .nb-k-titel { margin-bottom: 22px; }
-    .nb-bento > .nb-kachel:nth-child(4) { transform: scale(.975) rotate(.6deg); }
-    .nb-bento > .nb-kachel:nth-child(4).is-fokus { transform: rotate(.6deg); }
+    .nb-rundgang { display: grid; grid-template-columns: minmax(0, .62fr) minmax(0, 1.5fr); gap: clamp(32px, 4vw, 72px); align-items: start; }
+    .nb-rg-nav { display: block; position: sticky; top: 110px; }
+    .nb-rg-nav ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid rgba(19,90,63,.2); }
+    .nb-rg-nav li { position: relative; padding: 14px 0 14px 22px; cursor: pointer; }
+    .nb-rg-nav li::before { content: ""; position: absolute; left: -1px; top: 14px; bottom: 14px; width: 3px; border-radius: 2px;
+      background: #135A3F; transform: scaleY(0); transition: transform .35s; }
+    .nb-rg-nav li.an::before { transform: scaleY(1); }
+    .nb-rg-nr { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; transition: color .3s; }
+    .nb-rg-name { display: block; font-size: 19px; font-weight: 600; letter-spacing: -.01em; color: #9AA3AC; transition: color .3s; }
+    .nb-rg-text { display: block; max-height: 0; overflow: hidden; opacity: 0; font-size: 15px; line-height: 1.5; color: #3C4A58;
+      transition: max-height .45s ease, opacity .35s ease, margin .35s; }
+    .nb-rg-nav li.an .nb-rg-nr { color: #135A3F; }
+    .nb-rg-nav li.an .nb-rg-name { color: #121A22; }
+    .nb-rg-nav li.an .nb-rg-text { max-height: 90px; opacity: 1; margin-top: 6px; }
+    .nb-rundgang .nb-bento { display: flex !important; flex-direction: column; gap: clamp(40px, 8vh, 96px); }
+    .nb-rundgang .nb-bento > .nb-kachel { grid-column: auto !important; grid-row: auto !important; min-height: 72vh; justify-content: center;
+      opacity: .28; transform: scale(.97); transition: opacity .5s ease, transform .5s cubic-bezier(.2,.7,.2,1); }
+    .nb-rundgang .nb-bento > .nb-kachel.is-fokus { opacity: 1; transform: none; }
+    .nb-rundgang .nb-kachel > .nb-k-titel { display: none; }
+    .nb-rundgang .nb-kachel > .nb-k-label > span:first-child { visibility: hidden; }
   }
-  @media (max-width: 960px) {
-    .nb-bento > .nb-kachel, .nb-bento > .nb-kachel:nth-child(even) { grid-template-columns: 1fr; grid-template-rows: auto; min-height: 0; }
-    .nb-bento > .nb-kachel > *, .nb-bento > .nb-kachel:nth-child(even) > * { grid-column: 1 !important; grid-row: auto !important; }
-    .nb-bento > .nb-kachel > .nb-k-titel { margin-bottom: 18px; }
-  }
-  @media (prefers-reduced-motion: reduce) { .nb-bento > .nb-kachel { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .nb-rundgang .nb-bento > .nb-kachel { opacity: 1; transform: none; } }
   /* Kopfzeile: Inhalt so breit wie der breiteste Abschnitt (1400 px), Fläche bleibt randlos. */
   body > header, header[style*="sticky"] { padding-left: max(clamp(20px, 5vw, 40px), calc((100% - 1400px) / 2)) !important;
     padding-right: max(clamp(20px, 5vw, 40px), calc((100% - 1400px) / 2)) !important; }
@@ -421,14 +410,37 @@
   document.querySelectorAll('.ax-page').forEach(function (el) { el.hidden = el.dataset.page !== page; });
   document.querySelectorAll('.ax-nav').forEach(function (el) { el.classList.toggle('is-active', el.dataset.nav === page); });
   document.documentElement.dataset.page = page;
-  // Fokus beim Scrollen: die Station, die gerade mittig steht, ist hell.
-  var stationen = document.querySelectorAll('.nb-bento > .nb-kachel');
-  if (stationen.length && 'IntersectionObserver' in window) {
-    var fokus = new IntersectionObserver(function (e) {
-      e.forEach(function (x) { x.target.classList.toggle('is-fokus', x.isIntersecting); });
-    }, { rootMargin: '-38% 0px -38% 0px' });
-    stationen.forEach(function (k) { fokus.observe(k); });
-  } else { stationen.forEach(function (k) { k.classList.add('is-fokus'); }); }
+  // Rundgang: links die Stationen (bleiben stehen), rechts die Vorführungen.
+  var bento = document.querySelector('.nb-bento');
+  if (bento) {
+    var stationen = Array.prototype.slice.call(bento.querySelectorAll(':scope > .nb-kachel'));
+    var rg = document.createElement('div'); rg.className = 'nb-rundgang';
+    bento.parentNode.insertBefore(rg, bento);
+    var nav = document.createElement('nav'); nav.className = 'nb-rg-nav'; nav.setAttribute('aria-label', 'Stationen');
+    nav.innerHTML = '<ol>' + stationen.map(function (k, i) {
+      var l = k.querySelector('.nb-k-label > span:first-child'), t = k.querySelector('.nb-k-titel');
+      return '<li data-i="' + i + '"><span class="nb-rg-nr">0' + (i + 1) + '</span><span class="nb-rg-name">' + (l ? l.textContent : '') +
+        '</span><span class="nb-rg-text">' + (t ? t.textContent : '') + '</span></li>';
+    }).join('') + '</ol>';
+    rg.appendChild(nav); rg.appendChild(bento);
+    var punkte = nav.querySelectorAll('li');
+    nav.addEventListener('click', function (e) {
+      var li = e.target.closest('li'); if (!li) return;
+      var k = stationen[+li.dataset.i];
+      window.scrollTo({ top: k.getBoundingClientRect().top + scrollY - (innerHeight - k.offsetHeight) / 2, behavior: 'smooth' });
+    });
+    var setze = function (i) {
+      stationen.forEach(function (k, n) { k.classList.toggle('is-fokus', n === i); });
+      punkte.forEach(function (p, n) { p.classList.toggle('an', n === i); });
+    };
+    if ('IntersectionObserver' in window) {
+      var fokus = new IntersectionObserver(function (e) {
+        e.forEach(function (x) { if (x.isIntersecting) setze(stationen.indexOf(x.target)); });
+      }, { rootMargin: '-45% 0px -45% 0px' });
+      stationen.forEach(function (k) { fokus.observe(k); });
+    }
+    setze(0);
+  }
   // Burger-Menü fürs Handy: Knopf hinter „Anfrage senden“ einhängen.
   var kopf = document.querySelector('header'), menue = kopf && kopf.querySelector('nav');
   if (kopf && menue) {
