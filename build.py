@@ -297,11 +297,14 @@ RUNTIME_CSS = """
   /* Dunkelgrünes Band: bricht die Papierfläche auf; Kacheln stehen hell darauf. */
   .nb-band .nb-tuer { background: #F4F3EE; border-color: transparent; color: #121A22; }
   .nb-band .nb-tuer:hover { background: #FFFFFF; box-shadow: 0 30px 60px -20px rgba(0,0,0,.45); }
-  /* Wer dahintersteht: Foto im Bogen — der Hintergrund (Wien) erzählt mit. */
-  .nb-portrait { position: relative; max-width: 420px; width: 100%; margin: 0 auto; aspect-ratio: 720 / 992;
-    border-radius: 999px 999px 28px 28px; overflow: hidden; background: #0C2E22;
-    box-shadow: 0 40px 80px -40px rgba(12,46,34,.45); }
-  .nb-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
+  /* Wer dahintersteht: freigestelltes Foto, randlos vor einem grünen Bogen. */
+  .nb-portrait { position: relative; max-width: 420px; width: 100%; margin: 0 auto; aspect-ratio: 755 / 1000; }
+  .nb-portrait::before { content: ""; position: absolute; left: 0; right: 0; top: 14%; bottom: 0;
+    border-radius: 999px 999px 32px 32px; background: #0C2E22; }
+  .nb-portrait::after { content: ""; position: absolute; left: 0; right: 0; top: 14%; bottom: 0; border-radius: 999px 999px 32px 32px;
+    background: radial-gradient(circle at 40% 30%, rgba(127,209,166,.32), transparent 62%); }
+  .nb-portrait img { position: relative; z-index: 1; width: 92%; height: 100%; margin: 0 auto; object-fit: contain; object-position: bottom;
+    -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent 100%); mask-image: linear-gradient(to bottom, #000 82%, transparent 100%); }
   /* Pilotangebot: dunkle Karte über die Breite. */
   .nb-pilot { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 28px 56px; align-items: center;
     padding: clamp(28px, 4vw, 56px); border-radius: 28px; background: #0C2E22; color: #EAF2ED; }
