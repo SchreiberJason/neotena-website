@@ -363,7 +363,7 @@
   // Wie im Vorlagen-Editor: Felder aus der Akte auf die Stellen der Datei
   // ziehen (Schritt 2), mit einer Akte testen (Schritt 3), dann erstellen.
   var QUELLEN = [
-    ['name', 'Vor- und Nachname', 'Alex Beispiel'],
+    ['name', 'Vor- und Nachname', 'Sarah Lindner'],
     ['geb', 'Geburtsdatum', '14.03.2004'],
     ['adresse', 'Adresse', 'Musterweg 5, 8020 Graz'],
     ['beginn', 'Maßnahmenbeginn', null],
@@ -446,7 +446,7 @@
         schritt = 5;
         blatt.classList.add('gedruckt');
         datei.hidden = false;
-        datei.innerHTML = '<span class="nb-pdf">PDF</span><div><b>Vereinbarung_Beispiel_Alex.pdf</b><span>in der Akte abgelegt · ' + datum(0) + '</span></div><span class="nb-ok">✓</span>';
+        datei.innerHTML = '<span class="nb-pdf">PDF</span><div><b>Vereinbarung_Lindner_Sarah.pdf</b><span>in der Akte abgelegt · ' + datum(0) + '</span></div><span class="nb-ok">✓</span>';
         malen();
       }
       if (a === 'neu') {
@@ -548,7 +548,7 @@
   // Person antippen → passende Betriebe leuchten auf, nach Beruf und Region.
   function matching(root) {
     var TN = [['Hofer Jonas', 'Metalltechnik', 'Deutschlandsberg'], ['Bauer Lena', 'Köchin', 'Voitsberg'], ['Gruber Lisa-Marie', 'Installationstechnik', 'Graz West']];
-    var BT = [['Stahlbau Muster', 'Metalltechnik', 'Deutschlandsberg', 2], ['Gasthaus Beispiel', 'Köchin', 'Voitsberg', 1], ['Haustechnik Probe', 'Installationstechnik', 'Graz West', 1],
+    var BT = [['Stahlbau Muster', 'Metalltechnik', 'Deutschlandsberg', 2], ['Gasthaus Lindenhof', 'Köchin', 'Voitsberg', 1], ['Haustechnik Probe', 'Installationstechnik', 'Graz West', 1],
       ['Metall Weststeiermark', 'Metalltechnik', 'Voitsberg', 1], ['Hotel Muster', 'Köchin', 'Graz Ost', 3]];
     var wahl = 0;
     root.innerHTML = '<div class="mt"><div><div class="nb-label" style="margin-bottom:8px">Teilnehmende</div><div class="mt-tn"></div></div>' +
@@ -631,7 +631,7 @@
             '<div class="ip-safari"><div class="ip-adresse"><span>🔒</span>aufnahme.ihr-traeger.at</div><span class="ip-home"></span></div>' +
           '</div></div>' +
         '<div class="pt-weg" aria-hidden="true"><span class="pt-linie"></span><span class="pt-paket">🔒 nur Chiffrat</span></div>' +
-        '<div class="pt-akte"><div class="pt-akte-kopf"><span class="nb-ava" style="background:#0EA5E9">AB</span><div><b>Alex Beispiel</b><small>Akte · Dokumente</small></div></div>' +
+        '<div class="pt-akte"><div class="pt-akte-kopf"><span class="nb-ava" style="background:#0EA5E9">SL</span><div><b>Sarah Lindner</b><small>Akte · Dokumente</small></div></div>' +
           '<div class="pt-eingang"></div></div>' +
       '</div>';
     var seite = root.querySelector('.pt-seite'), eingang = root.querySelector('.pt-eingang'), weg = root.querySelector('.pt-weg');
@@ -650,7 +650,7 @@
       var s1fertig = st.sig[0] && st.sig[1];
       var s2fertig = st.gesendet;
       var h = '<div class="ps-kopfzeile"><span class="ps-zeichen">B</span><div><div class="ps-name">Ihr Bildungsträger</div><div class="ps-zusatz">Aufnahme</div></div></div>' +
-        '<h1 class="ps-h1">Hallo Alex!</h1><h2 class="ps-h2">Ihre Aufnahme in 3 Schritten.</h2>';
+        '<h1 class="ps-h1">Hallo Sarah!</h1><h2 class="ps-h2">Ihre Aufnahme in 3 Schritten.</h2>';
       // Schritt 1
       var r1 = '';
       if (!s1fertig) {
@@ -763,8 +763,8 @@
 
   // ============================================================ AMS-Felder
   var AMS = [
-    ['Vorname', 'Vorname', 'Alex'],
-    ['Nachname', 'Familienname', 'Beispiel'],
+    ['Vorname', 'Vorname', 'Sarah'],
+    ['Nachname', 'Familienname', 'Lindner'],
     ['Geburtsdatum', 'Geburtsdatum', '14.03.2004'],
     ['Maßnahmenbeginn', 'Eintritt', null],
     ['Betrieb', 'Ausbildungsbetrieb', 'Muster Bau GmbH']

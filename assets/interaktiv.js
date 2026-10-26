@@ -393,7 +393,7 @@
     var winkel = STAGES.map(function (s, i) { var a = start + i * (spanje + LUECKE); return [a, a + spanje]; });
 
     kreisRoot.innerHTML = '<div class="kr-buehne">' +
-      '<div class="kr-kopf"><span class="kr-avatar">AB</span><div><div class="kr-name">Alex Beispiel</div>' +
+      '<div class="kr-kopf"><span class="kr-avatar">SL</span><div><div class="kr-name">Sarah Lindner</div>' +
       '<div class="kr-sub">Teilnehmer:in · Akte</div></div><span class="kr-chip"></span></div>' +
       '<div class="kr-bogen"><svg viewBox="0 0 ' + SIZE + ' ' + vbH.toFixed(1) + '" aria-hidden="true"></svg>' +
       '<div class="kr-mitte"></div></div>' +
@@ -454,7 +454,7 @@
       chip.textContent = STAGES[jetzt].name;
       chip.style.background = rgb(f, 0.12);
       chip.style.color = rgb(f);
-      kreisRoot.setAttribute('aria-label', 'Prozess-Kreis: Alex Beispiel steht in „' + STAGES[jetzt].name + '“');
+      kreisRoot.setAttribute('aria-label', 'Prozess-Kreis: Sarah Lindner steht in „' + STAGES[jetzt].name + '“');
       if (neu) {
         var t = STAGES[jetzt].aufgabe;
         aufgabe.innerHTML = '<div><b>' + t[0] + '</b><span>' + t[1] + '</span></div><span class="kr-faellig">fällig ' + tag(2 + jetzt) + '</span>';

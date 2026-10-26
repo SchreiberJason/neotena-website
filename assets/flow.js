@@ -77,7 +77,7 @@
     bestaetigung: { label: 'Bestätigung', titel: 'Bestätigung', bars: [80, 88, 52] },
     meldung: { label: 'Meldung', titel: 'Meldung', bars: [70, 90, 64, 82] }
   };
-  var state = { name: 'Alex Beispiel', vorlage: 'vereinbarung', mail: true, frist: true };
+  var state = { name: 'Sarah Lindner', vorlage: 'vereinbarung', mail: true, frist: true };
 
   // Lagen im Ablauf (Flusskoordinaten): [x, y, Breite]. Ziel-Griffe am
   // Ergebnis wie auf reactflow.dev: drei Griffe untereinander, 20 px Abstand.
