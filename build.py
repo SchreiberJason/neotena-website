@@ -299,7 +299,7 @@ RUNTIME_CSS = """
   .nb-band .nb-tuer { background: #F4F3EE; border-color: transparent; color: #121A22; }
   .nb-band .nb-tuer:hover { background: #FFFFFF; box-shadow: 0 30px 60px -20px rgba(0,0,0,.45); }
   /* Wer dahintersteht: freigestelltes Foto, randlos vor einem grünen Bogen. */
-  .nb-portrait { position: relative; max-width: 420px; width: 100%; margin: 0 auto; aspect-ratio: 755 / 1000; }
+  .nb-portrait { position: relative; max-width: 420px; width: 100%; margin: 0 auto; aspect-ratio: 1132 / 1500; }
   .nb-portrait::before { content: ""; position: absolute; left: 0; right: 0; top: 26%; bottom: 0;
     border-radius: 999px 999px 32px 32px; background: #0C2E22; }
   .nb-portrait::after { content: ""; position: absolute; left: 0; right: 0; top: 26%; bottom: 0; border-radius: 999px 999px 32px 32px;
