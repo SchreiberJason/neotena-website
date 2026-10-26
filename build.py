@@ -368,13 +368,25 @@ RUNTIME_CSS = """
     .nb-k4, .nb-k6, .nb-k8, .nb-k12 { grid-column: auto; } .nb-hoch { grid-row: auto; }
   }
   /* Schmaler Viewport: Logo und Anfrage-Button in die erste Zeile, Navigation darunter. */
+  /* Handy: Burger-Menü statt Navigationszeile. */
+  .ax-burger { display: none; }
   @media (max-width: 860px) {
-    header > a[href="#kontakt"] { margin-left: auto; }
-    header > nav { order: 1; flex-basis: 100%; justify-content: flex-start !important;
-      flex-wrap: nowrap !important; overflow-x: auto; scrollbar-width: none; gap: 18px !important;
-      margin: 0 -20px; padding: 0 20px; -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
-    header > nav::-webkit-scrollbar { display: none; }
-    header > nav > * { flex: none; white-space: nowrap; }
+    header > a[href="#kontakt"] { margin-left: auto; padding: 9px 14px !important; }
+    .ax-burger { display: grid; place-items: center; width: 42px; height: 42px; padding: 0; border: 1px solid rgba(19,90,63,.35);
+      border-radius: 999px; background: transparent; cursor: pointer; }
+    .ax-burger span, .ax-burger span::before, .ax-burger span::after { display: block; width: 16px; height: 1.5px; background: #135A3F;
+      position: relative; transition: transform .25s, background .2s; }
+    .ax-burger span::before, .ax-burger span::after { content: ""; position: absolute; left: 0; }
+    .ax-burger span::before { top: -5px; } .ax-burger span::after { top: 5px; }
+    header.is-offen .ax-burger span { background: transparent; }
+    header.is-offen .ax-burger span::before { transform: translateY(5px) rotate(45deg); }
+    header.is-offen .ax-burger span::after { transform: translateY(-5px) rotate(-45deg); }
+    header > nav { display: none !important; order: 3; flex-basis: 100%; flex-direction: column; align-items: stretch !important;
+      gap: 0 !important; padding: 8px 0 6px; }
+    header.is-offen > nav { display: flex !important; }
+    header > nav > * { text-align: left; padding: 14px 2px !important; font-size: 17px !important; border-bottom: 1px solid rgba(19,90,63,.14) !important; }
+    header > nav > *:last-child { border-bottom: 0 !important; }
+    header > nav > .ax-nav.is-active { border-bottom-color: rgba(19,90,63,.14) !important; }
   }
 """
 
@@ -390,6 +402,23 @@ RUNTIME_JS = """
   document.querySelectorAll('.ax-page').forEach(function (el) { el.hidden = el.dataset.page !== page; });
   document.querySelectorAll('.ax-nav').forEach(function (el) { el.classList.toggle('is-active', el.dataset.nav === page); });
   document.documentElement.dataset.page = page;
+  // Burger-Menü fürs Handy: Knopf hinter „Anfrage senden“ einhängen.
+  var kopf = document.querySelector('header'), menue = kopf && kopf.querySelector('nav');
+  if (kopf && menue) {
+    menue.id = 'ax-menue';
+    var burger = document.createElement('button');
+    burger.type = 'button'; burger.className = 'ax-burger';
+    burger.setAttribute('aria-label', 'Menü öffnen'); burger.setAttribute('aria-expanded', 'false'); burger.setAttribute('aria-controls', 'ax-menue');
+    burger.innerHTML = '<span></span>';
+    kopf.appendChild(burger);
+    var zu = function () { kopf.classList.remove('is-offen'); burger.setAttribute('aria-expanded', 'false'); burger.setAttribute('aria-label', 'Menü öffnen'); };
+    burger.addEventListener('click', function () {
+      var offen = kopf.classList.toggle('is-offen');
+      burger.setAttribute('aria-expanded', String(offen)); burger.setAttribute('aria-label', offen ? 'Menü schließen' : 'Menü öffnen');
+    });
+    menue.addEventListener('click', zu);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') zu(); });
+  }
   document.addEventListener('click', function (e) {
     var btn = e.target.closest('[data-go], [data-nav]');
     if (!btn) return;
