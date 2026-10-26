@@ -127,15 +127,9 @@
   }
 
   // Seitenwechsel über das Hash-Routing der Seite, danach zum Anker scrollen.
+  var PFADE = { prozesse: '/prozesse/' };
   function gehe(seite, id) {
-    var ziel = '#/' + seite;
-    var springen = function () {
-      var z = document.getElementById(id);
-      if (z) z.scrollIntoView({ behavior: ruhig ? 'auto' : 'smooth', block: 'start' });
-    };
-    if (location.hash === ziel) { springen(); return; }
-    location.hash = ziel;
-    setTimeout(springen, 120);
+    location.href = (PFADE[seite] || '/') + '#' + id;
   }
 
   // ---------------------------------------------------- Blatt 03 → A—0x

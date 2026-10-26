@@ -380,52 +380,32 @@ RUNTIME_CSS = """
 
 RUNTIME_JS = """
 (function () {
-  var PAGES = ['start','prozesse','traeger','sicherheit','preise','impressum','datenschutz','agb'];
-  var NO_CONTACT = ['impressum','datenschutz','agb'];
-  var pages = document.querySelectorAll('.ax-page');
-  var navs = document.querySelectorAll('.ax-nav');
-  var kontakt = document.getElementById('ax-kontakt-wrap');
-
-  function routeFromHash() {
-    var h = (location.hash || '').replace(/^#\\/?/, '');
-    return PAGES.indexOf(h) > -1 ? h : 'start';
-  }
-
-  function render(page, scroll) {
-    pages.forEach(function (el) { el.hidden = el.dataset.page !== page; });
-    navs.forEach(function (el) { el.classList.toggle('is-active', el.dataset.nav === page); });
-    kontakt.hidden = NO_CONTACT.indexOf(page) > -1;
-    document.documentElement.dataset.page = page;
-    if (scroll) window.scrollTo(0, 0);
-    reveal();
-  }
-
+  var AX_SEITE = null;
+  var PFAD = { start: '/', prozesse: '/prozesse/', traeger: '/bildungstraeger/', sicherheit: '/sicherheit/',
+    preise: '/ablauf-und-kosten/', impressum: '/impressum/', datenschutz: '/datenschutz/', agb: '/agb/' };
+  // Alte Links (#/prozesse) auf die echte Adresse umleiten.
+  var alt = (location.hash || '').match(/^#\\/(\\w+)/);
+  if (alt && PFAD[alt[1]] && AX_SEITE !== alt[1]) { location.replace(PFAD[alt[1]]); return; }
+  var page = AX_SEITE || 'start';
+  document.querySelectorAll('.ax-page').forEach(function (el) { el.hidden = el.dataset.page !== page; });
+  document.querySelectorAll('.ax-nav').forEach(function (el) { el.classList.toggle('is-active', el.dataset.nav === page); });
+  document.documentElement.dataset.page = page;
   document.addEventListener('click', function (e) {
     var btn = e.target.closest('[data-go], [data-nav]');
     if (!btn) return;
-    var page = btn.dataset.go || btn.dataset.nav;
-    if (!page) return;
+    var ziel = btn.dataset.go || btn.dataset.nav;
+    if (!PFAD[ziel]) return;
     e.preventDefault();
-    if (routeFromHash() === page) { window.scrollTo(0, 0); return; }
-    location.hash = '#/' + page;
+    if (ziel === page) { window.scrollTo(0, 0); return; }
+    location.href = PFAD[ziel];
   });
-
-  window.addEventListener('hashchange', function () {
-    if ((location.hash || '').indexOf('#/') !== 0) return;   // #kontakt nicht abfangen
-    render(routeFromHash(), true);
-  });
-
-  // Auf den Rechtsseiten ist das Kontaktformular ausgeblendet — "Anfrage senden"
-  // muss von dort erst zurueck auf die Startseite routen, sonst passiert nichts.
+  // Ohne Kontaktformular (Rechtsseiten) fuehrt „Anfrage senden“ zur Startseite.
   document.addEventListener('click', function (e) {
     var link = e.target.closest('a[href="#kontakt"]');
-    if (!link || !kontakt.hidden) return;
+    if (!link || document.getElementById('kontakt')) return;
     e.preventDefault();
-    render('start', false);
-    history.replaceState(null, '', '#/start');
-    document.getElementById('kontakt').scrollIntoView({ behavior: 'smooth' });
+    location.href = '/#kontakt';
   });
-
   // ---- Ueberschlagsrechner
   var state = { mitarbeiter: 8, stunden: 6, satz: 30 };
   var fmt = function (n) { return String(n).replace(/\\B(?=(\\d{3})+(?!\\d))/g, '.'); };
@@ -515,7 +495,7 @@ RUNTIME_JS = """
     }, 2500);
   }
 
-  render(routeFromHash(), false);
+  reveal();
   if (location.hash === '#kontakt') {
     var k = document.getElementById('kontakt');
     if (k) k.scrollIntoView();
@@ -548,7 +528,76 @@ out = """<!DOCTYPE html>
     runtime_js=RUNTIME_JS,
 )
 
-OUT.write_text(out, encoding="utf-8")
+# ------------------------------------------------------- eine Datei je Seite
+# Fuer Suchmaschinen: jede Seite hat ihre eigene Adresse (/prozesse/ usw.),
+# genau eine <h1>, eigenen Titel, Beschreibung und Canonical. Im Dokument
+# bleibt nur die eigene .ax-page stehen.
+DOMAIN = "https://neotena.jasonschreiber.at"
+PFAD = {"start": "/", "prozesse": "/prozesse/", "traeger": "/bildungstraeger/", "sicherheit": "/sicherheit/",
+        "preise": "/ablauf-und-kosten/", "impressum": "/impressum/", "datenschutz": "/datenschutz/", "agb": "/agb/"}
+META = {
+    "start": ("Software für AMS-Bildungsträger | Neotena Wien",
+              "Eine Akte pro Person: Teilnehmerverwaltung, Formulare, Anwesenheiten und eAMS-Meldungen automatisch — lokal und verschlüsselt. Bezahlt nur für Menschen in Ausbildung."),
+    "prozesse": ("Sechs Abläufe automatisiert — Teilnehmer, Formulare, eAMS | Neotena",
+                 "Teilnehmerverwaltung, Word- und PDF-Formulare, Excel-Listen zusammenführen, Anwesenheiten, Betriebsmatching und Portale wie eAMS automatisch befüllen."),
+    "traeger": ("Für AMS-Bildungsträger: Dokumentationspflichten abgedeckt | Neotena",
+                "Anwesenheitslisten, Betreuungsverlauf, Meldungen an den Fördergeber, Aufbewahrung und Erfolgsnachweis — was Ihre Vorgaben verlangen und was die Software abdeckt."),
+    "sicherheit": ("Sicherheit & DSGVO — Teilnehmerdaten bleiben im Haus | Neotena",
+                   "Lokale, verschlüsselte Datenhaltung (AES-256-GCM, Argon2id), Rollen, revisionssichere Protokollierung, Ende-zu-Ende-Verschlüsselung zwischen Standorten. Keine Cloud, keine Telemetrie."),
+    "preise": ("Ablauf & Kosten — Software as a Result | Neotena",
+               "Prozessaufnahme, Bauplan, Einrichtung, Betrieb. Sie zahlen nur für Menschen in Ausbildung — vorher kostet es nichts."),
+    "impressum": ("Impressum | Neotena", "Impressum und Offenlegung nach § 5 ECG und § 25 MedienG."),
+    "datenschutz": ("Datenschutzerklärung | Neotena", "Datenschutzerklärung von Neotena."),
+    "agb": ("Allgemeine Geschäftsbedingungen | Neotena", "Allgemeine Geschäftsbedingungen von Neotena."),
+}
+
+def seite_ausschneiden(html_text, behalten):
+    """Entfernt jede .ax-page ausser `behalten` (ausbalanciert ueber <div>)."""
+    teile, pos = [], 0
+    for m in re.finditer(r'<div class="ax-page" data-page="(\w+)" hidden>', html_text):
+        if m.start() < pos:
+            continue
+        tiefe, i = 0, m.start()
+        for t in re.finditer(r"<div\b|</div>", html_text[m.start():]):
+            tiefe += 1 if t.group(0) == "<div" else -1
+            if tiefe == 0:
+                ende = m.start() + t.end()
+                break
+        if m.group(1) == behalten:
+            teile.append(html_text[pos:m.start()])
+            teile.append(html_text[m.start():ende].replace(" hidden>", ">", 1))
+        else:
+            teile.append(html_text[pos:m.start()])
+        pos = ende
+    teile.append(html_text[pos:])
+    return "".join(teile)
+
+def fuer_seite(seite):
+    h = seite_ausschneiden(out, seite)
+    titel, beschr = META[seite]
+    url = DOMAIN + PFAD[seite]
+    h = re.sub(r"<title>.*?</title>", "<title>%s</title>" % html.escape(titel, quote=False), h, count=1, flags=re.S)
+    h = re.sub(r'<meta name="description" content="[^"]*" />', '<meta name="description" content="%s" />' % html.escape(beschr), h, count=1)
+    h = re.sub(r'<link rel="canonical" href="[^"]*" />', '<link rel="canonical" href="%s" />' % url, h, count=1)
+    h = re.sub(r'<meta property="og:title" content="[^"]*" />', '<meta property="og:title" content="%s" />' % html.escape(titel), h, count=1)
+    h = re.sub(r'<meta property="og:description" content="[^"]*" />', '<meta property="og:description" content="%s" />' % html.escape(beschr), h, count=1)
+    h = h.replace('<meta property="og:type"', '<meta property="og:url" content="%s" />\n<meta property="og:type"' % url, 1)
+    # Wurzel-relative Pfade, damit /prozesse/ dieselben Dateien findet
+    h = re.sub(r'(src|href)="assets/', r'\1="/assets/', h)
+    h = h.replace("var AX_SEITE = null;", "var AX_SEITE = %s;" % json.dumps(seite))
+    if seite in ("impressum", "datenschutz", "agb"):
+        h = re.sub(r'<div id="ax-kontakt-wrap">.*?</section>\s*</div>', "", h, count=1, flags=re.S)
+    return h
+
+for seite, pfad in PFAD.items():
+    ziel = ROOT / pfad.strip("/") / "index.html" if pfad != "/" else OUT
+    ziel.parent.mkdir(exist_ok=True)
+    ziel.write_text(fuer_seite(seite), encoding="utf-8")
+
+(ROOT / "sitemap.xml").write_text(
+    '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    + "".join("  <url><loc>%s%s</loc></url>\n" % (DOMAIN, p) for s, p in PFAD.items() if s not in ("impressum", "datenschutz", "agb"))
+    + "</urlset>\n", encoding="utf-8")
 
 # Zusaetzlich eine Variante fuer die Claude-Artifact-Vorschau: dort liefert der
 # Host das <html>/<head>/<body>-Geruest, es darf also nur Seiteninhalt drin sein.
