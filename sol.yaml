@@ -1,0 +1,40 @@
+# Neotena-Website — öffentliche Produktseite für die Software an AMS-Bildungsträger.
+# Statisch auf GitHub Pages, gebaut aus src/ mit build.py. Keine Server-Logik.
+
+id: neotena-website
+anzeigename: Neotena-Website
+zweck: Stellt Neotena als Software für AMS-Bildungsträger vor und nimmt Anfragen per E-Mail-Entwurf an.
+
+kategorie: vertrieb
+klasse: sonde
+verantwortlich: jason
+kritikalitaet: niedrig      # Ausfall kostet Anfragen, keine Kundendaten betroffen
+
+zustand: betrieb
+repo: https://github.com/SchreiberJason/neotena-website
+
+bauart:
+  bahn: innen               # Produktseite mit künftigen Kunden
+  laufzeit: statische-seite
+  plattformen: []
+  erreichbarkeit: oeffentlich   # https://neotena.jasonschreiber.at (CNAME auf GitHub Pages)
+  datenrichtung: []
+  fremdzugriffe:
+    - dienst: github        # Hosting (GitHub Pages), sieht Verkehrsdaten der Besucher
+      recht: schreibend
+      auftragsverarbeiter: true
+  # Das Kontaktformular öffnet nur das Mailprogramm des Besuchers; die Seite
+  # selbst speichert und überträgt nichts. Anfragen landen im Postfach
+  # office@ (Proton) — das ist der Eingang, nicht dieses Projekt.
+  datenklasse: keine
+
+tests:
+  eingabevielfalt: fest
+  folge: nichts
+  mutation_schwelle: 0
+  affentest: aus
+
+protokoll:
+  betrieb: keines            # statische Seite, kein eigener Dienst
+  aenderungen:
+    aktiv: false
