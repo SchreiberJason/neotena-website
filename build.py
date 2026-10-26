@@ -231,6 +231,8 @@ RUNTIME_CSS = """
   html { scroll-behavior: smooth; }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   img { max-width: 100%; display: block; }
+  /* iOS zoomt bei Eingabefeldern unter 16 px hinein — auf dem Handy nie kleiner. */
+  @media (max-width: 760px) { input, textarea, select { font-size: 16px !important; } }
   /* Lange deutsche Wörter (Datenschutzbeauftragter) trennen statt aus dem Fenster zu ragen. */
   h1, h2, h3 { overflow-wrap: break-word; text-wrap: balance; }
   /* Nur wirklich lange Wörter trennen (Datenschutzbeauftragter), nicht „ver-langt“. */
@@ -368,7 +370,11 @@ RUNTIME_CSS = """
   /* Schmaler Viewport: Logo und Anfrage-Button in die erste Zeile, Navigation darunter. */
   @media (max-width: 860px) {
     header > a[href="#kontakt"] { margin-left: auto; }
-    header > nav { order: 1; flex-basis: 100%; justify-content: flex-start !important; }
+    header > nav { order: 1; flex-basis: 100%; justify-content: flex-start !important;
+      flex-wrap: nowrap !important; overflow-x: auto; scrollbar-width: none; gap: 18px !important;
+      margin: 0 -20px; padding: 0 20px; -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+    header > nav::-webkit-scrollbar { display: none; }
+    header > nav > * { flex: none; white-space: nowrap; }
   }
 """
 

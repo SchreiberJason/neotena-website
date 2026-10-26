@@ -51,6 +51,14 @@
     '.nf-check:checked{background:' + GRUEN + ';border-color:' + GRUEN + '}',
     '.nf-check:checked::after{content:"";width:5px;height:9px;margin-top:-2px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}',
     '.nf-check:focus-visible{outline:2px solid ' + GRUEN + ';outline-offset:2px}',
+    '.nf-vg{padding:0!important;overflow:hidden}',
+    '.nf-vg > .nf-vz{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 32px;align-items:start;margin:0!important;padding:20px 26px!important;border:0!important;border-bottom:1px solid rgba(19,90,63,.14)!important;transition:background .2s}',
+    '.nf-vg > .nf-vz:hover{background:rgba(255,255,255,.7)}',
+    '.nf-vg > .nf-vz > span:first-child{font-size:16px!important;font-weight:600!important;line-height:1.4}',
+    '.nf-vg > .nf-vz > span:last-child{display:grid;gap:4px;font-size:15px;line-height:1.5;color:#3C4A58}',
+    '.nf-ok{font-style:normal;font-family:' + MONO + ';font-size:11px;color:' + GRUEN + '}',
+    '.nf-vg .nf-auswahl{margin:0;border-radius:0}',
+    '@media (max-width:700px){.nf-vg > .nf-vz{grid-template-columns:1fr;padding:18px!important}.nf-vg > .nf-vz > span:last-child{padding-left:30px}}',
     '.nf-auswahl{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;margin-top:16px;padding:16px 20px;border-radius:14px;background:#0C2E22;color:#EAF2ED}',
     '.nf-auswahl span{font-family:' + MONO + ';font-size:13px}',
     '.nf-auswahl button{width:auto;padding:12px 22px;border:0;border-radius:999px;background:#7FD1A6;color:#0C2E22;font-family:' + MONO + ';font-size:12px;letter-spacing:.04em;cursor:pointer}',
@@ -276,14 +284,14 @@
   var vorgaben = $('[data-nf="vorgaben"]');
   var textfeld = $('textarea[name="ablauf"]');
   if (vorgaben) {
-    vorgaben.parentNode.insertBefore(el('p', 'nf-hinweis', 'Haken Sie an, was bei Ihnen gilt — die Auswahl geht auf Wunsch direkt in Ihre Anfrage.'), vorgaben);
+    vorgaben.classList.add('nf-vg');
     var zeilen = $$(':scope > div', vorgaben);
     var leiste = el('div', 'nf-auswahl');
     var stand = el('span');
     var los = knopf('Mit dieser Auswahl anfragen', {});
     leiste.appendChild(stand);
     leiste.appendChild(los);
-    vorgaben.parentNode.insertBefore(leiste, vorgaben.nextSibling);
+    vorgaben.appendChild(leiste);
 
     var gewaehlt = function () {
       return zeilen.filter(function (z) { return z.classList.contains('is-an'); })
@@ -299,6 +307,9 @@
     zeilen.forEach(function (z) {
       var titel = z.firstElementChild;
       if (!titel) return;
+      z.classList.add('nf-vz');
+      var wie = titel.nextElementSibling;
+      if (wie) wie.insertAdjacentHTML('afterbegin', '<em class="nf-ok">✓ abgedeckt</em>');
       var box = document.createElement('input');
       box.type = 'checkbox';
       box.className = 'nf-check';
@@ -365,15 +376,7 @@
     var APP = '-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif';
     var kcss = document.createElement('style');
     kcss.textContent = [
-      '#nf-kreis{font-family:' + APP + ';color:#18181b;max-width:480px;margin:0 auto;width:100%;perspective:1600px}',
-      // Schräg gestellt wie ein Produktbild; beim Zeigen richtet er sich auf.
-      '.kr-buehne{transform:rotateX(16deg) rotateY(-22deg) rotateZ(4deg);transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.7,.2,1)}',
-      '#nf-kreis:hover .kr-buehne,#nf-kreis:focus-within .kr-buehne{transform:rotateX(6deg) rotateY(-8deg) rotateZ(1deg)}',
-      '.kr-kopf{transform:translateZ(40px)}',
-      '.kr-naechst{transform:translateZ(56px)}',
-      '.kr-legende{transform:translateZ(20px)}',
-      '@media (max-width:760px){.kr-buehne{transform:none}.kr-kopf,.kr-naechst,.kr-legende{transform:none}}',
-      '@media (prefers-reduced-motion:reduce){.kr-buehne{transition:none}}',
+      '#nf-kreis{font-family:' + APP + ';color:#18181b;max-width:480px;margin:0 auto;width:100%}',
       '.kr-kopf{display:flex;align-items:center;gap:12px;margin-bottom:18px}',
       // In der Tür im Hero: nur Kopf und Bogen.
       '#nf-kreis[data-kompakt] .kr-legende,#nf-kreis[data-kompakt] .kr-naechst{display:none}',

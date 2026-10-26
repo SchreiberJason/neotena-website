@@ -132,6 +132,7 @@
     '.nb-zeit{display:grid;gap:4px;font-size:11px;color:#71717a}',
     '.nb-zeit i{display:block;height:4px;border-radius:2px;background:#e4e4e7;overflow:hidden}',
     '.nb-zeit i span{display:block;height:100%;background:#16a34a;border-radius:2px}',
+    '.nb-tn[hidden]{display:none}',
     '.nb-nichts{padding:14px;color:#71717a;font-size:12px}',
 
     // AMS-Felder
