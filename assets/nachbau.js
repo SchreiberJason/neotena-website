@@ -48,14 +48,18 @@
   function selbstlauf(root, schritt) {
     if (ruhig || !('IntersectionObserver' in window)) return;
     var sichtbar = false, uhr = 0, ruhe = 0, laeuft = false;
+    // In der Kachelübersicht spielt nur die Kachel im Fokus — sonst wird es zu viel.
+    var kachel = root.closest('.nb-bento > .nb-kachel');
+    var dran = function () { return sichtbar && (!kachel || kachel.classList.contains('is-fokus')); };
     function weiter(ms) {
       clearTimeout(uhr);
       uhr = setTimeout(function () {
-        if (!sichtbar || ruhe > Date.now()) { laeuft = false; return; }
+        if (!dran() || ruhe > Date.now()) { laeuft = false; return; }
         schritt(weiter);
       }, ms);
     }
-    function start() { if (!laeuft && sichtbar && ruhe <= Date.now()) { laeuft = true; weiter(900); } }
+    function start() { if (!laeuft && dran() && ruhe <= Date.now()) { laeuft = true; weiter(700); } }
+    document.addEventListener('nb-fokus', start);
     new IntersectionObserver(function (e) { sichtbar = e[0].isIntersecting; if (sichtbar) start(); else { clearTimeout(uhr); laeuft = false; } }, { threshold: 0.4 }).observe(root);
     ['pointerdown', 'keydown', 'focusin'].forEach(function (ev) {
       root.addEventListener(ev, function (e) {
@@ -94,7 +98,7 @@
     '@media (prefers-reduced-motion:reduce){.nb-lockt{animation:none;outline:2px solid rgba(19,90,63,.5);outline-offset:2px}}',
     // Pipeline
     '.nb-pipe{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,1fr);gap:14px;overflow-x:auto;padding:6px 2px 14px;scroll-snap-type:x mandatory}',
-    '.nb-spalte{display:flex;flex-direction:column;gap:10px;min-height:340px;padding:12px;border-radius:16px;background:rgba(255,255,255,.55);scroll-snap-align:start;transition:background .2s,box-shadow .2s}',
+    '.nb-spalte{display:flex;flex-direction:column;gap:10px;min-height:420px;padding:12px;border-radius:16px;background:rgba(255,255,255,.55);scroll-snap-align:start;transition:background .2s,box-shadow .2s}',
     '.nb-spalte.ziel{background:rgba(255,255,255,.9);box-shadow:0 0 0 2px var(--f) inset}',
     '.nb-spalte-kopf{display:flex;align-items:center;gap:8px;padding-bottom:10px;border-bottom:3px solid var(--f);font-weight:600;font-size:14px}',
     '.nb-zahl{margin-left:auto;min-width:22px;padding:1px 7px;border-radius:999px;background:var(--fa);color:var(--f);font-size:12px;text-align:center}',
@@ -105,6 +109,7 @@
     '.nb-karte.nb-gezeigt{transform:translateY(-4px) rotate(-1.5deg);box-shadow:0 18px 30px -12px rgba(0,0,0,.25)}',
     '.nb-karte b{font-size:14px;font-weight:600}',
     '.nb-karte .nb-chip{white-space:normal;line-height:1.35}',
+    '.nb-extra{min-height:22px}',
     '.nb-karte .nb-sub{font-size:12px;color:#71717a}',
     '.nb-zieh{position:fixed;z-index:50;pointer-events:none;transform:rotate(2deg);box-shadow:0 24px 48px -12px rgba(0,0,0,.28)!important;width:200px}',
     '.nb-platz{border:2px dashed rgba(0,0,0,.12);border-radius:12px;min-height:70px;background:transparent}',
@@ -120,13 +125,16 @@
     '.nb-vorlage{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(24px,4vw,56px);align-items:start}',
     '.nb-vorlage > *{min-width:0}',
     '.nb-feld > span{min-width:0;overflow-wrap:anywhere}',
+    '.nb-feld > span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;height:22px;box-sizing:border-box;display:flex;align-items:center}',
+    '.nb-feld > span:last-child > .nb-chip{max-width:100%;overflow:hidden;text-overflow:ellipsis}',
+    '.nb-stand{min-height:2.8em}',
     '.nb-quellen{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 12px}',
     '.nb-quelle{width:auto;padding:7px 12px;font-size:12px;font-family:inherit;cursor:grab;touch-action:none;transition:opacity .2s,transform .2s}',
     '.nb-quelle:hover:not(:disabled){transform:translateY(-1px)}',
     '.nb-quelle:disabled{opacity:.35;cursor:default}',
     '.nb-geist{font-family:' + APP + ';position:fixed;z-index:60;pointer-events:none;transform:translate(-50%,-50%) rotate(-3deg);box-shadow:0 12px 24px -8px rgba(0,0,0,.3);padding:7px 12px;font-size:12px}',
     '.nb-tipp{margin:0 0 20px;font-size:12px;color:#71717a}',
-    '.nb-aktion{display:grid;gap:10px;justify-items:start}',
+    '.nb-aktion{display:grid;gap:10px;justify-items:start;align-content:start;min-height:112px}',
     '.nb-stand{font-size:12px;color:#71717a}',
     '.nb-warn{color:' + ROT + '}',
     '.nb-knopf{padding:10px 18px;border:0;border-radius:999px;background:' + GRUEN + ';color:#fff;font:inherit;font-weight:600;font-size:13px;cursor:pointer;width:auto}',
@@ -141,7 +149,7 @@
     '.nb-blatt{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s}',
     '.nb-blatt.gedruckt{transform:translateY(-6px) rotate(-1deg);box-shadow:0 1px 2px rgba(0,0,0,.06),0 40px 70px -24px rgba(12,46,34,.35)}',
     '.nb-datei{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06);animation:nb-ein .4s ease}',
-    '.nb-datei[hidden]{display:none}',
+    '.nb-datei[hidden]{display:flex;visibility:hidden}',
     '.nb-datei b{display:block;font-size:13px}.nb-datei span{font-size:11px;color:#71717a}',
     '.nb-pdf{display:grid;place-items:center;flex:none;width:30px;height:36px;border-radius:4px;background:#B30B00;color:#fff;font-size:9px;font-weight:700}',
     '.nb-ok{margin-left:auto;color:' + GRUEN + ';font-weight:700}',
@@ -367,7 +375,7 @@
       setTimeout(function () { k.classList.remove('frisch'); }, 1400);
     }
     // Vorführung: Personen wandern weiter, danach beginnt es von vorn.
-    var FOLGE = [['Gruber Lisa-Marie', 'erstkontakt'], ['Kovalenko Olha', 'suche'], ['Hofer Jonas', 'massnahme'], ['Yılmaz Emre', 'erstkontakt'], ['Gruber Lisa-Marie', 'suche']];
+    var FOLGE = [['Hofer Jonas', 'massnahme'], ['Gruber Lisa-Marie', 'erstkontakt'], ['Kovalenko Olha', 'suche'], ['Yılmaz Emre', 'erstkontakt'], ['Bauer Lena', 'massnahme']];
     var fi = 0;
     selbstlauf(root, function (weiter) {
       if (fi >= FOLGE.length) { fi = 0; aufbau(); weiter(1600); return; }
@@ -469,7 +477,7 @@
           }).join('') +
           '<div class="nb-text"><i style="width:94%"></i><i style="width:70%"></i></div>' +
           '<div class="nb-unterschrift"><span>Ort, Datum</span><span>Unterschrift</span></div>' +
-        '</div><div class="nb-datei" hidden></div></div>' +
+        '</div><div class="nb-datei" hidden><span class="nb-pdf">PDF</span><div><b>Vereinbarung_Lindner_Sarah.pdf</b><span>in der Akte abgelegt</span></div><span class="nb-ok">✓</span></div></div>' +
       '</div>';
     var leiste = root.querySelector('.nb-schritte'), aktion = root.querySelector('.nb-aktion');
     var felder = Array.prototype.slice.call(root.querySelectorAll('.nb-feld'));
@@ -638,7 +646,8 @@
       if (a === 'los') { offen = true; malen(); }
       if (a === 'zurueck') { offen = false; malen(); }
     });
-    malen();
+    offen = true; malen(); var hB = root.offsetHeight; offen = false; malen();
+    root.style.minHeight = Math.max(hB, root.offsetHeight) + 'px';
     selbstlauf(root, function (weiter) {
       var b = root.querySelector('[data-a="los"]') || root.querySelector('[data-a="zurueck"]');
       if (!b) { weiter(800); return; }
@@ -950,6 +959,9 @@
     var f = BAU[el.dataset.nachbau];
     if (!f) return;
     f(el);
+    // Höhe merken: die Kachel darf durch Suchen, Umschalten oder Vorführen nicht wachsen oder schrumpfen.
+    var halten = function () { el.style.minHeight = ''; el.style.minHeight = el.offsetHeight + 'px'; };
+    requestAnimationFrame(halten);
     var sel = LOCKT[el.dataset.nachbau];
     var ziel = sel && el.querySelector(sel);
     if (!ziel) return;

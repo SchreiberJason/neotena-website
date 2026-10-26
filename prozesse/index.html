@@ -26,7 +26,7 @@
 <link rel="preload" href="/assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin="" />
 <script src="/assets/flow.js?v=0f6fc328" defer></script>
 <script src="/assets/interaktiv.js?v=47416688" defer></script>
-<script src="/assets/nachbau.js?v=9fafa7fa" defer></script>
+<script src="/assets/nachbau.js?v=69464b20" defer></script>
 <style>
   body { margin: 0; background: #F4F3EE; }
   a { color: #135A3F; text-decoration: none; }
@@ -223,6 +223,17 @@
   .nb-bento > .nb-kachel.is-da { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { .nb-bento > .nb-kachel { opacity: 1; transform: none; } }
   .nb-k5 { grid-column: span 5; } .nb-k7 { grid-column: span 7; }
+  /* Nummerierung und Fokus: nur eine Kachel ist hell und spielt sich vor. */
+  .nb-bento { counter-reset: station; }
+  .nb-bento > .nb-kachel { counter-increment: station; }
+  .nb-bento > .nb-kachel > .nb-k-label > span:first-child::before { content: counter(station, decimal-leading-zero);
+    display: inline-block; margin-right: 12px; padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor; letter-spacing: .04em; }
+  .nb-bento > .nb-kachel.is-da { transition: opacity .5s ease, filter .5s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+  .nb-bento.hat-fokus > .nb-kachel.is-da:not(.is-fokus) { opacity: .38; filter: grayscale(.9); }
+  .nb-bento > .nb-kachel:not(.is-fokus) .nb-lockt { animation: none; }
+  .nb-bento > .nb-kachel:not(.is-fokus) * { animation-play-state: paused !important; }
+  .nb-bento > .nb-kachel.is-fokus > .nb-k-label > span:first-child::before { background: #135A3F; color: #F4F3EE; border-color: #135A3F; }
+  .nb-bento > .nb-kachel.nb-dunkel.is-fokus > .nb-k-label > span:first-child::before { background: #7FD1A6; color: #0C2E22; border-color: #7FD1A6; }
   @media (max-width: 960px) { .nb-k5, .nb-k7 { grid-column: auto; } }
   /* Kopfzeile: Inhalt so breit wie der breiteste Abschnitt (1400 px), Fläche bleibt randlos. */
   body > header, header[style*="sticky"] { padding-left: max(clamp(20px, 5vw, 40px), calc((100% - 1400px) / 2)) !important;
@@ -439,6 +450,47 @@
     }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
     kacheln.forEach(function (k, i) { k.style.transitionDelay = (i % 2) * 120 + 'ms'; da.observe(k); });
   } else { kacheln.forEach(function (k) { k.classList.add('is-da'); }); }
+  // Fokus: die Kachel an der Leselinie (45 % der Fensterhöhe). Stehen zwei in
+  // einer Reihe, wandert der Fokus beim Scrollen durch die Reihe von links nach rechts.
+  // Zeigen oder Antippen holt eine Kachel sofort in den Fokus.
+  var bento = document.querySelector('.nb-bento');
+  if (bento && kacheln.length) {
+    var liste = Array.prototype.slice.call(kacheln), manuell = null, manuellY = 0;
+    var setze = function (k) {
+      if (!k || k.classList.contains('is-fokus')) return;
+      liste.forEach(function (x) { x.classList.toggle('is-fokus', x === k); });
+      bento.classList.add('hat-fokus');
+      document.dispatchEvent(new Event('nb-fokus'));
+    };
+    var rechne = function () {
+      if (manuell && Math.abs(scrollY - manuellY) < 160) return;
+      manuell = null;
+      var linie = innerHeight * 0.45, reihen = {};
+      liste.forEach(function (k) { var r = k.getBoundingClientRect(); var key = Math.round(r.top); (reihen[key] = reihen[key] || []).push([k, r]); });
+      var bester = null, abstand = Infinity;
+      Object.keys(reihen).forEach(function (key) {
+        var reihe = reihen[key], r = reihe[0][1];
+        var oben = r.top - innerHeight * 0.15, unten = Math.max.apply(null, reihe.map(function (x) { return x[1].bottom; }));
+        if (linie >= oben && linie <= unten) {
+          var i = Math.min(reihe.length - 1, Math.floor((linie - oben) / (unten - oben) * reihe.length));
+          bester = reihe[i][0]; abstand = 0;
+        } else {
+          var d = Math.min(Math.abs(linie - oben), Math.abs(linie - unten));
+          if (d < abstand) { abstand = d; bester = reihe[0][0]; }
+        }
+      });
+      setze(bester);
+    };
+    var warte = false;
+    addEventListener('scroll', function () { if (!warte) { warte = true; requestAnimationFrame(function () { warte = false; rechne(); }); } }, { passive: true });
+    addEventListener('resize', rechne);
+    liste.forEach(function (k) {
+      var hol = function () { manuell = k; manuellY = scrollY; setze(k); };
+      k.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hol(); });
+      k.addEventListener('pointerdown', hol, true);
+    });
+    rechne();
+  }
   // Burger-Menü fürs Handy: Knopf hinter „Anfrage senden“ einhängen.
   var kopf = document.querySelector('header'), menue = kopf && kopf.querySelector('nav');
   if (kopf && menue) {
