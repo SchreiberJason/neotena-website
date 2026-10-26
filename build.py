@@ -18,6 +18,7 @@ Die Quelle nutzt die Design-Canvas-Syntax (x-dc / helmet / sc-if / {{ bindings }
 
 Aufruf:  python3 build.py
 """
+import hashlib
 import html
 import json
 import re
@@ -614,6 +615,14 @@ def fuer_seite(seite):
     h = h.replace('<meta property="og:type"', '<meta property="og:url" content="%s" />\n<meta property="og:type"' % url, 1)
     # Wurzel-relative Pfade, damit /prozesse/ dieselben Dateien findet
     h = re.sub(r'(src|href)="assets/', r'\1="/assets/', h)
+    # Cache-Brecher: geänderte Datei = neue Adresse (GitHub Pages cacht 10 Minuten).
+    def mit_version(m):
+        datei = ROOT / m.group(2).lstrip("/")
+        if not datei.is_file() or datei.suffix == ".woff2":  # Preload muss zur URL in fonts.css passen
+            return m.group(0)
+        v = hashlib.sha1(datei.read_bytes()).hexdigest()[:8]
+        return '%s="%s?v=%s"' % (m.group(1), m.group(2), v)
+    h = re.sub(r'(src|href)="(/assets/[^"?#]+)"', mit_version, h)
     h = h.replace("var AX_SEITE = null;", "var AX_SEITE = %s;" % json.dumps(seite))
     if seite in ("impressum", "datenschutz", "agb"):
         h = re.sub(r'<div id="ax-kontakt-wrap">.*?</section>\s*</div>', "", h, count=1, flags=re.S)
