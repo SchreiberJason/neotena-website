@@ -26,7 +26,7 @@
 <link rel="preload" href="/assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin="" />
 <script src="/assets/flow.js?v=0f6fc328" defer></script>
 <script src="/assets/interaktiv.js?v=47416688" defer></script>
-<script src="/assets/nachbau.js?v=2780dd9a" defer></script>
+<script src="/assets/nachbau.js?v=3f961842" defer></script>
 <style>
   body { margin: 0; background: #F4F3EE; }
   a { color: #135A3F; text-decoration: none; }
@@ -215,6 +215,28 @@
     .nb-k4, .nb-k6, .nb-k8, .nb-k12 { grid-column: auto; } .nb-hoch { grid-row: auto; }
   }
   /* Schmaler Viewport: Logo und Anfrage-Button in die erste Zeile, Navigation darunter. */
+  /* „Was erledigt wird“ als Abfolge: eine Station nach der anderen, Text und
+     Vorführung abwechselnd links/rechts; im Fokus ist, was gerade mittig steht. */
+  .nb-bento { display: flex !important; flex-direction: column; gap: clamp(28px, 4vw, 56px); counter-reset: station; }
+  .nb-bento > .nb-kachel { counter-increment: station; display: grid; grid-column: auto !important; grid-row: auto !important;
+    grid-template-columns: minmax(0, .75fr) minmax(0, 1.5fr); grid-template-rows: auto 1fr; gap: 10px clamp(28px, 4vw, 64px);
+    align-items: start; padding: clamp(28px, 4vw, 56px); min-height: min(78vh, 720px);
+    opacity: .35; transform: scale(.975); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+  .nb-bento > .nb-kachel.is-fokus { opacity: 1; transform: none; }
+  .nb-bento > .nb-kachel > .nb-k-label { grid-column: 1; grid-row: 1; flex-direction: column; align-items: flex-start; gap: 14px; }
+  .nb-bento > .nb-kachel > .nb-k-label::before { content: counter(station, decimal-leading-zero); font-size: clamp(40px, 5vw, 64px);
+    letter-spacing: -.04em; line-height: 1; font-family: 'Space Grotesk', sans-serif; font-weight: 500; text-transform: none; opacity: .9; }
+  .nb-bento > .nb-kachel > .nb-k-titel { grid-column: 1; grid-row: 2; margin: 4px 0 0; font-size: clamp(22px, 2.4vw, 30px); line-height: 1.15; }
+  .nb-bento > .nb-kachel > [data-nachbau] { grid-column: 2; grid-row: 1 / 3; align-self: center; }
+  .nb-bento > .nb-kachel:nth-child(even) { grid-template-columns: minmax(0, 1.5fr) minmax(0, .75fr); }
+  .nb-bento > .nb-kachel:nth-child(even) > .nb-k-label, .nb-bento > .nb-kachel:nth-child(even) > .nb-k-titel { grid-column: 2; }
+  .nb-bento > .nb-kachel:nth-child(even) > [data-nachbau] { grid-column: 1; }
+  @media (max-width: 960px) {
+    .nb-bento > .nb-kachel, .nb-bento > .nb-kachel:nth-child(even) { grid-template-columns: 1fr; grid-template-rows: auto; min-height: 0; }
+    .nb-bento > .nb-kachel > *, .nb-bento > .nb-kachel:nth-child(even) > * { grid-column: 1 !important; grid-row: auto !important; }
+    .nb-bento > .nb-kachel > .nb-k-titel { margin-bottom: 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .nb-bento > .nb-kachel { opacity: 1; transform: none; } }
   /* Kopfzeile: Inhalt so breit wie der breiteste Abschnitt (1400 px), Fläche bleibt randlos. */
   body > header, header[style*="sticky"] { padding-left: max(clamp(20px, 5vw, 40px), calc((100% - 1400px) / 2)) !important;
     padding-right: max(clamp(20px, 5vw, 40px), calc((100% - 1400px) / 2)) !important; }
@@ -434,6 +456,14 @@
   document.querySelectorAll('.ax-page').forEach(function (el) { el.hidden = el.dataset.page !== page; });
   document.querySelectorAll('.ax-nav').forEach(function (el) { el.classList.toggle('is-active', el.dataset.nav === page); });
   document.documentElement.dataset.page = page;
+  // Fokus beim Scrollen: die Station, die gerade mittig steht, ist hell.
+  var stationen = document.querySelectorAll('.nb-bento > .nb-kachel');
+  if (stationen.length && 'IntersectionObserver' in window) {
+    var fokus = new IntersectionObserver(function (e) {
+      e.forEach(function (x) { x.target.classList.toggle('is-fokus', x.isIntersecting); });
+    }, { rootMargin: '-38% 0px -38% 0px' });
+    stationen.forEach(function (k) { fokus.observe(k); });
+  } else { stationen.forEach(function (k) { k.classList.add('is-fokus'); }); }
   // Burger-Menü fürs Handy: Knopf hinter „Anfrage senden“ einhängen.
   var kopf = document.querySelector('header'), menue = kopf && kopf.querySelector('nav');
   if (kopf && menue) {
