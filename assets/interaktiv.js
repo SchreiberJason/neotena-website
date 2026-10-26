@@ -4,7 +4,6 @@
  * baut dieses Skript. Fehlt ein Anker, bleibt die Seite wie sie ist.
  *
  *   Blatt 03          Karten springen zum passenden Ablauf A—0x
- *   A—01 … A—06       Umschalter „heute / danach“
  *   Referenzprojekt   Kennzahlen zählen beim Hineinscrollen hoch
  *   Bildungsträger    Pflichten anhaken, Auswahl geht in die Anfrage
  *   Sicherheit        „Wo liegen die Daten?“ — Cloud oder AQUAflow
@@ -23,16 +22,6 @@
     '.nf-mehr{display:inline-block;margin-left:6px;font-family:' + MONO + ';font-size:12px;color:' + GRUEN + ';white-space:nowrap;transition:transform .2s}',
     '[data-nf="karten"] > [role="link"]:hover .nf-mehr{transform:translateX(4px)}',
     '[data-nf="ablauf"]{scroll-margin-top:110px}',
-    // heute / danach
-    '.nf-seg{display:inline-flex;gap:2px;padding:3px;margin-bottom:12px;border:1px solid rgba(19,90,63,.22);border-radius:999px;background:rgba(255,255,255,.6)}',
-    '.nf-seg button{width:auto;padding:6px 14px;border:0;border-radius:999px;background:transparent;font-family:' + MONO + ';font-size:12px;color:#616C79;cursor:pointer;transition:background .2s,color .2s}',
-    '.nf-seg button[aria-pressed="true"]{background:' + GRUEN + ';color:#F4F3EE}',
-    '.nf-seg button[aria-pressed="true"][data-w="heute"]{background:' + ROT + '}',
-    '.nf-chaos{position:relative;overflow:hidden;border-radius:18px;border:1px solid rgba(179,64,46,.28);background:repeating-linear-gradient(0deg,#FBFAF7 0 27px,rgba(19,90,63,.06) 27px 28px)}',
-    '.nf-datei{position:absolute;display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;background:#fff;box-shadow:0 6px 16px rgba(0,0,0,.08);font-family:' + MONO + ';font-size:12px;color:#3C4A58;white-space:nowrap;animation:nf-wackel 3.2s ease-in-out infinite alternate}',
-    '.nf-datei i{flex:none;width:14px;height:16px;border-radius:2px}',
-    '@keyframes nf-wackel{to{transform:translate(3px,-4px) rotate(var(--r2))}}',
-    '.nf-chaos-text{position:absolute;left:0;right:0;bottom:0;padding:14px 18px;background:linear-gradient(transparent,rgba(251,250,247,.96) 40%);font-family:' + MONO + ';font-size:13px;color:' + ROT + '}',
     // Bildungsträger
     '.nf-hinweis{font-family:' + MONO + ';font-size:12px;color:#616C79;margin:0 0 12px}',
     '[data-nf="vorgaben"] > div{cursor:pointer;transition:background .2s}',
@@ -141,66 +130,6 @@
       });
     });
   }
-
-  // ------------------------------------------------- A—0x heute / danach
-  var DATEIEN = [
-    ['TN_Liste_2026.xlsx', 'TN_Liste_2026_neu.xlsx', 'Kopie von TN_Liste.xlsx', 'Kontakte_Betreuung.xlsx', 'Statusliste_FINAL.xlsx', 'Statusliste_FINAL2.xlsx'],
-    ['Vertrag_Vorlage.docx', 'Vertrag_Vorlage_alt.docx', 'Bestaetigung_2025.docx', 'Nachweis_leer.pdf', 'Vertrag_korr.docx', 'Vorlage (1).docx'],
-    ['Liste_Standort_A.xlsx', 'Liste_Standort_B.xlsx', 'Auswertung_Q1.xlsx', 'Auswertung_Q1_v2.xlsx', 'Pivot_neu.xlsx', 'Abgleich.xlsx'],
-    ['Anwesenheit_KW12.pdf', 'Stundenliste_Maerz.xlsx', 'Unterschriften_Scan.pdf', 'Fehlzeiten.xlsx', 'Anwesenheit_KW13.pdf', 'Stunden_korr.xlsx'],
-    ['Betriebe_Kontakte.xlsx', 'Praktikumsplaetze.docx', 'Notizen_Vermittlung.txt', 'Betriebe_alt.xlsx', 'Mail: Re: Re: Platz?', 'Rueckmeldungen.docx'],
-    ['Daten_fuer_Portal.xlsx', 'Abtipp_Hilfe.docx', 'Meldung_KW12.pdf', 'Portal_Notizen.txt', 'Meldung_KW13.pdf', 'Checkliste_Portal.docx']
-  ];
-  var FARBE = { xlsx: '#1D6F42', docx: '#2B579A', pdf: '#B30B00', txt: '#8A8F98' };
-  var LAGE = [[6, 8, -4], [44, 4, 3], [16, 30, 2], [52, 34, -3], [8, 56, -2], [46, 62, 4]];
-
-  $$('[data-nf="ablauf"]').forEach(function (zeile, i) {
-    var spalten = $$(':scope > div', zeile);
-    var bild = spalten.filter(function (s) { return !/A—0\d/.test(s.textContent.slice(0, 40)); })[0];
-    if (!bild || !bild.firstElementChild) return;
-    var heuteLabel = $$('span', zeile).filter(function (s) { return s.textContent.trim() === 'heute'; })[0];
-    var heuteText = heuteLabel && heuteLabel.nextElementSibling ? heuteLabel.nextElementSibling.textContent : '';
-    var karte = bild.firstElementChild;
-
-    var chaos = el('div', 'nf-chaos');
-    chaos.hidden = true;
-    (DATEIEN[i] || DATEIEN[0]).forEach(function (name, k) {
-      var d = el('div', 'nf-datei');
-      var typ = (name.match(/\.(\w+)$/) || [0, 'txt'])[1];
-      var l = LAGE[k];
-      d.style.left = l[0] + '%';
-      d.style.top = l[1] + '%';
-      d.style.transform = 'rotate(' + l[2] + 'deg)';
-      d.style.setProperty('--r2', (l[2] * -1) + 'deg');
-      d.style.animationDelay = (k * -0.7) + 's';
-      var ic = el('i');
-      ic.style.background = FARBE[typ] || FARBE.txt;
-      d.appendChild(ic);
-      d.appendChild(document.createTextNode(name));
-      chaos.appendChild(d);
-    });
-    chaos.appendChild(el('div', 'nf-chaos-text', '✕ heute: ' + heuteText));
-
-    var seg = el('div', 'nf-seg');
-    seg.setAttribute('role', 'group');
-    seg.setAttribute('aria-label', 'Ansicht wechseln');
-    var bHeute = knopf('heute', { 'data-w': 'heute', 'aria-pressed': 'false' });
-    var bDanach = knopf('danach', { 'data-w': 'danach', 'aria-pressed': 'true' });
-    seg.appendChild(bHeute);
-    seg.appendChild(bDanach);
-    bild.insertBefore(seg, karte);
-    bild.appendChild(chaos);
-
-    function zeige(w) {
-      if (w === 'heute') chaos.style.height = Math.max(karte.offsetHeight, 280) + 'px';
-      chaos.hidden = w !== 'heute';
-      karte.hidden = w === 'heute';
-      bHeute.setAttribute('aria-pressed', String(w === 'heute'));
-      bDanach.setAttribute('aria-pressed', String(w !== 'heute'));
-    }
-    bHeute.addEventListener('click', function () { zeige('heute'); });
-    bDanach.addEventListener('click', function () { zeige('danach'); });
-  });
 
   // ---------------------------------------------------- Kennzahlen zählen
   var zaehler = $$('[data-zaehl]');
