@@ -371,6 +371,9 @@ RUNTIME_CSS = """
     .nb-k4, .nb-k6, .nb-k8, .nb-k12 { grid-column: auto; } .nb-hoch { grid-row: auto; }
   }
   /* Schmaler Viewport: Logo und Anfrage-Button in die erste Zeile, Navigation darunter. */
+  /* Kopfzeile: Inhalt so breit wie der breiteste Abschnitt (1400 px), Fläche bleibt randlos. */
+  body > header, header[style*="sticky"] { padding-left: max(clamp(20px, 5vw, 40px), calc((100% - 1400px) / 2)) !important;
+    padding-right: max(clamp(20px, 5vw, 40px), calc((100% - 1400px) / 2)) !important; }
   /* Handy: Burger-Menü statt Navigationszeile. */
   .ax-burger { display: none; }
   @media (max-width: 860px) {

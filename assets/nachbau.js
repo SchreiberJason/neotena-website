@@ -42,6 +42,42 @@
     io.observe(el);
   }
 
+  // Selbstlauf: spielt eine Vorführung ab, solange der Baustein sichtbar ist.
+  // Fasst jemand selbst an, pausiert er und läuft nach 12 s Ruhe weiter.
+  // schritt(weiter) führt einen Schritt aus und ruft weiter(ms) für den nächsten.
+  function selbstlauf(root, schritt) {
+    if (ruhig || !('IntersectionObserver' in window)) return;
+    var sichtbar = false, uhr = 0, ruhe = 0, laeuft = false;
+    function weiter(ms) {
+      clearTimeout(uhr);
+      uhr = setTimeout(function () {
+        if (!sichtbar || ruhe > Date.now()) { laeuft = false; return; }
+        schritt(weiter);
+      }, ms);
+    }
+    function start() { if (!laeuft && sichtbar && ruhe <= Date.now()) { laeuft = true; weiter(900); } }
+    new IntersectionObserver(function (e) { sichtbar = e[0].isIntersecting; if (sichtbar) start(); else { clearTimeout(uhr); laeuft = false; } }, { threshold: 0.4 }).observe(root);
+    ['pointerdown', 'keydown', 'focusin'].forEach(function (ev) {
+      root.addEventListener(ev, function (e) {
+        if (!e.isTrusted) return;
+        clearTimeout(uhr); laeuft = false; ruhe = Date.now() + 12000;
+        setTimeout(start, 12100);
+      }, true);
+    });
+  }
+  // Ein Element sanft an seinen neuen Platz gleiten lassen (FLIP).
+  function gleiten(el, aendern) {
+    var vor = el.getBoundingClientRect();
+    aendern();
+    var nach = el.getBoundingClientRect();
+    el.style.transition = 'none';
+    el.style.transform = 'translate(' + (vor.left - nach.left) + 'px,' + (vor.top - nach.top) + 'px)';
+    void el.offsetWidth;
+    el.style.transition = 'transform .7s cubic-bezier(.2,.7,.2,1)';
+    el.style.transform = '';
+    setTimeout(function () { el.style.transition = ''; }, 750);
+  }
+
   var CSS = [
     '[data-nachbau]{font-family:' + APP + ';color:#18181b;font-size:13px;line-height:1.4}',
     '.nb-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;white-space:nowrap}',
@@ -65,6 +101,7 @@
     '.nb-karte{display:grid;gap:6px;padding:12px;border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06),0 6px 14px -8px rgba(0,0,0,.12);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;transition:box-shadow .2s,transform .2s,outline-color .4s;outline:2px solid transparent}',
     '.nb-karte:hover{box-shadow:0 1px 2px rgba(0,0,0,.06),0 12px 24px -10px rgba(0,0,0,.18)}',
     '.nb-karte.frisch{outline-color:var(--f)}',
+    '.nb-karte.nb-gezeigt{transform:translateY(-4px) rotate(-1.5deg);box-shadow:0 18px 30px -12px rgba(0,0,0,.25)}',
     '.nb-karte b{font-size:14px;font-weight:600}',
     '.nb-karte .nb-chip{white-space:normal;line-height:1.35}',
     '.nb-karte .nb-sub{font-size:12px;color:#71717a}',
@@ -291,9 +328,12 @@
         spalten[k].querySelector('.nb-zahl').textContent = spalten[k].querySelectorAll('.nb-karte').length;
       });
     };
+    function aufbau() {
+    Object.keys(spalten).forEach(function (k) { spalten[k].querySelectorAll('.nb-karte').forEach(function (c) { c.remove(); }); });
     KARTEN.forEach(function (k) {
       var c = document.createElement('div');
       c.className = 'nb-karte';
+      c.dataset.n = k[1];
       c.innerHTML = '<div style="display:flex;align-items:center;gap:8px"><b>' + esc(k[1]) + '</b><span class="nb-chip nb-leise" style="margin-left:auto">' + k[2] + '</span></div>' +
         '<div class="nb-sub">' + esc(k[3]) + '</div>' +
         '<div class="nb-extra">' + (k[5] ? '<span class="nb-chip nb-krit">⚠ ' + esc(k[5]) + '</span>' : '') + '</div>' +
@@ -301,6 +341,29 @@
       spalten[k[0]].appendChild(c);
     });
     zaehlen();
+    }
+    aufbau();
+    function stageWechsel(k, nach) {
+      k.style.setProperty('--f', rgb(STAGE[nach][1]));
+      k.querySelector('.nb-extra').innerHTML = '<span class="nb-chip nb-brand nb-ein">' + VON_SELBST[nach] + '</span>';
+      k.classList.add('frisch');
+      setTimeout(function () { k.classList.remove('frisch'); }, 1400);
+    }
+    // Vorführung: Personen wandern weiter, danach beginnt es von vorn.
+    var FOLGE = [['Gruber Lisa-Marie', 'erstkontakt'], ['Kovalenko Olha', 'suche'], ['Hofer Jonas', 'massnahme'], ['Yılmaz Emre', 'erstkontakt'], ['Gruber Lisa-Marie', 'suche']];
+    var fi = 0;
+    selbstlauf(root, function (weiter) {
+      if (fi >= FOLGE.length) { fi = 0; aufbau(); weiter(1600); return; }
+      var f = FOLGE[fi++], k = pipe.querySelector('.nb-karte[data-n="' + f[0] + '"]');
+      if (!k) { weiter(100); return; }
+      k.classList.add('nb-gezeigt');
+      setTimeout(function () {
+        gleiten(k, function () { spalten[f[1]].appendChild(k); });
+        k.classList.remove('nb-gezeigt');
+        stageWechsel(k, f[1]); zaehlen();
+        weiter(2600);
+      }, 500);
+    });
 
     var zug = null;
     pipe.addEventListener('pointerdown', function (e) {
@@ -346,12 +409,7 @@
       zug.platz.remove();
       Object.keys(spalten).forEach(function (s) { spalten[s].classList.remove('ziel'); });
       var nach = ziel.dataset.stage;
-      if (nach !== zug.von) {
-        k.style.setProperty('--f', rgb(STAGE[nach][1]));
-        k.querySelector('.nb-extra').innerHTML = '<span class="nb-chip nb-brand nb-ein">' + VON_SELBST[nach] + '</span>';
-        k.classList.add('frisch');
-        setTimeout(function () { k.classList.remove('frisch'); }, 1400);
-      }
+      if (nach !== zug.von) stageWechsel(k, nach);
       zug = null;
       zaehlen();
     };
@@ -501,6 +559,28 @@
       if (zug && e.pointerId === zug.id) { zug.g.remove(); zug = null; }
     });
     malen();
+    // Vorführung: Felder fliegen auf die freien Stellen, Test, Erstellen, von vorn.
+    var mitte = function (el) { var r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+    var klick = function (a) { var b = aktion.querySelector('[data-a="' + a + '"]'); if (b) b.click(); };
+    selbstlauf(root, function (weiter) {
+      if (schritt === 5) { klick('neu'); weiter(1400); return; }
+      if (schritt === 3) { klick('erstellen'); weiter(3200); return; }
+      var i = zuordnung.indexOf(null);
+      if (i < 0) { klick('test'); weiter(2400); return; }
+      var k = { 2: 'adresse', 3: 'tel', 4: 'beginn' }[i];
+      var b = root.querySelector('.nb-quelle[data-q="' + k + '"]');
+      if (!b) { weiter(200); return; }
+      var von = mitte(b), nach = mitte(felder[i].lastChild);
+      var g = b.cloneNode(true);
+      g.classList.add('nb-geist');
+      g.style.left = von[0] + 'px'; g.style.top = von[1] + 'px';
+      document.body.appendChild(g);
+      felder[i].classList.add('ziel');
+      void g.offsetWidth;
+      g.style.transition = 'left .8s cubic-bezier(.3,.7,.2,1), top .8s cubic-bezier(.3,.7,.2,1)';
+      g.style.left = nach[0] + 'px'; g.style.top = nach[1] + 'px';
+      setTimeout(function () { g.remove(); felder[i].classList.remove('ziel'); setze(i, k); weiter(900); }, 850);
+    });
   }
 
   // ============================================================ Listen zusammenführen
