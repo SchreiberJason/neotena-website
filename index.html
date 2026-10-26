@@ -26,7 +26,7 @@
 <link rel="preload" href="/assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin="" />
 <script src="/assets/flow.js?v=0f6fc328" defer></script>
 <script src="/assets/interaktiv.js?v=47416688" defer></script>
-<script src="/assets/nachbau.js?v=69464b20" defer></script>
+<script src="/assets/nachbau.js?v=1e6e6358" defer></script>
 <style>
   body { margin: 0; background: #F4F3EE; }
   a { color: #135A3F; text-decoration: none; }
@@ -327,11 +327,11 @@
         <h2 style="font-size: clamp(30px, 3.6vw, 46px); line-height: 1.05; letter-spacing: -.03em; font-weight: 600; margin: 0 0 clamp(32px, 4vw, 48px); max-width: 18em;">Das übernimmt Neotena. <span style="color: #135A3F;">Probieren Sie es aus.</span></h2>
         <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; line-height: 1.7; margin: calc(-1 * clamp(16px, 2vw, 28px)) 0 clamp(28px, 3vw, 40px);">Alles hier lässt sich bedienen — ziehen, antippen, tippen. Was gerade leicht pulsiert, ist der erste Schritt.</p>
         <div class="nb-bento">
-          <div id="k-pipeline" class="nb-kachel nb-k8"><div class="nb-k-label"><span>Teilnehmerverwaltung</span><span class="nb-k-tipp">↔ Karte ziehen</span></div><div class="nb-k-titel">Karte weiterziehen — der nächste Schritt passiert von selbst.</div><div data-nachbau="pipeline"></div></div>
+          <div id="k-pipeline" class="nb-kachel nb-k8 nb-hoch"><div class="nb-k-label"><span>Teilnehmerverwaltung</span><span class="nb-k-tipp">↔ Karte ziehen</span></div><div class="nb-k-titel">Karte weiterziehen — der nächste Schritt passiert von selbst.</div><div data-nachbau="pipeline"></div></div>
           <div id="k-anwesenheit" class="nb-kachel nb-k4"><div class="nb-k-label"><span>Anwesenheit</span><span class="nb-k-tipp">● Antippen</span></div><div class="nb-k-titel">Fehltage fallen sofort auf.</div><div data-nachbau="anwesenheit"></div></div>
+          <div id="k-akte" class="nb-kachel nb-dunkel nb-k4"><div class="nb-k-label"><span>Eine Akte pro Person</span><span class="nb-k-tipp">⌨ Namen tippen</span></div><div class="nb-k-titel">Tippen — die Person ist da.</div><div data-nachbau="teilnehmer" data-anzahl="4"></div></div>
           <div id="k-vorlage" class="nb-kachel nb-k7"><div class="nb-k-label"><span>Word- und PDF-Formulare</span><span class="nb-k-tipp">↔ Felder ziehen</span></div><div class="nb-k-titel">Felder ziehen, testen, PDF erstellen.</div><div data-nachbau="vorlage"></div></div>
           <div id="k-portal" class="nb-kachel nb-k5 pt-kompakt"><div class="nb-k-label"><span>Aufnahme-Portal</span><span class="nb-k-tipp">● Antippen</span></div><div class="nb-k-titel">Unterlagen kommen vom Handy — verschlüsselt in die Akte.</div><div data-nachbau="portal"></div></div>
-          <div id="k-akte" class="nb-kachel nb-dunkel nb-k12"><div class="nb-k-label"><span>Eine Akte pro Person</span><span class="nb-k-tipp">⌨ Namen tippen</span></div><div class="nb-k-titel">Zwei Buchstaben, und der Mensch ist da.</div><div data-nachbau="teilnehmer"></div></div>
         </div>
         <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-top: 28px;">
           <p style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; line-height: 1.7; margin: 0;">Nachgebaut aus der Software, mit erfundenen Daten.</p>
@@ -526,21 +526,20 @@
     var rechne = function () {
       if (manuell && Math.abs(scrollY - manuellY) < 160) return;
       manuell = null;
-      var linie = innerHeight * 0.45, reihen = {};
-      liste.forEach(function (k) { var r = k.getBoundingClientRect(); var key = Math.round(r.top); (reihen[key] = reihen[key] || []).push([k, r]); });
-      var bester = null, abstand = Infinity;
-      Object.keys(reihen).forEach(function (key) {
-        var reihe = reihen[key], r = reihe[0][1];
-        var oben = r.top - innerHeight * 0.15, unten = Math.max.apply(null, reihe.map(function (x) { return x[1].bottom; }));
-        if (linie >= oben && linie <= unten) {
-          var i = Math.min(reihe.length - 1, Math.floor((linie - oben) / (unten - oben) * reihe.length));
-          bester = reihe[i][0]; abstand = 0;
-        } else {
-          var d = Math.min(Math.abs(linie - oben), Math.abs(linie - unten));
-          if (d < abstand) { abstand = d; bester = reihe[0][0]; }
-        }
+      // Jede Kachel bekommt einen Startpunkt auf der Seite: ihre Oberkante;
+      // teilen sich mehrere eine Oberkante, werden sie über die Höhe der
+      // kleinsten verteilt. Aktiv ist die letzte, deren Startpunkt die Leselinie passiert hat.
+      var linie = scrollY + innerHeight * 0.45, gruppen = {};
+      liste.forEach(function (k) { var r = k.getBoundingClientRect(); var key = Math.round(r.top + scrollY); (gruppen[key] = gruppen[key] || []).push([k, r.height]); });
+      var punkte = [];
+      Object.keys(gruppen).forEach(function (key) {
+        var g = gruppen[key], h = Math.min.apply(null, g.map(function (x) { return x[1]; }));
+        g.forEach(function (x, j) { punkte.push([+key - innerHeight * 0.1 + j * h / g.length, x[0]]); });
       });
-      setze(bester);
+      punkte.sort(function (a, b) { return a[0] - b[0]; });
+      var wahl = punkte[0][1];
+      punkte.forEach(function (p) { if (p[0] <= linie) wahl = p[1]; });
+      setze(wahl);
     };
     var warte = false;
     addEventListener('scroll', function () { if (!warte) { warte = true; requestAnimationFrame(function () { warte = false; rechne(); }); } }, { passive: true });

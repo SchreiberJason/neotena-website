@@ -451,21 +451,20 @@ RUNTIME_JS = """
     var rechne = function () {
       if (manuell && Math.abs(scrollY - manuellY) < 160) return;
       manuell = null;
-      var linie = innerHeight * 0.45, reihen = {};
-      liste.forEach(function (k) { var r = k.getBoundingClientRect(); var key = Math.round(r.top); (reihen[key] = reihen[key] || []).push([k, r]); });
-      var bester = null, abstand = Infinity;
-      Object.keys(reihen).forEach(function (key) {
-        var reihe = reihen[key], r = reihe[0][1];
-        var oben = r.top - innerHeight * 0.15, unten = Math.max.apply(null, reihe.map(function (x) { return x[1].bottom; }));
-        if (linie >= oben && linie <= unten) {
-          var i = Math.min(reihe.length - 1, Math.floor((linie - oben) / (unten - oben) * reihe.length));
-          bester = reihe[i][0]; abstand = 0;
-        } else {
-          var d = Math.min(Math.abs(linie - oben), Math.abs(linie - unten));
-          if (d < abstand) { abstand = d; bester = reihe[0][0]; }
-        }
+      // Jede Kachel bekommt einen Startpunkt auf der Seite: ihre Oberkante;
+      // teilen sich mehrere eine Oberkante, werden sie über die Höhe der
+      // kleinsten verteilt. Aktiv ist die letzte, deren Startpunkt die Leselinie passiert hat.
+      var linie = scrollY + innerHeight * 0.45, gruppen = {};
+      liste.forEach(function (k) { var r = k.getBoundingClientRect(); var key = Math.round(r.top + scrollY); (gruppen[key] = gruppen[key] || []).push([k, r.height]); });
+      var punkte = [];
+      Object.keys(gruppen).forEach(function (key) {
+        var g = gruppen[key], h = Math.min.apply(null, g.map(function (x) { return x[1]; }));
+        g.forEach(function (x, j) { punkte.push([+key - innerHeight * 0.1 + j * h / g.length, x[0]]); });
       });
-      setze(bester);
+      punkte.sort(function (a, b) { return a[0] - b[0]; });
+      var wahl = punkte[0][1];
+      punkte.forEach(function (p) { if (p[0] <= linie) wahl = p[1]; });
+      setze(wahl);
     };
     var warte = false;
     addEventListener('scroll', function () { if (!warte) { warte = true; requestAnimationFrame(function () { warte = false; rechne(); }); } }, { passive: true });

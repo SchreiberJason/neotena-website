@@ -873,7 +873,8 @@
     root.innerHTML = '<label class="nb-suche"><span aria-hidden="true" style="color:#a1a1aa">⌕</span>' +
       '<input type="search" placeholder="Teilnehmer:innen suchen …" aria-label="Teilnehmer:innen suchen" /></label><div class="nb-liste"></div>';
     var liste = root.querySelector('.nb-liste');
-    TN.forEach(function (t) {
+    var anzahl = +root.dataset.anzahl || TN.length;
+    TN.slice(0, anzahl).forEach(function (t) {
       var s = STAGE[t[2]], ini = t[0].split(' ').map(function (w) { return w[0]; }).slice(0, 2).join('');
       var z = document.createElement('div');
       z.className = 'nb-tn';
