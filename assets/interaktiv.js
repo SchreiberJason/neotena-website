@@ -5,7 +5,6 @@
  *
  *   Blatt 03          Karten springen zum passenden Ablauf A—0x
  *   A—01 … A—06       Umschalter „heute / danach“
- *   Überschlag        frei werdende Vollzeitstellen als Figuren
  *   Referenzprojekt   Kennzahlen zählen beim Hineinscrollen hoch
  *   Bildungsträger    Pflichten anhaken, Auswahl geht in die Anfrage
  *   Sicherheit        „Wo liegen die Daten?“ — Cloud oder AQUAflow
@@ -34,14 +33,6 @@
     '.nf-datei i{flex:none;width:14px;height:16px;border-radius:2px}',
     '@keyframes nf-wackel{to{transform:translate(3px,-4px) rotate(var(--r2))}}',
     '.nf-chaos-text{position:absolute;left:0;right:0;bottom:0;padding:14px 18px;background:linear-gradient(transparent,rgba(251,250,247,.96) 40%);font-family:' + MONO + ';font-size:13px;color:' + ROT + '}',
-    // Überschlag
-    '.nf-stellen{margin:18px 0 4px}',
-    '.nf-stellen-text{font-family:' + MONO + ';font-size:12px;color:#616C79;margin-bottom:10px}',
-    '.nf-stellen-text b{color:' + GRUEN + ';font-weight:600}',
-    '.nf-figuren{display:flex;flex-wrap:wrap;gap:4px}',
-    '.nf-figur{position:relative;width:16px;height:24px}',
-    '.nf-figur svg{position:absolute;inset:0;width:100%;height:100%}',
-    '.nf-figur .v{clip-path:inset(0 calc(100% - var(--f)) 0 0);transition:clip-path .35s ease}',
     // Bildungsträger
     '.nf-hinweis{font-family:' + MONO + ';font-size:12px;color:#616C79;margin:0 0 12px}',
     '[data-nf="vorgaben"] > div{cursor:pointer;transition:background .2s}',
@@ -210,44 +201,6 @@
     bHeute.addEventListener('click', function () { zeige('heute'); });
     bDanach.addEventListener('click', function () { zeige('danach'); });
   });
-
-  // ------------------------------------------- Überschlag: Vollzeitstellen
-  // 38,5 Wochenstunden × 46 Arbeitswochen; 60 % wie in der Rechnung daneben.
-  var gespartEl = $('[data-bind="kostenGespart"]');
-  var modelle = $$('[data-model]');
-  if (gespartEl && modelle.length) {
-    var anker = gespartEl.closest('div');
-    var box = el('div', 'nf-stellen');
-    var text = el('div', 'nf-stellen-text');
-    var figuren = el('div', 'nf-figuren');
-    box.appendChild(text);
-    box.appendChild(figuren);
-    anker.parentNode.insertBefore(box, anker.nextSibling);
-    var FIGUR = '<path d="M8 2.2a3.3 3.3 0 1 1 0 6.6 3.3 3.3 0 0 1 0-6.6ZM2.4 22.5c0-6.2 2.5-11 5.6-11s5.6 4.8 5.6 11Z"/>';
-    var wert = function (k) {
-      var i = modelle.filter(function (m) { return m.dataset.model === k; })[0];
-      return i ? +i.value : 0;
-    };
-    var malen = function () {
-      var frei = wert('mitarbeiter') * wert('stunden') * 46 * 0.6;
-      var stellen = frei / (38.5 * 46);
-      text.innerHTML = 'entspricht rund <b>' + zahl(stellen, stellen < 10 ? 1 : 0) + '</b> Vollzeitstellen';
-      var n = Math.max(1, Math.ceil(stellen));
-      while (figuren.children.length < n) {
-        var f = el('span', 'nf-figur');
-        f.innerHTML = '<svg viewBox="0 0 16 24" fill="rgba(19,90,63,.15)">' + FIGUR + '</svg>' +
-          '<svg class="v" viewBox="0 0 16 24" fill="' + GRUEN + '">' + FIGUR + '</svg>';
-        figuren.appendChild(f);
-      }
-      while (figuren.children.length > n) figuren.removeChild(figuren.lastChild);
-      $$('.nf-figur', figuren).forEach(function (f, k) {
-        var anteil = Math.max(0, Math.min(1, stellen - k));
-        f.querySelector('.v').style.setProperty('--f', (anteil * 100) + '%');
-      });
-    };
-    modelle.forEach(function (m) { m.addEventListener('input', malen); });
-    malen();
-  }
 
   // ---------------------------------------------------- Kennzahlen zählen
   var zaehler = $$('[data-zaehl]');
