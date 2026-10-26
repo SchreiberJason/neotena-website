@@ -640,75 +640,80 @@
   waehle('aufnahme');
 })();
 
-// -------------------------------------------- Was Neotena kann: Team-Illustration
-// Ihr Team am Tisch, darüber die sechs Module von Neotena. Jedes Modul gehört
-// zu einer Zeile der Liste darunter: Zeigen auf das eine hebt das andere hervor.
+// -------------------------------------------- Was Neotena kann: das Team um eine Akte
+// Alle schauen auf dasselbe Blatt — eine Akte pro Person, eine Wahrheit.
+// Jede Zeile der Liste darunter entspricht einer Zeile der Akte; Zeigen hebt
+// die Zeile hervor und die Person, die davon am meisten hat.
 // Figuren: Open Peeps (Pablo Stanley, CC0), lokal unter assets/peeps/.
 (function () {
   'use strict';
   var root = document.getElementById('nf-team');
   if (!root) return;
   var G = '#135A3F';
-  var ICON = {
-    akte: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/>',
-    vorlage: '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
-    frist: '<circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 2.5M9 2.5h6"/>',
-    portal: '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>',
-    eams: '<rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M7 10h4M7 14h10M14 10h3"/>',
-    daten: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'
-  };
-  // [Schlüssel, Zeile in der Liste (0-basiert), x, y in %]
-  var MOD = [['akte', 0, 8, 46], ['vorlage', 1, 22, 16], ['frist', 2, 41, 4], ['portal', 3, 60, 4], ['eams', 4, 78, 16], ['daten', 5, 92, 46]];
+  // Personen: [Bild, Rolle, x %, y %]
+  var LEUTE = [['p1', 'Leitung', 14, 12], ['p2', 'Sekretariat', 86, 12], ['p4', 'Betreuung', 12, 66], ['p5', 'Beratung', 88, 66], ['p3', 'Teilnehmerin', 50, 92]];
+  // Zeilen der Akte: [Text, Zustand, Person (Index), Zeile der Liste]
+  var ZEILEN = [
+    ['Stammdaten · eine Quelle', '✓', null, 0],
+    ['Vereinbarung erstellt', '✓', 1, 1],
+    ['Frist Abbuchung 30.10.', '◷', 0, 2],
+    ['Unterlagen 4 von 5', '↑', 4, 3],
+    ['eAMS-Meldung vorbereitet', '✓', 2, 4],
+    ['lokal · verschlüsselt', '🔒', 3, 5]
+  ];
   var st = document.createElement('style');
   st.textContent = [
-    '.nb-kb-oben{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:24px 48px;align-items:end;margin-bottom:clamp(24px,3vw,40px)}',
+    '.nb-kb-oben{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:24px 48px;align-items:center;margin-bottom:clamp(28px,3vw,44px)}',
     '.nb-kb-oben h2{margin-bottom:0!important}',
     '@media (max-width:860px){.nb-kb-oben{grid-template-columns:1fr}}',
-    '#nf-team{position:relative;aspect-ratio:1.55;width:100%;max-width:560px;justify-self:end}',
-    '.tm-linien{position:absolute;inset:0;width:100%;height:100%;overflow:visible}',
-    '.tm-linien path{fill:none;stroke:#8fbfa6;stroke-width:1.5;stroke-dasharray:4 5;transition:stroke .2s,stroke-width .2s}',
-    '.tm-linien path.an{stroke:' + G + ';stroke-width:2.5;stroke-dasharray:none}',
-    '.tm-mod{position:absolute;width:13%;aspect-ratio:1;margin:-6.5% 0 0 -6.5%;display:grid;place-items:center;border-radius:50%;background:#FBFAF7;border:1.5px solid ' + G + ';box-shadow:0 6px 14px -8px rgba(12,46,34,.35);transition:transform .2s,background .2s}',
-    '.tm-mod svg{width:46%;height:46%;fill:none;stroke:#18181b;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}',
-    '.tm-mod.an{transform:scale(1.12);background:' + G + '}',
-    '.tm-mod.an svg{stroke:#F4F3EE}',
-    '.tm-leute{position:absolute;left:6%;right:6%;bottom:16%;display:flex;justify-content:center}',
-    '.tm-leute img{width:21%;height:auto;margin:0 -1.5%;}',
-    '.tm-tisch{position:absolute;left:4%;right:4%;bottom:6%;height:12%;border-radius:4px;background:linear-gradient(#fff,#ecebe6);box-shadow:0 10px 24px -14px rgba(12,46,34,.4)}',
-    '.tm-laptop{position:absolute;left:50%;bottom:15%;width:10%;aspect-ratio:1.5;margin-left:-5%;border:1.5px solid #18181b;border-radius:4px 4px 0 0;background:#fff;display:grid;place-items:center;font:700 13px "Space Grotesk",sans-serif;color:' + G + '}',
-    '.tm-laptop::after{content:"";position:absolute;left:-14%;right:-14%;bottom:-6px;height:5px;border-radius:0 0 4px 4px;background:#18181b}',
-    '.tm-label{position:absolute;left:0;right:0;bottom:0;text-align:center;font:500 10px "IBM Plex Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:' + G + '}',
-    '.nb-kb-zeile.tm-an{background:rgba(255,255,255,.7);padding-left:14px;padding-right:14px}'
+    '#nf-team{position:relative;aspect-ratio:1.12;width:100%;max-width:540px;justify-self:end;margin:8px 0 36px}',
+    '.ak-linien{position:absolute;inset:0;width:100%;height:100%;overflow:visible}',
+    '.ak-linien line{stroke:#8fbfa6;stroke-width:1.5;stroke-dasharray:4 5;transition:stroke .2s}',
+    '.ak-linien line.an{stroke:' + G + ';stroke-dasharray:none;stroke-width:2.5}',
+    '.ak-blatt{position:absolute;left:50%;top:42%;width:48%;transform:translate(-50%,-50%) rotate(-1.5deg);padding:16px 16px 12px;background:#fff;border-radius:4px;' +
+      'box-shadow:0 1px 2px rgba(0,0,0,.06),0 30px 50px -24px rgba(12,46,34,.4);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}',
+    '.ak-blatt::before{content:"";position:absolute;left:-6px;top:10px;bottom:10px;width:6px;border-radius:3px 0 0 3px;background:' + G + '}',
+    '.ak-kopf{display:flex;align-items:center;gap:8px;padding-bottom:9px;margin-bottom:6px;border-bottom:1px solid #eee}',
+    '.ak-kopf i{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#0EA5E9;color:#fff;font:600 10px sans-serif;font-style:normal}',
+    '.ak-kopf b{font-size:13px}.ak-kopf small{display:block;font-size:10px;color:#71717a}',
+    '.ak-z{display:flex;justify-content:space-between;gap:8px;padding:5px 6px;margin:0 -6px;border-radius:5px;font-size:11.5px;color:#3f3f46;transition:background .2s,color .2s}',
+    '.ak-z span:last-child{color:' + G + ';font-weight:600}',
+    '.ak-z.an{background:' + G + ';color:#fff}.ak-z.an span:last-child{color:#fff}',
+    '.ak-p{position:absolute;width:18%;transform:translate(-50%,-50%);text-align:center;transition:transform .25s}',
+    '.ak-p img{display:block;width:100%;height:auto;border-radius:50%;background:#FBFAF7;border:1.5px solid rgba(19,90,63,.3);transition:border-color .2s,box-shadow .2s}',
+    '.ak-p span{display:inline-block;margin-top:4px;padding:2px 8px;border-radius:999px;background:#F4F3EE;font:500 10px "IBM Plex Mono",monospace;color:#3C4A58;white-space:nowrap}',
+    '.ak-p.an{transform:translate(-50%,-50%) scale(1.08)}',
+    '.ak-p.an img{border-color:' + G + ';box-shadow:0 0 0 4px rgba(19,90,63,.15)}',
+    '.ak-p.an span{background:' + G + ';color:#fff}',
+    '.nb-kb-zeile.tm-an{background:rgba(255,255,255,.7);padding-left:14px;padding-right:14px}',
+    '@media (max-width:480px){#nf-team{aspect-ratio:.95}.ak-blatt{width:58%;padding:12px 12px 8px}.ak-z{font-size:10px;padding:4px 5px}.ak-p{width:20%}.ak-p span{font-size:9px;padding:1px 6px}}'
   ].join('\n');
   document.head.appendChild(st);
-  var NS = 'http://www.w3.org/2000/svg';
-  var ziel = [50, 56]; // Sammelpunkt über dem Laptop, in %
-  var linien = MOD.map(function (m) {
-    return '<path data-m="' + m[0] + '" d="M' + m[2] + ' ' + m[3] + ' C' + m[2] + ' ' + (m[3] + 30) + ' ' + ziel[0] + ' ' + (ziel[1] - 22) + ' ' + ziel[0] + ' ' + ziel[1] + '"/>';
-  }).join('');
-  root.innerHTML = '<svg class="tm-linien" viewBox="0 0 100 100" preserveAspectRatio="none">' + linien + '</svg>' +
-    MOD.map(function (m) { return '<span class="tm-mod" data-m="' + m[0] + '" style="left:' + m[2] + '%;top:' + m[3] + '%"><svg viewBox="0 0 24 24">' + ICON[m[0]] + '</svg></span>'; }).join('') +
-    '<div class="tm-leute">' + [1, 2, 3, 4, 5].map(function (n) { return '<img src="/assets/peeps/p' + n + '.svg" alt="" width="704" height="704" loading="lazy" />'; }).join('') + '</div>' +
-    '<div class="tm-tisch"></div><div class="tm-laptop">N</div><div class="tm-label">Ihr Team</div>';
-  root.querySelectorAll('.tm-linien path').forEach(function (p) { p.setAttribute('vector-effect', 'non-scaling-stroke'); });
-  var zeilen = document.querySelectorAll('.nb-kb-zeile');
-  function an(key) {
-    MOD.forEach(function (m) {
-      var ja = m[0] === key;
-      root.querySelector('.tm-mod[data-m="' + m[0] + '"]').classList.toggle('an', ja);
-      root.querySelector('path[data-m="' + m[0] + '"]').classList.toggle('an', ja);
-      if (zeilen[m[1]]) zeilen[m[1]].classList.toggle('tm-an', ja);
+  var mitte = [50, 42];
+  root.innerHTML = '<svg class="ak-linien" viewBox="0 0 100 100" preserveAspectRatio="none">' +
+    LEUTE.map(function (l, i) { return '<line data-p="' + i + '" x1="' + l[2] + '" y1="' + l[3] + '" x2="' + mitte[0] + '" y2="' + mitte[1] + '" vector-effect="non-scaling-stroke"/>'; }).join('') + '</svg>' +
+    '<div class="ak-blatt"><div class="ak-kopf"><i>AB</i><div><b>Alex Beispiel</b><small>Akte · eine für alle</small></div></div>' +
+    ZEILEN.map(function (z, i) { return '<div class="ak-z" data-z="' + i + '"><span>' + z[0] + '</span><span>' + z[1] + '</span></div>'; }).join('') + '</div>' +
+    LEUTE.map(function (l, i) {
+      return '<div class="ak-p" data-p="' + i + '" style="left:' + l[2] + '%;top:' + l[3] + '%"><img src="/assets/peeps/' + l[0] + '.svg" alt="" width="704" height="704" loading="lazy" /><span>' + l[1] + '</span></div>';
+    }).join('');
+  var liste = document.querySelectorAll('.nb-kb-zeile');
+  function an(zi) {
+    var z = zi == null ? null : ZEILEN[zi];
+    root.querySelectorAll('.ak-z').forEach(function (e, i) { e.classList.toggle('an', i === zi); });
+    root.querySelectorAll('[data-p]').forEach(function (e) {
+      var p = +e.dataset.p;
+      e.classList.toggle('an', !!z && (z[2] === null || z[2] === p));
     });
+    liste.forEach(function (e, i) { e.classList.toggle('tm-an', !!z && z[3] === i); });
   }
-  MOD.forEach(function (m) {
-    var z = zeilen[m[1]];
-    if (z) { z.addEventListener('mouseenter', function () { an(m[0]); }); z.addEventListener('mouseleave', function () { an(null); }); }
-    var k = root.querySelector('.tm-mod[data-m="' + m[0] + '"]');
-    k.addEventListener('mouseenter', function () { an(m[0]); });
-    k.addEventListener('mouseleave', function () { an(null); });
+  ZEILEN.forEach(function (z, i) {
+    var l = liste[z[3]];
+    if (l) { l.addEventListener('mouseenter', function () { an(i); }); l.addEventListener('mouseleave', function () { an(null); }); }
+    var e = root.querySelector('.ak-z[data-z="' + i + '"]');
+    e.addEventListener('mouseenter', function () { an(i); }); e.addEventListener('mouseleave', function () { an(null); });
   });
-  // Ohne Maus: die Module leuchten nacheinander auf.
   if (!window.matchMedia('(hover: hover)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    var i = 0; setInterval(function () { an(MOD[i % MOD.length][0]); i++; }, 1600);
+    var k = 0; setInterval(function () { an(k % ZEILEN.length); k++; }, 1800);
   }
 })();
