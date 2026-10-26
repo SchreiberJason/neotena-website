@@ -319,7 +319,7 @@
     los.addEventListener('click', function () {
       var g = gewaehlt();
       if (textfeld) {
-        textfeld.value = 'Diese Pflichten haben wir:\n' + g.map(function (t) { return '– ' + t; }).join('\n') + '\n\n';
+        textfeld.value = 'Diese Pflichten gelten bei uns:\n' + g.map(function (t) { return '– ' + t; }).join('\n') + '\n\n';
         textfeld.dispatchEvent(new Event('input', { bubbles: true }));
       }
       var k = document.getElementById('kontakt');
@@ -548,7 +548,7 @@
         farbe: ROT
       },
       lokal: {
-        knopf: 'Mit unserer Software',
+        knopf: 'Mit Neotena',
         links: ['Ihr Büro', 'Die Daten bleiben hier', 'Verschlüsselte Datenbank auf Ihrem Gerät oder Server. Wer die Datei kopiert, hat nichts Lesbares.'],
         label: 'nur bei mehreren Standorten: verschlüsselte Pakete',
         pakete: ['🔒 a8f3…', '🔒 c71e…', '🔒 09bd…'],
