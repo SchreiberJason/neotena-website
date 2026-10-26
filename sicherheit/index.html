@@ -224,12 +224,13 @@
   @media (prefers-reduced-motion: reduce) { .nb-bento > .nb-kachel { opacity: 1; transform: none; } }
   .nb-k5 { grid-column: span 5; } .nb-k7 { grid-column: span 7; }
   /* Nummerierung und Fokus: nur eine Kachel ist hell und spielt sich vor. */
-  .nb-bento { counter-reset: station; }
+  #erledigt { counter-reset: station; }
+  .nb-pin + .nb-pin { margin-top: 16px; }
   .nb-bento > .nb-kachel { counter-increment: station; }
   .nb-bento > .nb-kachel > .nb-k-label > span:first-child::before { content: counter(station, decimal-leading-zero);
     display: inline-block; margin-right: 12px; padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor; letter-spacing: .04em; }
   .nb-bento > .nb-kachel.is-da { transition: opacity .5s ease, filter .5s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
-  .nb-bento.hat-fokus > .nb-kachel.is-da:not(.is-fokus) { opacity: .38; filter: grayscale(.9); }
+  #erledigt.hat-fokus .nb-bento > .nb-kachel.is-da:not(.is-fokus) { opacity: .38; filter: grayscale(.9); }
   .nb-bento > .nb-kachel:not(.is-fokus) .nb-lockt { animation: none; }
   .nb-bento > .nb-kachel:not(.is-fokus) * { animation-play-state: paused !important; }
   .nb-bento > .nb-kachel.is-fokus > .nb-k-label > span:first-child::before { background: #135A3F; color: #F4F3EE; border-color: #135A3F; }
@@ -462,44 +463,73 @@
     }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
     kacheln.forEach(function (k, i) { k.style.transitionDelay = (i % 2) * 120 + 'ms'; da.observe(k); });
   } else { kacheln.forEach(function (k) { k.classList.add('is-da'); }); }
-  // Fokus: die Kachel an der Leselinie (45 % der Fensterhöhe). Stehen zwei in
-  // einer Reihe, wandert der Fokus beim Scrollen durch die Reihe von links nach rechts.
-  // Zeigen oder Antippen holt eine Kachel sofort in den Fokus.
-  var bento = document.querySelector('.nb-bento');
-  if (bento && kacheln.length) {
+  // Fokus. Desktop: jede Reihe bleibt stehen (sticky), bis ihre Kacheln
+  // nacheinander dran waren — man scrollt nicht über eine Vorführung hinweg.
+  // Passt eine Reihe nicht ins Fenster, oder auf dem Handy: Startpunkte je Kachel.
+  var bereich = document.getElementById('erledigt');
+  var pins = Array.prototype.slice.call(document.querySelectorAll('.nb-pin'));
+  if (bereich && kacheln.length) {
     var liste = Array.prototype.slice.call(kacheln), manuell = null, manuellY = 0;
+    var SCHRITT = 0.55; // Fensterhöhen Scrollweg je Kachel
     var setze = function (k) {
       if (!k || k.classList.contains('is-fokus')) return;
       liste.forEach(function (x) { x.classList.toggle('is-fokus', x === k); });
-      bento.classList.add('hat-fokus');
+      bereich.classList.add('hat-fokus');
       document.dispatchEvent(new Event('nb-fokus'));
+    };
+    var heften = function () {
+      var an = innerWidth > 960 && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+      pins.forEach(function (p) {
+        var b = p.firstElementChild, n = +p.dataset.schritte || 1;
+        b.style.position = ''; b.style.top = ''; p.style.height = ''; p.dataset.an = '';
+        var h = b.offsetHeight, platz = innerHeight - 90;
+        if (an && h <= platz) {
+          p.style.height = (h + (n - 1) * innerHeight * SCHRITT) + 'px';
+          b.style.position = 'sticky';
+          b.style.top = Math.max(82, (innerHeight - h) / 2 + 30) + 'px';
+          p.dataset.an = '1';
+        }
+      });
     };
     var rechne = function () {
       if (manuell && Math.abs(scrollY - manuellY) < 160) return;
       manuell = null;
-      // Jede Kachel bekommt einen Startpunkt auf der Seite: ihre Oberkante;
-      // teilen sich mehrere eine Oberkante, werden sie über die Höhe der
-      // kleinsten verteilt. Aktiv ist die letzte, deren Startpunkt die Leselinie passiert hat.
-      var linie = scrollY + innerHeight * 0.45, gruppen = {};
-      liste.forEach(function (k) { var r = k.getBoundingClientRect(); var key = Math.round(r.top + scrollY); (gruppen[key] = gruppen[key] || []).push([k, r.height]); });
-      var punkte = [];
-      Object.keys(gruppen).forEach(function (key) {
-        var g = gruppen[key], h = Math.min.apply(null, g.map(function (x) { return x[1]; }));
-        g.forEach(function (x, j) { punkte.push([+key - innerHeight * 0.1 + j * h / g.length, x[0]]); });
+      var linie = scrollY + innerHeight * 0.45, punkte = [];
+      pins.forEach(function (p) {
+        var kids = Array.prototype.slice.call(p.querySelectorAll('.nb-kachel'));
+        var oben = p.getBoundingClientRect().top + scrollY;
+        if (p.dataset.an) {
+          var top = parseFloat(p.firstElementChild.style.top) || 0;
+          kids.forEach(function (k, j) { punkte.push([oben - top + innerHeight * 0.45 - innerHeight * 0.1 + j * innerHeight * SCHRITT, k]); });
+        } else {
+          var gruppen = {};
+          // Ohne Transform rechnen: die Einblend-Animation verschiebt die Kacheln kurz.
+          var seitenTop = function (el) { var y = 0; while (el) { y += el.offsetTop; el = el.offsetParent; } return y; };
+          kids.forEach(function (k) { var key = Math.round(seitenTop(k)); (gruppen[key] = gruppen[key] || []).push([k, k.offsetHeight]); });
+          Object.keys(gruppen).forEach(function (key) {
+            var g = gruppen[key], hh = Math.min.apply(null, g.map(function (x) { return x[1]; }));
+            g.forEach(function (x, j) { punkte.push([+key - innerHeight * 0.1 + j * hh / g.length, x[0]]); });
+          });
+        }
       });
       punkte.sort(function (a, b) { return a[0] - b[0]; });
+      // Jede Kachel bekommt mindestens eine halbe Fensterhöhe Scrollweg.
+      for (var i = 1; i < punkte.length; i++) punkte[i][0] = Math.max(punkte[i][0], punkte[i - 1][0] + innerHeight * 0.45);
       var wahl = punkte[0][1];
       punkte.forEach(function (p) { if (p[0] <= linie) wahl = p[1]; });
       setze(wahl);
     };
     var warte = false;
     addEventListener('scroll', function () { if (!warte) { warte = true; requestAnimationFrame(function () { warte = false; rechne(); }); } }, { passive: true });
-    addEventListener('resize', rechne);
+    addEventListener('resize', function () { heften(); rechne(); });
     liste.forEach(function (k) {
       var hol = function () { manuell = k; manuellY = scrollY; setze(k); };
       k.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hol(); });
       k.addEventListener('pointerdown', hol, true);
     });
+    heften();
+    // Vorführungen setzen ihre Höhe erst nach dem ersten Zeichnen.
+    setTimeout(function () { heften(); rechne(); }, 400);
     rechne();
   }
   // Burger-Menü fürs Handy: Knopf hinter „Anfrage senden“ einhängen.
