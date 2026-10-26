@@ -101,6 +101,7 @@
     '.nb-karte{display:grid;gap:6px;padding:12px;border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06),0 6px 14px -8px rgba(0,0,0,.12);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;transition:box-shadow .2s,transform .2s,outline-color .4s;outline:2px solid transparent}',
     '.nb-karte:hover{box-shadow:0 1px 2px rgba(0,0,0,.06),0 12px 24px -10px rgba(0,0,0,.18)}',
     '.nb-karte.frisch{outline-color:var(--f)}',
+    '.nb-gedrueckt{transform:scale(.94);transition:transform .15s}',
     '.nb-karte.nb-gezeigt{transform:translateY(-4px) rotate(-1.5deg);box-shadow:0 18px 30px -12px rgba(0,0,0,.25)}',
     '.nb-karte b{font-size:14px;font-weight:600}',
     '.nb-karte .nb-chip{white-space:normal;line-height:1.35}',
@@ -622,6 +623,13 @@
       if (a === 'zurueck') { offen = false; malen(); }
     });
     malen();
+    selbstlauf(root, function (weiter) {
+      var b = root.querySelector('[data-a="los"]') || root.querySelector('[data-a="zurueck"]');
+      if (!b) { weiter(800); return; }
+      var los = b.dataset.a === 'los';
+      b.classList.add('nb-gedrueckt');
+      setTimeout(function () { b.click(); weiter(los ? 3600 : 2000); }, 400);
+    });
   }
 
   // ============================================================ Matching
@@ -647,6 +655,8 @@
     }
     tn.addEventListener('click', function (e) { var b = e.target.closest('[data-i]'); if (b) { wahl = +b.dataset.i; malen(); } });
     malen();
+    var mi = 0;
+    selbstlauf(root, function (weiter) { mi = (wahl + 1) % TN.length; tn.querySelector('[data-i="' + mi + '"]').click(); weiter(2400); });
   }
 
   // ============================================================ Anwesenheit
@@ -685,6 +695,14 @@
       if (neu) { neu.focus(); neu.classList.add('nb-ein'); }
     });
     malen();
+    // Vorführung: der Fehltag wird nachgetragen, die Woche ist vollständig, dann von vorn.
+    var FOLGE = [[2, 3], [1, 2], [1, 2], [1, 2], [2, 3], [2, 3]], fi = 0;
+    selbstlauf(root, function (weiter) {
+      var f = FOLGE[fi++ % FOLGE.length];
+      var z = tab.querySelector('[data-i="' + f[0] + '"][data-j="' + f[1] + '"]');
+      if (z) { z.classList.add('nb-gedrueckt'); setTimeout(function () { z.click(); weiter(fi % FOLGE.length === 1 ? 2400 : 1300); }, 350); }
+      else weiter(800);
+    });
   }
 
   // ============================================================ Aufnahme-Portal
@@ -799,6 +817,22 @@
       malen();
     });
     malen();
+    // Vorführung: unterschreiben, weiter, Fotos, abschicken — die Akte füllt sich.
+    var schirm = root.querySelector('.ip-inhalt');
+    selbstlauf(root, function (weiter) {
+      var b = root.querySelector('.pt-seite [data-a="sig"]') || root.querySelector('.pt-seite [data-a="weiter"]') ||
+        root.querySelector('.pt-seite [data-a="datei"]') || root.querySelector('.pt-seite [data-a="senden"]:not([disabled])') ||
+        root.querySelector('[data-a="neu"]');
+      if (!b) { weiter(800); return; }
+      if (schirm.contains(b)) schirm.scrollTo({ top: Math.max(0, b.offsetTop * 0.71 - 160), behavior: 'smooth' });
+      b.classList.add('nb-gedrueckt');
+      setTimeout(function () {
+        var neu = b.dataset.a === 'neu';
+        b.click();
+        if (neu) schirm.scrollTo({ top: 0 });
+        weiter(neu ? 1600 : b.dataset.a === 'senden' ? 3400 : 1300);
+      }, 450);
+    });
   }
 
   // ============================================================ Teilnehmerliste
