@@ -215,32 +215,15 @@
     .nb-k4, .nb-k6, .nb-k8, .nb-k12 { grid-column: auto; } .nb-hoch { grid-row: auto; }
   }
   /* Schmaler Viewport: Logo und Anfrage-Button in die erste Zeile, Navigation darunter. */
-  /* „Was erledigt wird“ als Rundgang: links bleibt die Liste der Stationen
-     stehen, rechts wechselt beim Scrollen die Vorführung. */
-  .nb-rg-nav { display: none; }
-  @media (min-width: 961px) {
-    .nb-rundgang { display: grid; grid-template-columns: minmax(0, .62fr) minmax(0, 1.5fr); gap: clamp(32px, 4vw, 72px); align-items: start; }
-    .nb-rg-nav { display: block; position: sticky; top: 110px; }
-    .nb-rg-nav ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid rgba(19,90,63,.2); }
-    .nb-rg-nav li { position: relative; padding: 14px 0 14px 22px; cursor: pointer; }
-    .nb-rg-nav li::before { content: ""; position: absolute; left: -1px; top: 14px; bottom: 14px; width: 3px; border-radius: 2px;
-      background: #135A3F; transform: scaleY(0); transition: transform .35s; }
-    .nb-rg-nav li.an::before { transform: scaleY(1); }
-    .nb-rg-nr { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #616C79; transition: color .3s; }
-    .nb-rg-name { display: block; font-size: 19px; font-weight: 600; letter-spacing: -.01em; color: #9AA3AC; transition: color .3s; }
-    .nb-rg-text { display: block; max-height: 0; overflow: hidden; opacity: 0; font-size: 15px; line-height: 1.5; color: #3C4A58;
-      transition: max-height .45s ease, opacity .35s ease, margin .35s; }
-    .nb-rg-nav li.an .nb-rg-nr { color: #135A3F; }
-    .nb-rg-nav li.an .nb-rg-name { color: #121A22; }
-    .nb-rg-nav li.an .nb-rg-text { max-height: 90px; opacity: 1; margin-top: 6px; }
-    .nb-rundgang .nb-bento { display: flex !important; flex-direction: column; gap: clamp(40px, 8vh, 96px); }
-    .nb-rundgang .nb-bento > .nb-kachel { grid-column: auto !important; grid-row: auto !important; min-height: 72vh; justify-content: center;
-      opacity: .28; transform: scale(.97); transition: opacity .5s ease, transform .5s cubic-bezier(.2,.7,.2,1); }
-    .nb-rundgang .nb-bento > .nb-kachel.is-fokus { opacity: 1; transform: none; }
-    .nb-rundgang .nb-kachel > .nb-k-titel { display: none; }
-    .nb-rundgang .nb-kachel > .nb-k-label > span:first-child { visibility: hidden; }
-  }
-  @media (prefers-reduced-motion: reduce) { .nb-rundgang .nb-bento > .nb-kachel { opacity: 1; transform: none; } }
+  /* „Was erledigt wird“: Raster, Kachelgröße nach Inhalt. Kacheln erscheinen
+     nacheinander beim Scrollen; Inhalt sitzt mittig in der Kachel. */
+  .nb-bento { align-items: stretch; }
+  .nb-bento > .nb-kachel > [data-nachbau] { margin-block: auto; }
+  .nb-bento > .nb-kachel { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+  .nb-bento > .nb-kachel.is-da { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .nb-bento > .nb-kachel { opacity: 1; transform: none; } }
+  .nb-k5 { grid-column: span 5; } .nb-k7 { grid-column: span 7; }
+  @media (max-width: 960px) { .nb-k5, .nb-k7 { grid-column: auto; } }
   /* Kopfzeile: Inhalt so breit wie der breiteste Abschnitt (1400 px), Fläche bleibt randlos. */
   body > header, header[style*="sticky"] { padding-left: max(clamp(20px, 5vw, 40px), calc((100% - 1400px) / 2)) !important;
     padding-right: max(clamp(20px, 5vw, 40px), calc((100% - 1400px) / 2)) !important; }
@@ -448,37 +431,14 @@
   document.querySelectorAll('.ax-page').forEach(function (el) { el.hidden = el.dataset.page !== page; });
   document.querySelectorAll('.ax-nav').forEach(function (el) { el.classList.toggle('is-active', el.dataset.nav === page); });
   document.documentElement.dataset.page = page;
-  // Rundgang: links die Stationen (bleiben stehen), rechts die Vorführungen.
-  var bento = document.querySelector('.nb-bento');
-  if (bento) {
-    var stationen = Array.prototype.slice.call(bento.querySelectorAll(':scope > .nb-kachel'));
-    var rg = document.createElement('div'); rg.className = 'nb-rundgang';
-    bento.parentNode.insertBefore(rg, bento);
-    var nav = document.createElement('nav'); nav.className = 'nb-rg-nav'; nav.setAttribute('aria-label', 'Stationen');
-    nav.innerHTML = '<ol>' + stationen.map(function (k, i) {
-      var l = k.querySelector('.nb-k-label > span:first-child'), t = k.querySelector('.nb-k-titel');
-      return '<li data-i="' + i + '"><span class="nb-rg-nr">0' + (i + 1) + '</span><span class="nb-rg-name">' + (l ? l.textContent : '') +
-        '</span><span class="nb-rg-text">' + (t ? t.textContent : '') + '</span></li>';
-    }).join('') + '</ol>';
-    rg.appendChild(nav); rg.appendChild(bento);
-    var punkte = nav.querySelectorAll('li');
-    nav.addEventListener('click', function (e) {
-      var li = e.target.closest('li'); if (!li) return;
-      var k = stationen[+li.dataset.i];
-      window.scrollTo({ top: k.getBoundingClientRect().top + scrollY - (innerHeight - k.offsetHeight) / 2, behavior: 'smooth' });
-    });
-    var setze = function (i) {
-      stationen.forEach(function (k, n) { k.classList.toggle('is-fokus', n === i); });
-      punkte.forEach(function (p, n) { p.classList.toggle('an', n === i); });
-    };
-    if ('IntersectionObserver' in window) {
-      var fokus = new IntersectionObserver(function (e) {
-        e.forEach(function (x) { if (x.isIntersecting) setze(stationen.indexOf(x.target)); });
-      }, { rootMargin: '-45% 0px -45% 0px' });
-      stationen.forEach(function (k) { fokus.observe(k); });
-    }
-    setze(0);
-  }
+  // Kacheln erscheinen nacheinander, sobald sie ins Bild kommen.
+  var kacheln = document.querySelectorAll('.nb-bento > .nb-kachel');
+  if (kacheln.length && 'IntersectionObserver' in window) {
+    var da = new IntersectionObserver(function (e) {
+      e.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add('is-da'); da.unobserve(x.target); } });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
+    kacheln.forEach(function (k, i) { k.style.transitionDelay = (i % 2) * 120 + 'ms'; da.observe(k); });
+  } else { kacheln.forEach(function (k) { k.classList.add('is-da'); }); }
   // Burger-Menü fürs Handy: Knopf hinter „Anfrage senden“ einhängen.
   var kopf = document.querySelector('header'), menue = kopf && kopf.querySelector('nav');
   if (kopf && menue) {
